@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* ---- Brand palette: warm, light, minimalist (matches jellevanderidder.com) ---- */
+@theme {
+  --color-ink: #16130f; /* near-black, warm */
+  --color-paper: #fbfaf7; /* warm white background */
+  --color-mist: #f1ede6; /* soft section background */
+  --color-line: #e4ded3; /* hairline borders */
+  --color-muted: #6b6359; /* secondary text */
+  --color-clay: #9d5c3f; /* restrained accent for CTAs/highlights */
+  --color-clay-dark: #7f4830;
+}
+
+/* Fonts are injected by next/font/local as CSS variables in the root layout.
+   `inline` lets the theme reference those runtime variables. */
+@theme inline {
+  --font-title: var(--font-avenir);
+  --font-body: var(--font-fraunces);
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-body), Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-title {
+  font-family: var(--font-title), "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: var(--color-clay);
+  color: var(--color-paper);
+}
