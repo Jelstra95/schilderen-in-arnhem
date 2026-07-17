@@ -62,7 +62,7 @@ export function Calendar({
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-paper p-5">
+    <div className="rounded-xl border border-line bg-paper p-5">
       <div className="mb-4 flex items-center justify-between">
         <button
           type="button"
@@ -107,7 +107,7 @@ export function Calendar({
               disabled={!hasSpot}
               onClick={() => course && onSelect(course)}
               className={cn(
-                "relative aspect-square rounded-lg text-sm transition",
+                "relative aspect-square rounded-xl text-sm transition",
                 !course && "text-ink/30",
                 course && !hasSpot && "text-muted line-through",
                 hasSpot && !isSelected && "bg-clay/10 text-clay-dark hover:bg-clay/20 font-medium",

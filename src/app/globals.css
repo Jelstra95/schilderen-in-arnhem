@@ -43,3 +43,48 @@ h4,
   background: var(--color-clay);
   color: var(--color-paper);
 }
+
+/* ---- Ken Burns: slow pan & zoom for the course carousel ---- */
+@keyframes kenburns-a {
+  from {
+    transform: scale(1.06) translate(0%, 0%);
+  }
+  to {
+    transform: scale(1.18) translate(-2%, -1.5%);
+  }
+}
+@keyframes kenburns-b {
+  from {
+    transform: scale(1.18) translate(1.5%, 1%);
+  }
+  to {
+    transform: scale(1.06) translate(-1%, -1%);
+  }
+}
+@keyframes kenburns-c {
+  from {
+    transform: scale(1.06) translate(-1.5%, 1%);
+  }
+  to {
+    transform: scale(1.2) translate(1.5%, -1.5%);
+  }
+}
+
+.kenburns-a {
+  animation: kenburns-a 22s ease-in-out infinite alternate;
+}
+.kenburns-b {
+  animation: kenburns-b 26s ease-in-out infinite alternate;
+}
+.kenburns-c {
+  animation: kenburns-c 24s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kenburns-a,
+  .kenburns-b,
+  .kenburns-c {
+    animation: none;
+    transform: scale(1.06);
+  }
+}

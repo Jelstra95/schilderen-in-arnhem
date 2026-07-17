@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 const fieldBase =
-  "w-full rounded-xl border border-line bg-paper px-4 py-3 text-ink placeholder:text-muted/60 focus:border-clay focus:outline-none focus:ring-2 focus:ring-clay/20 transition";
+  "w-full rounded-lg border border-line bg-paper px-4 py-3 text-ink placeholder:text-muted/60 focus:border-clay focus:outline-none focus:ring-2 focus:ring-clay/20 transition";
 
 export function Label({
   children,

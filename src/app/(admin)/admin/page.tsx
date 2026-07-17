@@ -50,7 +50,7 @@ export default async function AdminOverviewPage() {
           <Link
             key={s.label}
             href={s.href}
-            className="rounded-2xl border border-line bg-paper p-6 transition-shadow hover:shadow-[0_8px_30px_rgba(22,19,15,0.06)]"
+            className="rounded-xl border border-line bg-paper p-6 transition-shadow hover:shadow-[0_8px_30px_rgba(22,19,15,0.06)]"
           >
             <p className="font-title text-4xl text-ink">{s.value}</p>
             <p className="mt-1 text-sm text-muted">{s.label}</p>
@@ -59,7 +59,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {pending > 0 && (
-        <div className="mt-8 rounded-2xl border border-clay/30 bg-clay/5 p-6">
+        <div className="mt-8 rounded-xl border border-clay/30 bg-clay/5 p-6">
           <p className="text-ink">
             Er {pending === 1 ? "is" : "zijn"}{" "}
             <strong>

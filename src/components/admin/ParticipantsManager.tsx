@@ -67,7 +67,7 @@ export function ParticipantsManager({ rows }: { rows: EnrollmentRow[] }) {
   return (
     <div>
       {credentials && (
-        <div className="mb-6 rounded-2xl border border-clay/30 bg-clay/5 p-6">
+        <div className="mb-6 rounded-xl border border-clay/30 bg-clay/5 p-6">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="font-title text-lg text-ink">
@@ -101,12 +101,12 @@ export function ParticipantsManager({ rows }: { rows: EnrollmentRow[] }) {
       )}
 
       {error && (
-        <p className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
       )}
 
-      <div className="overflow-hidden rounded-2xl border border-line">
+      <div className="overflow-hidden rounded-xl border border-line">
         <table className="w-full text-left text-sm">
           <thead className="bg-mist/60 text-xs uppercase tracking-wide text-muted">
             <tr>

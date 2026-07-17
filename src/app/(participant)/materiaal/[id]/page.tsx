@@ -39,7 +39,7 @@ export default async function MaterialViewerPage({
       </Link>
       <h1 className="mt-4 font-title text-3xl text-ink">{material.title}</h1>
 
-      <div className="mt-8 rounded-2xl border border-line bg-mist/30 p-4 sm:p-8">
+      <div className="mt-8 rounded-xl border border-line bg-mist/30 p-4 sm:p-8">
         {isPdf ? (
           <PdfViewer src={streamSrc} />
         ) : (
@@ -48,7 +48,7 @@ export default async function MaterialViewerPage({
             src={streamSrc}
             alt={material.title}
             draggable={false}
-            className="mx-auto max-w-full select-none rounded-lg border border-line"
+            className="mx-auto max-w-full select-none rounded-xl border border-line"
           />
         )}
       </div>

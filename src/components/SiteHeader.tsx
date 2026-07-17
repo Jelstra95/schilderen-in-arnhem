@@ -3,9 +3,8 @@ import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 
 const navLinks = [
-  { href: "/#cursus", label: "De cursus" },
-  { href: "/#voordelen", label: "Waarom" },
-  { href: "/#data", label: "Data" },
+  { href: "/cursussen", label: "Cursussen" },
+  { href: "/workshops", label: "Workshops" },
 ];
 
 export function SiteHeader() {

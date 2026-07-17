@@ -29,7 +29,7 @@ export default async function MaterialsPage() {
       </p>
 
       {rows.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-dashed border-line bg-mist/40 p-10 text-center text-muted">
+        <div className="mt-10 rounded-xl border border-dashed border-line bg-mist/40 p-10 text-center text-muted">
           Er is nog geen materiaal beschikbaar. Zodra je inschrijving bevestigd
           is, verschijnt het hier.
         </div>
@@ -39,7 +39,7 @@ export default async function MaterialsPage() {
             <li key={m.id}>
               <Link
                 href={`/materiaal/${m.id}`}
-                className="flex items-center justify-between rounded-2xl border border-line bg-paper p-5 transition-shadow hover:shadow-[0_8px_30px_rgba(22,19,15,0.06)]"
+                className="flex items-center justify-between rounded-xl border border-line bg-paper p-5 transition-shadow hover:shadow-[0_8px_30px_rgba(22,19,15,0.06)]"
               >
                 <div>
                   <p className="font-medium text-ink">{m.title}</p>

@@ -22,7 +22,7 @@ const fraunces = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Schilderen in Arnhem — Schildercursussen door Jelle van der Ridder",
+    default: "Schilderen in Arnhem — Schildercursussen door Jelle van de Ridder",
     template: "%s · Schilderen in Arnhem",
   },
   description:

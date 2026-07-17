@@ -9,8 +9,27 @@ export function SiteFooter() {
         <div>
           <p className="font-title text-lg text-ink">Schilderen in Arnhem</p>
           <p className="mt-1 text-sm text-muted">
-            Schildercursussen door Jelle van der Ridder
+            Schildercursussen door Jelle van de Ridder
           </p>
+          <address className="mt-4 space-y-0.5 text-sm not-italic text-muted">
+            <p>Schrassertstraat 99, 6821 AK Arnhem</p>
+            <p>
+              <a
+                href="tel:+31623837071"
+                className="hover:text-ink transition-colors"
+              >
+                +31 (0)6 23 83 70 71
+              </a>
+            </p>
+            <p>
+              <a
+                href="mailto:info@jellevanderidder.com"
+                className="hover:text-ink transition-colors"
+              >
+                info@jellevanderidder.com
+              </a>
+            </p>
+          </address>
         </div>
         <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted">
           <Link href="/inschrijven" className="hover:text-ink transition-colors">
@@ -31,7 +50,7 @@ export function SiteFooter() {
       </Container>
       <Container className="border-t border-line/70 py-6">
         <p className="text-xs text-muted">
-          © {year} Jelle van der Ridder · Arnhem
+          © {year} Jelle van de Ridder · Arnhem
         </p>
       </Container>
     </footer>

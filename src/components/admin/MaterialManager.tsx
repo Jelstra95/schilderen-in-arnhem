@@ -61,7 +61,7 @@ export function MaterialManager({
       <form
         ref={formRef}
         onSubmit={upload}
-        className="mb-10 space-y-4 rounded-2xl border border-line bg-paper p-6"
+        className="mb-10 space-y-4 rounded-xl border border-line bg-paper p-6"
       >
         <h2 className="font-title text-xl text-ink">Materiaal uploaden</h2>
         <Field label="Titel" htmlFor="title">
@@ -95,7 +95,7 @@ export function MaterialManager({
         </div>
 
         {error && (
-          <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
           </p>
         )}
@@ -109,7 +109,7 @@ export function MaterialManager({
         {materials.map((m) => (
           <div
             key={m.id}
-            className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-paper p-5"
+            className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-line bg-paper p-5"
           >
             <div>
               <p className="font-medium text-ink">{m.title}</p>
@@ -131,7 +131,7 @@ export function MaterialManager({
           </div>
         ))}
         {materials.length === 0 && (
-          <p className="rounded-2xl border border-dashed border-line p-8 text-center text-muted">
+          <p className="rounded-xl border border-dashed border-line p-8 text-center text-muted">
             Nog geen materiaal geüpload.
           </p>
         )}

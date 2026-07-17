@@ -51,7 +51,7 @@ export default async function DashboardPage() {
       </header>
 
       {active.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-line bg-mist/40 p-10 text-center">
+        <div className="rounded-xl border border-dashed border-line bg-mist/40 p-10 text-center">
           <p className="text-muted">Je hebt nog geen actieve inschrijving.</p>
           <div className="mt-4 flex justify-center">
             <ButtonLink href="/inschrijven" size="sm">
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
           {active.map((row) => (
             <article
               key={row.id}
-              className="rounded-2xl border border-line bg-paper p-6"
+              className="rounded-xl border border-line bg-paper p-6"
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
@@ -89,7 +89,7 @@ export default async function DashboardPage() {
                 <CancelEnrollmentButton id={row.id} />
               </div>
               {row.status === "pending" && (
-                <p className="mt-4 rounded-xl bg-mist/60 px-4 py-3 text-sm text-muted">
+                <p className="mt-4 rounded-lg bg-mist/60 px-4 py-3 text-sm text-muted">
                   Je plek is gereserveerd. Zodra de betaling verwerkt is, wordt
                   je inschrijving bevestigd en krijg je toegang tot het
                   materiaal.
@@ -109,7 +109,7 @@ export default async function DashboardPage() {
             {cancelled.map((row) => (
               <li
                 key={row.id}
-                className="flex items-center justify-between rounded-xl border border-line/60 px-4 py-3"
+                className="flex items-center justify-between rounded-lg border border-line/60 px-4 py-3"
               >
                 <span>{row.course_date?.title ?? "Cursus"}</span>
                 {row.course_date && (

@@ -41,7 +41,7 @@ export function PdfViewer({ src }: { src: string }) {
           canvas.style.width = "100%";
           canvas.style.maxWidth = `${viewport.width}px`;
           canvas.className =
-            "mx-auto mb-4 rounded-lg border border-line shadow-sm";
+            "mx-auto mb-4 rounded-xl border border-line shadow-sm";
           ctx.scale(dpr, dpr);
           await page.render({ canvasContext: ctx, viewport }).promise;
           if (cancelled) return;

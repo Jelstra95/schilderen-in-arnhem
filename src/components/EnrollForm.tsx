@@ -61,7 +61,7 @@ export function EnrollForm({
 
   if (dates.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-line bg-mist/40 p-10 text-center text-muted">
+      <div className="rounded-xl border border-dashed border-line bg-mist/40 p-10 text-center text-muted">
         Er zijn op dit moment geen data om op in te schrijven. Kom binnenkort
         terug.
       </div>
@@ -78,7 +78,7 @@ export function EnrollForm({
       <div>
         <h2 className="mb-4 font-title text-2xl text-ink">2 · Jouw gegevens</h2>
 
-        <div className="mb-5 rounded-2xl border border-line bg-mist/40 p-5">
+        <div className="mb-5 rounded-xl border border-line bg-mist/40 p-5">
           {selected ? (
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -122,7 +122,7 @@ export function EnrollForm({
           </Field>
 
           {error && (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </p>
           )}

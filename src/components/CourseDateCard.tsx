@@ -13,7 +13,7 @@ export function CourseDateCard({
   const soldOut = date.available <= 0 || date.status !== "open";
 
   return (
-    <article className="flex flex-col gap-4 rounded-2xl border border-line bg-paper p-6 transition-shadow hover:shadow-[0_8px_30px_rgba(22,19,15,0.06)]">
+    <article className="flex flex-col gap-4 rounded-xl border border-line bg-paper p-6 transition-shadow hover:shadow-[0_8px_30px_rgba(22,19,15,0.06)]">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="font-title text-xl text-ink">{date.title}</p>

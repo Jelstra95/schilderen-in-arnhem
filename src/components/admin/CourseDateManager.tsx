@@ -141,7 +141,7 @@ export function CourseDateManager({
       {open && (
         <form
           onSubmit={submit}
-          className="mb-8 space-y-4 rounded-2xl border border-line bg-paper p-6"
+          className="mb-8 space-y-4 rounded-xl border border-line bg-paper p-6"
         >
           <h2 className="font-title text-xl text-ink">
             {editingId ? "Datum bewerken" : "Nieuwe cursusdatum"}
@@ -211,7 +211,7 @@ export function CourseDateManager({
           </div>
 
           {error && (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </p>
           )}
@@ -238,7 +238,7 @@ export function CourseDateManager({
         {dates.map((d) => (
           <div
             key={d.id}
-            className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-paper p-5"
+            className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-line bg-paper p-5"
           >
             <div>
               <div className="flex items-center gap-2">
@@ -270,7 +270,7 @@ export function CourseDateManager({
           </div>
         ))}
         {dates.length === 0 && (
-          <p className="rounded-2xl border border-dashed border-line p-8 text-center text-muted">
+          <p className="rounded-xl border border-dashed border-line p-8 text-center text-muted">
             Nog geen cursusdata. Maak je eerste datum aan.
           </p>
         )}

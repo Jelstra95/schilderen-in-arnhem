@@ -1,50 +1,33 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
-import { EnrollForm } from "@/components/EnrollForm";
-import { getCourseDatesWithAvailability } from "@/lib/availability";
-import type { CourseDateWithAvailability } from "@/lib/types";
+import { AanmeldForm } from "@/components/AanmeldForm";
 
 export const metadata: Metadata = {
-  title: "Inschrijven",
+  title: "Aanmelden",
   description:
-    "Kies een datum en schrijf je in voor een schildercursus in Arnhem.",
+    "Meld je aan voor de schildercursus in Arnhem. Kies je voorkeursavond en laat je gegevens achter.",
 };
 
-export default async function InschrijvenPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ datum?: string }>;
-}) {
-  const { datum } = await searchParams;
-
-  let dates: CourseDateWithAvailability[] = [];
-  try {
-    dates = await getCourseDatesWithAvailability({
-      upcomingOnly: true,
-      openOnly: true,
-    });
-  } catch {
-    // Supabase not configured — EnrollForm renders an empty state.
-  }
-
+export default function InschrijvenPage() {
   return (
     <section className="py-16 sm:py-20">
       <Container>
         <div className="max-w-2xl">
           <p className="mb-3 text-sm uppercase tracking-[0.2em] text-clay">
-            Inschrijven
+            Aanmelden
           </p>
           <h1 className="font-title text-4xl text-ink sm:text-5xl">
-            Reserveer je plek
+            Ik meld mij aan
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-muted">
-            Kies hieronder een beschikbare datum en laat je gegevens achter. Je
-            plek wordt direct voor je gereserveerd.
+            Kies je voorkeursavond en laat je gegevens achter. Ik neem daarna
+            persoonlijk contact met je op over de startdatum, betaling en
+            bevestiging.
           </p>
         </div>
 
         <div className="mt-12">
-          <EnrollForm dates={dates} preselectedId={datum} />
+          <AanmeldForm />
         </div>
       </Container>
     </section>
