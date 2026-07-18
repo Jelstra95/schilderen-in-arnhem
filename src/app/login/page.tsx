@@ -40,8 +40,30 @@ export default async function LoginPage({
 
       <div className="relative z-10 w-full max-w-md">
         <Link
+          href="/cursussen"
+          className="inline-flex items-center gap-1.5 text-sm text-paper/80 transition-colors hover:text-paper"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M15 6l-6 6 6 6"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Terug naar cursussen
+        </Link>
+
+        <Link
           href="/"
-          className="font-title text-lg tracking-wide text-paper hover:text-clay"
+          className="mt-6 block font-title text-lg tracking-wide text-paper hover:text-clay"
         >
           Schilderen in Arnhem
         </Link>
