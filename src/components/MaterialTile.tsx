@@ -13,21 +13,34 @@ export function MaterialTile({
   title,
   subtitle,
   isPdf,
+  hasThumbnail,
 }: {
   id: string;
   title: string;
   subtitle?: string;
   isPdf: boolean;
+  hasThumbnail?: boolean;
 }) {
   const src = `/api/materials/${id}/stream`;
+  const thumb = `/api/materials/${id}/thumb`;
 
   return (
     <Link
       href={`/materiaal/${id}`}
       className="group relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl border border-line bg-ink shadow-sm transition-shadow hover:shadow-[0_12px_40px_rgba(22,19,15,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay/50 focus-visible:ring-offset-2"
     >
-      {/* Background: PDF page 2, or the image itself. */}
-      {isPdf ? (
+      {/* Background: the stored thumbnail (fast) when available, otherwise the
+          image itself, or — for un-thumbnailed PDFs — a rendered page 2. */}
+      {hasThumbnail ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={thumb}
+          alt=""
+          loading="lazy"
+          draggable={false}
+          className="absolute inset-0 h-full w-full select-none object-cover"
+        />
+      ) : isPdf ? (
         <PdfPageCanvas
           src={src}
           page={2}

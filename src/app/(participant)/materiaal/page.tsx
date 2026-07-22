@@ -18,7 +18,10 @@ export default async function MaterialsPage() {
   let query = db.from("materials").select("*, course_date:course_dates(*)");
   if (isPreview && viewer) query = query.or(materialsOrFilter(viewer));
 
-  const { data } = await query.order("created_at", { ascending: false });
+  // Sorted by lesson date (chronological); undated "general" material last.
+  const { data } = await query
+    .order("taught_on", { ascending: true, nullsFirst: false })
+    .order("created_at", { ascending: true });
 
   const rows = (data as Row[] | null) ?? [];
 
@@ -46,6 +49,7 @@ export default async function MaterialsPage() {
                 m.taught_on ? capitalize(formatDay(m.taught_on)) : undefined
               }
               isPdf={m.mime_type === "application/pdf"}
+              hasThumbnail={m.thumbnail_path != null}
             />
           ))}
         </div>
