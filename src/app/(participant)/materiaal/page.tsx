@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { getAuthContext } from "@/lib/auth";
-import { capitalize, formatDate } from "@/lib/format";
+import { capitalize, formatDay } from "@/lib/format";
 import type { CourseDate, Material } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Cursusmateriaal" };
@@ -45,8 +45,9 @@ export default async function MaterialsPage() {
                   <p className="font-medium text-ink">{m.title}</p>
                   <p className="mt-0.5 text-sm text-muted">
                     {m.mime_type === "application/pdf" ? "PDF" : "Afbeelding"}
+                    {m.taught_on ? ` · ${capitalize(formatDay(m.taught_on))}` : ""}
                     {m.course_date
-                      ? ` · ${m.course_date.title} (${capitalize(formatDate(m.course_date.starts_at))})`
+                      ? ` · ${m.course_date.title}`
                       : " · Algemeen"}
                   </p>
                 </div>

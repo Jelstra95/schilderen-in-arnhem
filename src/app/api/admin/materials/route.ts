@@ -22,12 +22,23 @@ export async function POST(request: NextRequest) {
   const file = form.get("file");
   const title = form.get("title")?.toString().trim();
   const courseDateId = form.get("course_date_id")?.toString() || null;
+  const taughtOnRaw = form.get("taught_on")?.toString().trim() || null;
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "Geen bestand ontvangen." }, { status: 400 });
   }
   if (!title) {
     return NextResponse.json({ error: "Titel is verplicht." }, { status: 400 });
+  }
+
+  // `taught_on` comes from an <input type="date"> as YYYY-MM-DD. Validate the
+  // shape and that it is a real calendar date before storing it.
+  let taughtOn: string | null = null;
+  if (taughtOnRaw) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(taughtOnRaw) || Number.isNaN(Date.parse(taughtOnRaw))) {
+      return NextResponse.json({ error: "Ongeldige datum." }, { status: 400 });
+    }
+    taughtOn = taughtOnRaw;
   }
   if (!ALLOWED.has(file.type)) {
     return NextResponse.json(
@@ -62,6 +73,7 @@ export async function POST(request: NextRequest) {
     .insert({
       course_date_id: courseDateId,
       title,
+      taught_on: taughtOn,
       storage_path: path,
       mime_type: file.type,
       size_bytes: file.size,
