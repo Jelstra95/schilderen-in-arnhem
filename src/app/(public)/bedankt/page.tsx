@@ -23,7 +23,7 @@ export default function BedanktPage() {
           cursusmateriaal.
         </p>
         <div className="mt-9 flex justify-center gap-3">
-          <ButtonLink href="/">Terug naar de homepage</ButtonLink>
+          <ButtonLink href="/cursussen">Terug naar de cursus</ButtonLink>
         </div>
       </Container>
     </section>
