@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { PdfViewer } from "@/components/PdfViewer";
-import { getAuthContext } from "@/lib/auth";
+import { getViewerContext, isMaterialVisibleToViewer } from "@/lib/preview";
 import type { Material } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Materiaal bekijken" };
@@ -14,10 +14,10 @@ export default async function MaterialViewerPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { supabase } = await getAuthContext();
+  const { isPreview, viewer, db } = await getViewerContext();
 
-  // RLS returns the row only if the participant may view it.
-  const { data } = await supabase
+  // For a real participant, RLS returns the row only if they may view it.
+  const { data } = await db
     .from("materials")
     .select("*")
     .eq("id", id)
@@ -25,6 +25,12 @@ export default async function MaterialViewerPage({
 
   const material = data as Material | null;
   if (!material) notFound();
+
+  // In preview the service-role client bypasses RLS, so enforce the previewed
+  // student's visibility window explicitly.
+  if (isPreview && viewer && !isMaterialVisibleToViewer(material, viewer)) {
+    notFound();
+  }
 
   const streamSrc = `/api/materials/${material.id}/stream`;
   const isPdf = material.mime_type === "application/pdf";
