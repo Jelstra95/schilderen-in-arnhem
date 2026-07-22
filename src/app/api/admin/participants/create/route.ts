@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { guardAdminApi } from "@/lib/admin-guard";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, missingAdminEnv } from "@/lib/supabase/admin";
 
 /** The default password every new participant account is created with. */
 const DEFAULT_PASSWORD = "olieverf";
@@ -25,6 +25,14 @@ function parseDate(value: unknown): string | null | undefined {
 export async function POST(request: NextRequest) {
   const guard = await guardAdminApi();
   if (!guard.ok) return guard.response;
+
+  const missingEnv = missingAdminEnv();
+  if (missingEnv) {
+    return NextResponse.json(
+      { error: `Serverinstelling ${missingEnv} ontbreekt in deze omgeving.` },
+      { status: 503 },
+    );
+  }
 
   let body: {
     email?: string;

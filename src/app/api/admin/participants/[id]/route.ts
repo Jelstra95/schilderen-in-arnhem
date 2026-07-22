@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { guardAdminApi } from "@/lib/admin-guard";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, missingAdminEnv } from "@/lib/supabase/admin";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const UUID_RE =
@@ -24,6 +24,14 @@ export async function PATCH(
 ) {
   const guard = await guardAdminApi();
   if (!guard.ok) return guard.response;
+
+  const missingEnv = missingAdminEnv();
+  if (missingEnv) {
+    return NextResponse.json(
+      { error: `Serverinstelling ${missingEnv} ontbreekt in deze omgeving.` },
+      { status: 503 },
+    );
+  }
 
   const { id } = await params;
   if (!UUID_RE.test(id)) {
