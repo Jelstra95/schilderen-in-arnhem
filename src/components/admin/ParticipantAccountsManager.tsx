@@ -120,6 +120,28 @@ export function ParticipantAccountsManager({
     if (ok) setEditingId(null);
   }
 
+  async function viewAs(account: ParticipantAccount) {
+    setRowBusyId(account.id);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participant_id: account.id }),
+      });
+      if (!res.ok) {
+        const p = await res.json().catch(() => ({}));
+        setError(p.error ?? "Kon niet als deelnemer bekijken.");
+        return;
+      }
+      // Enter the participant area scoped to this student.
+      router.push("/dashboard");
+      router.refresh();
+    } finally {
+      setRowBusyId(null);
+    }
+  }
+
   async function endAccess(account: ParticipantAccount) {
     if (
       !window.confirm(
@@ -333,6 +355,16 @@ export function ParticipantAccountsManager({
 
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap justify-end gap-1">
+                      {!editing && (
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => viewAs(account)}
+                          disabled={rowBusy}
+                        >
+                          Bekijk als
+                        </Button>
+                      )}
                       {!editing && (
                         <Button
                           size="sm"

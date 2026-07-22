@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { getAuthContext } from "@/lib/auth";
+import { getViewerContext, materialsOrFilter } from "@/lib/preview";
 import { capitalize, formatDay } from "@/lib/format";
 import type { CourseDate, Material } from "@/lib/types";
 
@@ -10,13 +10,15 @@ export const metadata: Metadata = { title: "Cursusmateriaal" };
 type Row = Material & { course_date: CourseDate | null };
 
 export default async function MaterialsPage() {
-  const { supabase } = await getAuthContext();
+  const { isPreview, viewer, db } = await getViewerContext();
 
-  // RLS only returns materials for the participant's confirmed course dates.
-  const { data } = await supabase
-    .from("materials")
-    .select("*, course_date:course_dates(*)")
-    .order("created_at", { ascending: false });
+  // For a real participant, RLS returns only materials within their access
+  // window. In preview, the service-role client bypasses RLS, so we replicate
+  // that window filter for the previewed student.
+  let query = db.from("materials").select("*, course_date:course_dates(*)");
+  if (isPreview && viewer) query = query.or(materialsOrFilter(viewer));
+
+  const { data } = await query.order("created_at", { ascending: false });
 
   const rows = (data as Row[] | null) ?? [];
 
