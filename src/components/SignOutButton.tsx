@@ -11,7 +11,7 @@ export function SignOutButton() {
   async function signOut() {
     setBusy(true);
     await createClient().auth.signOut();
-    router.push("/");
+    router.push("/cursussen");
     router.refresh();
   }
 
