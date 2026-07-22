@@ -10,50 +10,61 @@ const ALLOWED = new Set([
 ]);
 const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
 
-function slug(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-+|-+$/g, "");
-}
-
+/**
+ * Step 2 of the direct-to-storage upload: the browser has already uploaded the
+ * file to Supabase Storage via a signed URL (see ./upload-url), so this only
+ * verifies the object exists and records the `materials` row. No file body
+ * passes through this function.
+ */
 export async function POST(request: NextRequest) {
   const guard = await guardAdminApi();
   if (!guard.ok) return guard.response;
 
-  const form = await request.formData();
-  const file = form.get("file");
-  const title = form.get("title")?.toString().trim();
-  const courseDateId = form.get("course_date_id")?.toString() || null;
+  const body = await request.json().catch(() => null);
+  const path = body?.path?.toString();
+  const title = body?.title?.toString().trim();
+  const mimeType = body?.mimeType?.toString() || "";
+  const courseDateId = body?.courseDateId ? String(body.courseDateId) : null;
 
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: "Geen bestand ontvangen." }, { status: 400 });
-  }
-  if (!title) {
-    return NextResponse.json({ error: "Titel is verplicht." }, { status: 400 });
-  }
-  if (!ALLOWED.has(file.type)) {
+  if (!path || !title) {
     return NextResponse.json(
-      { error: "Alleen PDF of afbeeldingen (PNG, JPG, WebP) zijn toegestaan." },
+      { error: "Onvolledige gegevens." },
       { status: 400 },
     );
   }
-  if (file.size > MAX_BYTES) {
-    return NextResponse.json(
-      { error: "Bestand is te groot (max. 50 MB)." },
-      { status: 400 },
-    );
+  if (!ALLOWED.has(mimeType)) {
+    return NextResponse.json({ error: "Type niet toegestaan." }, { status: 400 });
+  }
+
+  // The path must live in the folder implied by the (optional) course date.
+  const folder = courseDateId ?? "algemeen";
+  if (!path.startsWith(`${folder}/`)) {
+    return NextResponse.json({ error: "Ongeldig pad." }, { status: 400 });
   }
 
   const admin = createAdminClient();
-  const folder = courseDateId ?? "algemeen";
-  const path = `${folder}/${crypto.randomUUID()}-${slug(file.name)}`;
 
-  const { error: uploadError } = await admin.storage
+  // Verify the uploaded object exists and read its real size.
+  const name = path.slice(folder.length + 1);
+  const { data: list } = await admin.storage
     .from(MATERIALS_BUCKET)
-    .upload(path, file, { contentType: file.type, upsert: false });
+    .list(folder, { search: name, limit: 100 });
+  const object = list?.find((o) => o.name === name);
 
-  if (uploadError) {
+  if (!object) {
     return NextResponse.json(
-      { error: "Uploaden naar opslag is mislukt." },
-      { status: 500 },
+      { error: "De upload is niet gevonden." },
+      { status: 400 },
+    );
+  }
+
+  const size =
+    typeof object.metadata?.size === "number" ? object.metadata.size : null;
+  if (size != null && size > MAX_BYTES) {
+    await admin.storage.from(MATERIALS_BUCKET).remove([path]);
+    return NextResponse.json(
+      { error: "Bestand is te groot (max. 50 MB)." },
+      { status: 400 },
     );
   }
 
@@ -63,8 +74,8 @@ export async function POST(request: NextRequest) {
       course_date_id: courseDateId,
       title,
       storage_path: path,
-      mime_type: file.type,
-      size_bytes: file.size,
+      mime_type: mimeType,
+      size_bytes: size,
     })
     .select("*")
     .single();
