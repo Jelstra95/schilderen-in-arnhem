@@ -11,12 +11,15 @@ interface Attempt {
 }
 
 // Tried in order; we stop at the first result that fits under the target.
+// The later steps get aggressive so many-page decks can still fit.
 const ATTEMPTS: Attempt[] = [
   { dpi: 150, quality: 0.72 },
   { dpi: 132, quality: 0.62 },
   { dpi: 110, quality: 0.55 },
   { dpi: 96, quality: 0.5 },
   { dpi: 80, quality: 0.45 },
+  { dpi: 66, quality: 0.4 },
+  { dpi: 54, quality: 0.38 },
 ];
 
 export interface CompressProgress {
