@@ -3,12 +3,15 @@
 // PDF using the locally installed Apple apps (via AppleScript), then uploads the
 // PDF straight into the course platform's Supabase storage + `materials` table.
 //
-// This talks to Supabase directly with the service-role key, mirroring exactly
-// what POST /api/admin/materials does — so no changes to the deployed app are
-// needed. It is triggered by a launchd LaunchAgent (see install.sh) whenever a
-// file lands in the inbox, plus a periodic safety sweep.
+// It uses only Node built-ins (global fetch) and talks to Supabase's REST +
+// Storage HTTP API with the service-role key, mirroring exactly what
+// POST /api/admin/materials does. No npm dependencies, so it can live and run
+// from anywhere — the installer copies it to a stable location. No changes to
+// the deployed app are needed.
+//
+// Triggered by a launchd LaunchAgent (see install.sh) whenever a file lands in
+// the inbox, plus a periodic safety sweep.
 
-import { createClient } from "@supabase/supabase-js";
 import { readFileSync, existsSync } from "node:fs";
 import {
   readdir,
@@ -41,7 +44,10 @@ const LOG_DIR =
   process.env.KP_LOG_DIR || join(HOME, "Library", "Logs", "keynote-to-pdf");
 const LOCK = join(tmpdir(), "keynote-to-pdf.lock");
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(
+  /\/+$/,
+  "",
+);
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const BUCKET = process.env.SUPABASE_MATERIALS_BUCKET || "course-materials";
 
@@ -59,7 +65,7 @@ async function main() {
   if (!SUPABASE_URL || !SERVICE_KEY) {
     await log(
       "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY. " +
-        "Put them in the repo's .env.local, or set KP_ENV_FILE. Aborting.",
+        "Point KP_ENV_FILE at an env file that defines them. Aborting.",
     );
     process.exit(1);
   }
@@ -72,12 +78,8 @@ async function main() {
     const candidates = await findSettledDocuments();
     if (candidates.length === 0) return;
 
-    const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
-      auth: { autoRefreshToken: false, persistSession: false },
-    });
-
     for (const file of candidates) {
-      await processOne(supabase, file).catch(async (err) => {
+      await processOne(file).catch(async (err) => {
         await fail(file, err?.message || String(err));
       });
     }
@@ -87,7 +89,7 @@ async function main() {
 }
 
 // ── Core ──────────────────────────────────────────────────────────────────
-async function processOne(supabase, filePath) {
+async function processOne(filePath) {
   const ext = extname(filePath).toLowerCase();
   const base = basename(filePath, extname(filePath));
   const app = ext === ".key" ? "Keynote" : "Pages";
@@ -109,25 +111,19 @@ async function processOne(supabase, filePath) {
   const buffer = await readFile(tmpPdf);
   const storagePath = `algemeen/${randomUUID()}-${slug(base)}.pdf`;
 
-  const { error: uploadError } = await supabase.storage
-    .from(BUCKET)
-    .upload(storagePath, buffer, {
-      contentType: "application/pdf",
-      upsert: false,
+  await sbUploadObject(storagePath, buffer);
+  try {
+    await sbInsertMaterial({
+      course_date_id: null, // "algemeen" — visible to all participants
+      title: base,
+      storage_path: storagePath,
+      mime_type: "application/pdf",
+      size_bytes: buffer.length,
     });
-  if (uploadError) throw new Error(`Storage upload failed: ${uploadError.message}`);
-
-  const { error: insertError } = await supabase.from("materials").insert({
-    course_date_id: null, // "algemeen" — visible to all participants
-    title: base,
-    storage_path: storagePath,
-    mime_type: "application/pdf",
-    size_bytes: buffer.length,
-  });
-  if (insertError) {
+  } catch (err) {
     // Roll back the uploaded object so we don't leave orphans.
-    await supabase.storage.from(BUCKET).remove([storagePath]);
-    throw new Error(`DB insert failed: ${insertError.message}`);
+    await sbDeleteObject(storagePath).catch(() => {});
+    throw err;
   }
 
   // 3. Keep a local copy of the PDF next to the archived original, then
@@ -153,6 +149,63 @@ async function fail(filePath, message) {
   } catch (err) {
     await log(`  (could not move failed file: ${err?.message || err})`);
   }
+}
+
+// ── Supabase HTTP (service-role; bypasses RLS) ──────────────────────────────
+function sbHeaders(extra = {}) {
+  return {
+    apikey: SERVICE_KEY,
+    Authorization: `Bearer ${SERVICE_KEY}`,
+    ...extra,
+  };
+}
+
+async function sbUploadObject(objectPath, buffer) {
+  const url = `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${encodeStoragePath(objectPath)}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: sbHeaders({
+      "Content-Type": "application/pdf",
+      "x-upsert": "false",
+      "cache-control": "3600",
+    }),
+    body: buffer,
+  });
+  if (!res.ok) {
+    throw new Error(
+      `Storage upload failed (${res.status}): ${(await res.text()).slice(0, 300)}`,
+    );
+  }
+}
+
+async function sbDeleteObject(objectPath) {
+  const url = `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${encodeStoragePath(objectPath)}`;
+  const res = await fetch(url, { method: "DELETE", headers: sbHeaders() });
+  if (!res.ok && res.status !== 404) {
+    throw new Error(`Storage delete failed (${res.status})`);
+  }
+}
+
+async function sbInsertMaterial(row) {
+  const url = `${SUPABASE_URL}/rest/v1/materials`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: sbHeaders({
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    }),
+    body: JSON.stringify(row),
+  });
+  if (!res.ok) {
+    throw new Error(
+      `DB insert failed (${res.status}): ${(await res.text()).slice(0, 300)}`,
+    );
+  }
+}
+
+// Encode each path segment but keep the "/" separators intact.
+function encodeStoragePath(p) {
+  return p.split("/").map(encodeURIComponent).join("/");
 }
 
 // ── Inbox scanning ──────────────────────────────────────────────────────────
@@ -271,8 +324,8 @@ function sleep(ms) {
 function loadEnvFiles() {
   const files = [
     process.env.KP_ENV_FILE,
-    join(REPO_ROOT, ".env.local"),
     join(TOOL_DIR, ".env"),
+    join(REPO_ROOT, ".env.local"),
   ].filter(Boolean);
   for (const file of files) {
     if (!existsSync(file)) continue;
