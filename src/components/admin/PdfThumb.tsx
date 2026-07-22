@@ -12,8 +12,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 type Status = "loading" | "ready" | "error";
 
 /**
- * Renders the first page of a PDF (served by `src`) into a canvas thumbnail.
- * Used for the admin material gallery cards.
+ * Renders a PDF (served by `src`) into a canvas thumbnail for the admin
+ * material gallery cards. Prefers the second page — the first slide is usually
+ * the generic course announcement, while the second carries the topic image —
+ * and falls back to the first page for single-page documents.
  */
 export function PdfThumb({ src }: { src: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,7 +31,9 @@ export function PdfThumb({ src }: { src: string }) {
         const data = await res.arrayBuffer();
         const pdf = await pdfjs.getDocument({ data }).promise;
         if (cancelled) return;
-        const page = await pdf.getPage(1);
+        // Second slide when available; first for single-page documents.
+        const pageNumber = pdf.numPages >= 2 ? 2 : 1;
+        const page = await pdf.getPage(pageNumber);
         if (cancelled) return;
 
         const canvas = canvasRef.current;
