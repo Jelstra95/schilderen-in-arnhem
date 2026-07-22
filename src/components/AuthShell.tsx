@@ -75,7 +75,7 @@ export function AuthShell({
         </div>
 
         {footer && (
-          <p className="mt-6 text-center text-sm text-paper/80">{footer}</p>
+          <p className="mt-8 text-center text-sm text-paper/80">{footer}</p>
         )}
       </div>
     </div>
