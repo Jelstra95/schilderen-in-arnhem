@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
+import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
@@ -245,6 +246,15 @@ export default function LandingPage() {
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <h2 className="font-title text-4xl text-ink">Over de docent</h2>
+            <div className="mt-8 overflow-hidden rounded-xl border border-line">
+              <Image
+                src={jelleDocent}
+                alt="Jelle van de Ridder in zijn atelier met penselen naast twee olieverfschilderijen"
+                placeholder="blur"
+                sizes="(min-width: 1024px) 32rem, 100vw"
+                className="h-auto w-full"
+              />
+            </div>
           </div>
           <div className="space-y-5 text-lg leading-relaxed text-muted">
             <p>
