@@ -14,12 +14,20 @@ import {
   iworkAppName,
   iworkToPdf,
 } from "@/lib/iwork-to-pdf";
+import { createClient } from "@/lib/supabase/client";
+import { compressPdf } from "@/lib/pdf/compressPdf";
 import type { CourseDate, Material } from "@/lib/types";
 
 export type MaterialRow = Material & { course_date: CourseDate | null };
 
 const isPdf = (m: Material) => m.mime_type === "application/pdf";
 const streamSrc = (id: string) => `/api/materials/${id}/stream`;
+
+// Compress PDFs larger than this in the browser; keep the hard ceiling below
+// the storage bucket limit.
+const COMPRESS_ABOVE = 45 * 1024 * 1024;
+const MAX_BYTES = 50 * 1024 * 1024;
+const mb = (bytes: number) => (bytes / 1024 / 1024).toFixed(1);
 
 function metaLine(m: MaterialRow): string {
   const parts = [isPdf(m) ? "PDF" : "Afbeelding"];
@@ -243,21 +251,30 @@ function UploadModal({
     e.preventDefault();
     setError(null);
     setStatus(null);
-    const form = new FormData(e.currentTarget);
-    if (form.get("course_date_id") === "") form.delete("course_date_id");
-    if (form.get("taught_on") === "") form.delete("taught_on");
 
-    const file = form.get("file");
+    const form = new FormData(e.currentTarget);
+    const title = String(form.get("title") ?? "").trim();
+    const courseDateId = form.get("course_date_id")
+      ? String(form.get("course_date_id"))
+      : null;
+    const taughtOn = form.get("taught_on")
+      ? String(form.get("taught_on"))
+      : null;
+    const picked = form.get("file");
+    if (!(picked instanceof File) || picked.size === 0) {
+      setError("Kies een bestand.");
+      return;
+    }
+    let file = picked;
 
     setBusy(true);
     try {
       // Convert Pages/Keynote to PDF in the browser before uploading.
-      if (file instanceof File && isIWorkFile(file)) {
+      if (isIWorkFile(file)) {
         const app = iworkAppName(file);
         setStatus(`${app}-bestand omzetten naar PDF…`);
         try {
-          const pdf = await iworkToPdf(file);
-          form.set("file", pdf, pdf.name);
+          file = await iworkToPdf(file);
         } catch (err) {
           if (err instanceof IWorkConversionError) {
             setError(
@@ -272,16 +289,85 @@ function UploadModal({
         }
       }
 
-      setStatus("Uploaden…");
-      const res = await fetch("/api/admin/materials", { method: "POST", body: form });
-      if (!res.ok) {
-        const p = await res.json().catch(() => ({}));
-        setError(p.error ?? "Uploaden mislukt.");
+      // Compress large PDFs in the browser so the file fits under the limit.
+      if (file.type === "application/pdf" && file.size > COMPRESS_ABOVE) {
+        const result = await compressPdf(file, {
+          maxBytes: COMPRESS_ABOVE,
+          onProgress: ({ page, totalPages, attempt, totalAttempts }) =>
+            setStatus(
+              `PDF verkleinen… pagina ${page}/${totalPages}` +
+                (totalAttempts > 1 ? ` (poging ${attempt}/${totalAttempts})` : ""),
+            ),
+        });
+        file = result.file;
+        if (file.size > MAX_BYTES) {
+          setError(
+            `De PDF blijft te groot (${mb(file.size)} MB) na verkleinen. ` +
+              "Splits het bestand op in delen.",
+          );
+          return;
+        }
+        setStatus(
+          `Verkleind van ${mb(result.originalBytes)} naar ${mb(file.size)} MB. Uploaden…`,
+        );
+      } else if (file.size > MAX_BYTES) {
+        setError(`Bestand is te groot (max. ${MAX_BYTES / 1024 / 1024} MB).`);
+        return;
+      } else {
+        setStatus("Uploaden…");
+      }
+
+      // Ask the server for a signed upload URL (it owns the storage path).
+      const urlRes = await fetch("/api/admin/materials/upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          courseDateId,
+          filename: file.name,
+          mimeType: file.type,
+        }),
+      });
+      if (!urlRes.ok) {
+        const p = await urlRes.json().catch(() => ({}));
+        setError(p.error ?? "Voorbereiden van de upload is mislukt.");
         return;
       }
+      const { bucket, path, token } = await urlRes.json();
+
+      // Upload the file straight to Supabase Storage — not via the server.
+      const supabase = createClient();
+      const { error: uploadError } = await supabase.storage
+        .from(bucket)
+        .uploadToSignedUrl(path, token, file, { contentType: file.type });
+      if (uploadError) {
+        setError("Uploaden naar opslag is mislukt.");
+        return;
+      }
+
+      // Record the materials row.
+      const finalizeRes = await fetch("/api/admin/materials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          path,
+          title,
+          courseDateId,
+          taughtOn,
+          mimeType: file.type,
+        }),
+      });
+      if (!finalizeRes.ok) {
+        const p = await finalizeRes.json().catch(() => ({}));
+        setError(p.error ?? "Opslaan van het materiaal is mislukt.");
+        return;
+      }
+
       formRef.current?.reset();
       setConvertNote(null);
       onUploaded();
+    } catch {
+      setError("Er ging iets mis bij het uploaden.");
     } finally {
       setBusy(false);
       setStatus(null);
@@ -320,7 +406,7 @@ function UploadModal({
         <Field
           label="Bestand"
           htmlFor="file"
-          hint="PDF, afbeelding, of Pages/Keynote · max. 50 MB"
+          hint="PDF, afbeelding, of Pages/Keynote · grote PDF's worden automatisch verkleind"
         >
           <Input
             id="file"
