@@ -23,10 +23,11 @@ export type MaterialRow = Material & { course_date: CourseDate | null };
 const isPdf = (m: Material) => m.mime_type === "application/pdf";
 const streamSrc = (id: string) => `/api/materials/${id}/stream`;
 
-// Compress PDFs larger than this in the browser; keep the hard ceiling below
-// the storage bucket limit.
-const COMPRESS_ABOVE = 45 * 1024 * 1024;
-const MAX_BYTES = 50 * 1024 * 1024;
+// Supabase Storage rejects uploads over 50 MiB (verified). Stay safely below
+// that: upload directly only when a file is already under SAFE_MAX, and when
+// compressing, aim for COMPRESS_TARGET so the result has real headroom.
+const SAFE_MAX = 48 * 1024 * 1024;
+const COMPRESS_TARGET = 40 * 1024 * 1024;
 const mb = (bytes: number) => (bytes / 1024 / 1024).toFixed(1);
 
 function metaLine(m: MaterialRow): string {
@@ -290,9 +291,9 @@ function UploadModal({
       }
 
       // Compress large PDFs in the browser so the file fits under the limit.
-      if (file.type === "application/pdf" && file.size > COMPRESS_ABOVE) {
+      if (file.type === "application/pdf" && file.size > SAFE_MAX) {
         const result = await compressPdf(file, {
-          maxBytes: COMPRESS_ABOVE,
+          maxBytes: COMPRESS_TARGET,
           onProgress: ({ page, totalPages, attempt, totalAttempts }) =>
             setStatus(
               `PDF verkleinen… pagina ${page}/${totalPages}` +
@@ -300,7 +301,7 @@ function UploadModal({
             ),
         });
         file = result.file;
-        if (file.size > MAX_BYTES) {
+        if (file.size > SAFE_MAX) {
           setError(
             `De PDF blijft te groot (${mb(file.size)} MB) na verkleinen. ` +
               "Splits het bestand op in delen.",
@@ -310,8 +311,11 @@ function UploadModal({
         setStatus(
           `Verkleind van ${mb(result.originalBytes)} naar ${mb(file.size)} MB. Uploaden…`,
         );
-      } else if (file.size > MAX_BYTES) {
-        setError(`Bestand is te groot (max. ${MAX_BYTES / 1024 / 1024} MB).`);
+      } else if (file.size > SAFE_MAX) {
+        setError(
+          `Bestand is te groot (${mb(file.size)} MB, max. ${Math.floor(SAFE_MAX / 1024 / 1024)} MB). ` +
+            "Verklein of splits het bestand.",
+        );
         return;
       } else {
         setStatus("Uploaden…");
