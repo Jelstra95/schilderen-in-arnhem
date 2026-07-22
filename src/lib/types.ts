@@ -51,6 +51,7 @@ export interface Material {
   id: string;
   course_date_id: string | null;
   title: string;
+  taught_on: string | null; // date the course took place (YYYY-MM-DD)
   storage_path: string;
   mime_type: string;
   size_bytes: number | null;
