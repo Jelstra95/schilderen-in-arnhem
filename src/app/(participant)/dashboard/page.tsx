@@ -4,8 +4,8 @@ import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { CancelEnrollmentButton } from "@/components/CancelEnrollmentButton";
-import { getAuthContext } from "@/lib/auth";
-import { capitalize, formatDate, formatTime } from "@/lib/format";
+import { getViewerContext } from "@/lib/preview";
+import { capitalize, formatDate, formatDay, formatTime } from "@/lib/format";
 import type { CourseDate, Enrollment } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Mijn cursus" };
@@ -19,28 +19,30 @@ const statusLabel: Record<Enrollment["status"], string> = {
 };
 
 export default async function DashboardPage() {
-  const { supabase, user, profile } = await getAuthContext();
+  const { isPreview, viewer, db } = await getViewerContext();
 
-  const { data } = await supabase
+  const { data } = await db
     .from("enrollments")
     .select("*, course_date:course_dates(*)")
-    .eq("user_id", user!.id)
+    .eq("user_id", viewer!.id)
     .order("created_at", { ascending: false });
 
   const rows = (data as Row[] | null) ?? [];
   const active = rows.filter((r) => r.status !== "cancelled");
   const cancelled = rows.filter((r) => r.status === "cancelled");
 
+  const hasPeriod = Boolean(viewer?.access_starts_on);
+
   return (
     <Container className="max-w-3xl">
       <header className="mb-10">
         <h1 className="font-title text-4xl text-ink">
-          Welkom{profile?.full_name ? `, ${profile.full_name}` : ""}
+          Welkom{viewer?.full_name ? `, ${viewer.full_name}` : ""}
         </h1>
         <p className="mt-2 text-muted">
           Hier vind je je inschrijvingen en het cursusmateriaal.
         </p>
-        {profile?.role === "admin" && (
+        {viewer?.role === "admin" && (
           <Link
             href="/admin"
             className="mt-3 inline-block text-sm text-clay hover:underline"
@@ -50,15 +52,39 @@ export default async function DashboardPage() {
         )}
       </header>
 
-      {active.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-line bg-mist/40 p-10 text-center">
-          <p className="text-muted">Je hebt nog geen actieve inschrijving.</p>
-          <div className="mt-4 flex justify-center">
-            <ButtonLink href="/inschrijven" size="sm">
-              Bekijk de cursusdata
+      {hasPeriod && (
+        <article className="mb-4 rounded-xl border border-line bg-paper p-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="font-title text-xl text-ink">Jouw cursusperiode</p>
+              <p className="mt-1 text-sm text-muted">
+                {capitalize(formatDay(viewer!.access_starts_on!))}
+                {viewer!.access_ends_on
+                  ? ` t/m ${formatDay(viewer!.access_ends_on)}`
+                  : " — doorlopend"}
+              </p>
+              <p className="mt-3 text-sm text-muted">
+                Je hebt toegang tot het cursusmateriaal binnen deze periode.
+              </p>
+            </div>
+            <ButtonLink href="/materiaal" size="sm">
+              Naar cursusmateriaal
             </ButtonLink>
           </div>
-        </div>
+        </article>
+      )}
+
+      {active.length === 0 ? (
+        !hasPeriod && (
+          <div className="rounded-xl border border-dashed border-line bg-mist/40 p-10 text-center">
+            <p className="text-muted">Je hebt nog geen actieve inschrijving.</p>
+            <div className="mt-4 flex justify-center">
+              <ButtonLink href="/inschrijven" size="sm">
+                Bekijk de cursusdata
+              </ButtonLink>
+            </div>
+          </div>
+        )
       ) : (
         <div className="space-y-4">
           {active.map((row) => (
@@ -86,7 +112,7 @@ export default async function DashboardPage() {
                     </p>
                   )}
                 </div>
-                <CancelEnrollmentButton id={row.id} />
+                {!isPreview && <CancelEnrollmentButton id={row.id} />}
               </div>
               {row.status === "pending" && (
                 <p className="mt-4 rounded-lg bg-mist/60 px-4 py-3 text-sm text-muted">

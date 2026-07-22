@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
 import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
+import monetBg from "@/assets/cursus/monet-landscape.jpg";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
@@ -379,17 +380,29 @@ export default function LandingPage() {
       {/* Slot-CTA -------------------------------------------------------- */}
       <section className="py-20">
         <Container>
-          <div className="rounded-xl bg-ink px-8 py-16 text-center text-paper sm:px-16">
-            <h2 className="font-title text-4xl text-paper">Interesse?</h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-paper/70">
-              Lijkt deze cursus je wat, of heb je nog vragen? Reserveer je plek
-              op een van de beschikbare data. Na je aanmelding neem ik
-              persoonlijk contact met je op.
-            </p>
-            <div className="mt-8 flex justify-center">
-              <ButtonLink href="/inschrijven" size="lg" variant="onDark">
-                Ik meld mij aan!
-              </ButtonLink>
+          <div className="relative overflow-hidden rounded-xl px-8 py-16 text-center text-paper sm:px-16">
+            <Image
+              src={monetBg}
+              alt=""
+              fill
+              placeholder="blur"
+              sizes="(max-width: 768px) 100vw, 1024px"
+              className="object-cover"
+            />
+            {/* Darken the bright Monet sky so white text stays legible. */}
+            <div className="absolute inset-0 bg-ink/65" />
+            <div className="relative z-10">
+              <h2 className="font-title text-4xl text-paper">Interesse?</h2>
+              <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-paper/85">
+                Lijkt deze cursus je wat, of heb je nog vragen? Reserveer je plek
+                op een van de beschikbare data. Na je aanmelding neem ik
+                persoonlijk contact met je op.
+              </p>
+              <div className="mt-8 flex justify-center">
+                <ButtonLink href="/inschrijven" size="lg" variant="onDark">
+                  Ik meld mij aan!
+                </ButtonLink>
+              </div>
             </div>
           </div>
         </Container>
