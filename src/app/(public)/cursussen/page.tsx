@@ -46,16 +46,16 @@ const practical = [
 ];
 
 const materials = [
-  { product: "Old Holland Olieverf Set Scheveningen Algemeen 10x40ml", price: "130,03", category: "Verf(set)" },
-  { product: "Old Holland Olieverf A002 40ml Zinkwit", price: "10,92", category: "Verf" },
-  { product: "Old Holland Olieverf B103 40ml Brilliant Yellow Light", price: "17,95", category: "Verf" },
-  { product: "Old Holland Olieverf A054 40ml Yellow Ochre Deep", price: "10,92", category: "Verf" },
-  { product: "Gamblin Gamsol OMS 125ml", price: "12,51", category: "Oplosmiddel" },
-  { product: "Da Vinci Penselenzeep", price: "4,90", category: "Kwastenzeep" },
-  { product: "Gamblin Solvent Free Fluid Medium 125ml", price: "17,58", category: "Medium" },
-  { product: "Ami Hout Palet Rechthoek 18x27cm", price: "3,54", category: "Palet" },
-  { product: "Van Beek Penselen Set Filament 12x", price: "22,95", category: "Penselen zacht" },
-  { product: "Van Beek Penselen Set in Koker Varkenshaar Plat 10 Stuks", price: "17,40", category: "Penselen stug" },
+  { product: "Old Holland Olieverf Set Scheveningen Algemeen 10x40ml", price: "130", category: "Verf(set)" },
+  { product: "Old Holland Olieverf A002 40ml Zinkwit", price: "11", category: "Verf" },
+  { product: "Old Holland Olieverf B103 40ml Brilliant Yellow Light", price: "18", category: "Verf" },
+  { product: "Old Holland Olieverf A054 40ml Yellow Ochre Deep", price: "11", category: "Verf" },
+  { product: "Gamblin Gamsol OMS 125ml", price: "13", category: "Oplosmiddel" },
+  { product: "Da Vinci Penselenzeep", price: "5", category: "Kwastenzeep" },
+  { product: "Gamblin Solvent Free Fluid Medium 125ml", price: "18", category: "Medium" },
+  { product: "Ami Hout Palet Rechthoek 18x27cm", price: "4", category: "Palet" },
+  { product: "Van Beek Penselen Set Filament 12x", price: "23", category: "Penselen zacht" },
+  { product: "Van Beek Penselen Set in Koker Varkenshaar Plat 10 Stuks", price: "17", category: "Penselen stug" },
 ];
 
 const reviews = [
@@ -302,7 +302,7 @@ export default function LandingPage() {
                 <tr className="border-b border-line text-sm uppercase tracking-wide text-clay">
                   <th className="py-3 pr-4 font-normal">Product</th>
                   <th className="py-3 pr-4 font-normal">Categorie</th>
-                  <th className="py-3 text-right font-normal">Prijs</th>
+                  <th className="py-3 text-right font-normal">Prijs (±)</th>
                 </tr>
               </thead>
               <tbody>
@@ -320,7 +320,7 @@ export default function LandingPage() {
                     Totaal
                   </td>
                   <td className="py-4 text-right tabular-nums text-ink">
-                    € 248,70
+                    € 250
                   </td>
                 </tr>
               </tbody>
