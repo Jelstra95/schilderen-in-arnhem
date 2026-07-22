@@ -10,6 +10,11 @@ export interface Profile {
   role: Role;
   full_name: string | null;
   email: string | null;
+  phone: string | null;
+  // Membership window. Participants see material dated within it (see
+  // migration 0003). `access_ends_on` null = open-ended.
+  access_starts_on: string | null; // date-only (YYYY-MM-DD)
+  access_ends_on: string | null; // date-only (YYYY-MM-DD)
   created_at: string;
 }
 

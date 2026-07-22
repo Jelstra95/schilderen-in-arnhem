@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { CancelEnrollmentButton } from "@/components/CancelEnrollmentButton";
 import { getAuthContext } from "@/lib/auth";
-import { capitalize, formatDate, formatTime } from "@/lib/format";
+import { capitalize, formatDate, formatDay, formatTime } from "@/lib/format";
 import type { CourseDate, Enrollment } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Mijn cursus" };
@@ -31,6 +31,8 @@ export default async function DashboardPage() {
   const active = rows.filter((r) => r.status !== "cancelled");
   const cancelled = rows.filter((r) => r.status === "cancelled");
 
+  const hasPeriod = Boolean(profile?.access_starts_on);
+
   return (
     <Container className="max-w-3xl">
       <header className="mb-10">
@@ -50,15 +52,39 @@ export default async function DashboardPage() {
         )}
       </header>
 
-      {active.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-line bg-mist/40 p-10 text-center">
-          <p className="text-muted">Je hebt nog geen actieve inschrijving.</p>
-          <div className="mt-4 flex justify-center">
-            <ButtonLink href="/inschrijven" size="sm">
-              Bekijk de cursusdata
+      {hasPeriod && (
+        <article className="mb-4 rounded-xl border border-line bg-paper p-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="font-title text-xl text-ink">Jouw cursusperiode</p>
+              <p className="mt-1 text-sm text-muted">
+                {capitalize(formatDay(profile!.access_starts_on!))}
+                {profile!.access_ends_on
+                  ? ` t/m ${formatDay(profile!.access_ends_on)}`
+                  : " — doorlopend"}
+              </p>
+              <p className="mt-3 text-sm text-muted">
+                Je hebt toegang tot het cursusmateriaal binnen deze periode.
+              </p>
+            </div>
+            <ButtonLink href="/materiaal" size="sm">
+              Naar cursusmateriaal
             </ButtonLink>
           </div>
-        </div>
+        </article>
+      )}
+
+      {active.length === 0 ? (
+        !hasPeriod && (
+          <div className="rounded-xl border border-dashed border-line bg-mist/40 p-10 text-center">
+            <p className="text-muted">Je hebt nog geen actieve inschrijving.</p>
+            <div className="mt-4 flex justify-center">
+              <ButtonLink href="/inschrijven" size="sm">
+                Bekijk de cursusdata
+              </ButtonLink>
+            </div>
+          </div>
+        )
       ) : (
         <div className="space-y-4">
           {active.map((row) => (
