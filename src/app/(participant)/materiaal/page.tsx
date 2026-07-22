@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { MaterialTile } from "@/components/MaterialTile";
 import { getViewerContext, materialsOrFilter } from "@/lib/preview";
 import { capitalize, formatDay } from "@/lib/format";
 import type { CourseDate, Material } from "@/lib/types";
@@ -23,7 +23,7 @@ export default async function MaterialsPage() {
   const rows = (data as Row[] | null) ?? [];
 
   return (
-    <Container className="max-w-3xl">
+    <Container className="max-w-4xl">
       <h1 className="font-title text-4xl text-ink">Cursusmateriaal</h1>
       <p className="mt-2 text-muted">
         Bekijk hier de PDF&apos;s en slides bij jouw cursus. Het materiaal is
@@ -36,28 +36,19 @@ export default async function MaterialsPage() {
           is, verschijnt het hier.
         </div>
       ) : (
-        <ul className="mt-10 space-y-3">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2">
           {rows.map((m) => (
-            <li key={m.id}>
-              <Link
-                href={`/materiaal/${m.id}`}
-                className="flex items-center justify-between rounded-xl border border-line bg-paper p-5 transition-shadow hover:shadow-[0_8px_30px_rgba(22,19,15,0.06)]"
-              >
-                <div>
-                  <p className="font-medium text-ink">{m.title}</p>
-                  <p className="mt-0.5 text-sm text-muted">
-                    {m.mime_type === "application/pdf" ? "PDF" : "Afbeelding"}
-                    {m.taught_on ? ` · ${capitalize(formatDay(m.taught_on))}` : ""}
-                    {m.course_date
-                      ? ` · ${m.course_date.title}`
-                      : " · Algemeen"}
-                  </p>
-                </div>
-                <span className="text-clay">Bekijken →</span>
-              </Link>
-            </li>
+            <MaterialTile
+              key={m.id}
+              id={m.id}
+              title={m.title}
+              subtitle={
+                m.taught_on ? capitalize(formatDay(m.taught_on)) : undefined
+              }
+              isPdf={m.mime_type === "application/pdf"}
+            />
           ))}
-        </ul>
+        </div>
       )}
     </Container>
   );
