@@ -3,6 +3,7 @@ import Image from "next/image";
 import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
 import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
 import monetBg from "@/assets/cursus/monet-landscape.jpg";
+import quoteBg from "@/assets/cursus/quote-bg.jpg";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
@@ -110,17 +111,27 @@ export default function LandingPage() {
           </div>
 
           <div className="relative">
-            <div className="aspect-[4/5] overflow-hidden rounded-xl border border-line bg-gradient-to-br from-mist via-paper to-clay/10">
-              <div className="flex h-full flex-col justify-end p-8">
-                <span className="font-title text-7xl leading-none text-clay/30">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-line bg-mist">
+              <Image
+                src={quoteBg}
+                alt=""
+                fill
+                placeholder="blur"
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                className="object-cover"
+              />
+              {/* Darken the photo so the light quote text stays legible. */}
+              <div className="absolute inset-0 bg-ink/65" />
+              <div className="relative z-10 flex h-full flex-col justify-end p-8">
+                <span className="font-title text-7xl leading-none text-clay/40">
                   &ldquo;
                 </span>
-                <p className="font-body text-lg italic leading-relaxed text-ink/70">
+                <p className="font-body text-lg italic leading-relaxed text-paper/90">
                   Je leert niet alleen hoe je schildert, maar vooral ook hoe je
                   kijkt en denkt als kunstenaar. Na deze cursus zal een museumbezoek nooit meer hetzelfde
                   zijn en ben je in staat je eigen projecten te realiseren met een sterke basis in de schilderkunst.
                 </p>
-                <p className="mt-3 text-sm text-muted">— Jelle van de Ridder</p>
+                <p className="mt-3 text-sm text-paper/70">— Jelle van de Ridder</p>
               </div>
             </div>
           </div>
