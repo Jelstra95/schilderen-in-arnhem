@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import loginBg from "@/assets/cursus/img-1890.jpg";
+import { Logo } from "@/components/Logo";
 
 /**
  * Shared visual shell for the authentication pages (login, forgot- and
@@ -63,8 +64,9 @@ export function AuthShell({
 
         <Link
           href="/"
-          className="mt-6 block font-title text-lg tracking-wide text-paper hover:text-clay"
+          className="mt-6 flex items-center gap-2.5 font-title text-lg tracking-wide text-paper hover:text-clay"
         >
+          <Logo className="h-8 w-auto" />
           Schilderen in Arnhem
         </Link>
 

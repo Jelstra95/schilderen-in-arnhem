@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SignOutButton } from "@/components/SignOutButton";
+import { Logo } from "@/components/Logo";
 
 export interface NavItem {
   href: string;
@@ -22,9 +23,11 @@ export function AppHeader({
         <div className="flex items-center gap-3">
           <Link
             href={homeHref}
-            className="font-title text-lg tracking-wide text-ink hover:text-clay"
+            className="flex items-center gap-2.5 font-title text-lg tracking-wide text-ink hover:text-clay"
           >
-            Schilderen in Arnhem
+            <Logo className="h-8 w-auto" />
+            {/* See SiteHeader: mark only on phones, wordmark stays sr-only. */}
+            <span className="sr-only sm:not-sr-only">Schilderen in Arnhem</span>
           </Link>
           {badge && (
             <span className="rounded-full bg-mist px-2.5 py-0.5 text-xs uppercase tracking-wide text-muted">
