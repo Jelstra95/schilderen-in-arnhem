@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LandingHero } from "@/components/LandingHero";
+import { Logo } from "@/components/Logo";
 
 const actions = [
   {
@@ -26,6 +27,7 @@ export default function HomePage() {
         <p className="mb-5 text-sm uppercase tracking-[0.25em] text-paper/70">
           Schildercursus · Arnhem
         </p>
+        <Logo className="mx-auto mb-6 h-20 w-auto sm:h-24" />
         <h1 className="font-title text-5xl leading-[1.05] sm:text-7xl">
           Schilderen in Arnhem
         </h1>

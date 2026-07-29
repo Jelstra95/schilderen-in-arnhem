@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { Logo } from "@/components/Logo";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -7,7 +8,10 @@ export function SiteFooter() {
     <footer className="mt-24 border-t border-line bg-mist/50">
       <Container className="flex flex-col gap-6 py-12 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="font-title text-lg text-ink">Schilderen in Arnhem</p>
+          <p className="flex items-center gap-2.5 font-title text-lg text-ink">
+            <Logo className="h-8 w-auto" />
+            Schilderen in Arnhem
+          </p>
           <p className="mt-1 text-sm text-muted">
             Schildercursussen door Jelle van de Ridder
           </p>
