@@ -16,6 +16,7 @@ import {
 } from "@/lib/iwork-to-pdf";
 import { createClient } from "@/lib/supabase/client";
 import { compressPdf } from "@/lib/pdf/compressPdf";
+import { renderPdfPageToJpegBase64 } from "@/lib/pdf/thumbnail";
 import type { CourseDate, Material } from "@/lib/types";
 
 export type MaterialRow = Material & { course_date: CourseDate | null };
@@ -349,6 +350,14 @@ function UploadModal({
         return;
       }
 
+      // Generate a small preview from the PDF's second slide so student tiles
+      // load fast (best-effort — the tile falls back to rendering the PDF).
+      let thumbnailBase64: string | null = null;
+      if (file.type === "application/pdf") {
+        setStatus("Voorbeeld genereren…");
+        thumbnailBase64 = await renderPdfPageToJpegBase64(file, 2);
+      }
+
       // Record the materials row.
       const finalizeRes = await fetch("/api/admin/materials", {
         method: "POST",
@@ -359,6 +368,7 @@ function UploadModal({
           courseDateId,
           taughtOn,
           mimeType: file.type,
+          thumbnailBase64,
         }),
       });
       if (!finalizeRes.ok) {

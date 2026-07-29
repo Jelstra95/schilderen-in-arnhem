@@ -58,6 +58,7 @@ export interface Material {
   title: string;
   taught_on: string | null; // date the course took place (YYYY-MM-DD)
   storage_path: string;
+  thumbnail_path: string | null; // preview image rendered from the PDF's 2nd page
   mime_type: string;
   size_bytes: number | null;
   created_at: string;

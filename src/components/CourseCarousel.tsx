@@ -4,12 +4,14 @@ import { useCallback, useEffect, useState } from "react";
 import Image, { type StaticImageData } from "next/image";
 import pleinAir1 from "@/assets/cursus/plein-air-1.jpg";
 import pleinAir2 from "@/assets/cursus/plein-air-2.jpg";
+import portret1 from "@/assets/cursus/portret-1.jpg";
 
 type Slide = { src: StaticImageData; alt: string };
 
 const slides: Slide[] = [
   { src: pleinAir1, alt: "Cursisten schilderen in de buitenlucht tijdens een plein-airsessie" },
   { src: pleinAir2, alt: "Plein-air schilderen op locatie met de cursusgroep" },
+  { src: portret1, alt: "Portretstudie geschilderd tijdens de cursus" },
 ];
 
 const kenburns = ["kenburns-a", "kenburns-b", "kenburns-c"];

@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
   const mimeType = body?.mimeType?.toString() || "";
   const courseDateId = body?.courseDateId ? String(body.courseDateId) : null;
   const taughtOnRaw = body?.taughtOn?.toString().trim() || null;
+  const thumbnailBase64 =
+    typeof body?.thumbnailBase64 === "string" ? body.thumbnailBase64 : null;
 
   if (!path || !title) {
     return NextResponse.json({ error: "Onvolledige gegevens." }, { status: 400 });
@@ -76,6 +78,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Store the preview image (best-effort; a failure just means no thumbnail).
+  let thumbnailPath: string | null = null;
+  if (thumbnailBase64) {
+    try {
+      const bytes = Buffer.from(thumbnailBase64, "base64");
+      if (bytes.length > 0 && bytes.length < 2 * 1024 * 1024) {
+        const tp = `${folder}/thumb-${crypto.randomUUID()}.jpg`;
+        const { error: thumbErr } = await admin.storage
+          .from(MATERIALS_BUCKET)
+          .upload(tp, bytes, { contentType: "image/jpeg", upsert: false });
+        if (!thumbErr) thumbnailPath = tp;
+      }
+    } catch {
+      // ignore — thumbnail is optional
+    }
+  }
+
   const { data, error: insertError } = await admin
     .from("materials")
     .insert({
@@ -83,6 +102,7 @@ export async function POST(request: NextRequest) {
       title,
       taught_on: taughtOn,
       storage_path: path,
+      thumbnail_path: thumbnailPath,
       mime_type: mimeType,
       size_bytes: size,
     })
@@ -90,8 +110,9 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (insertError) {
-    // Roll back the uploaded object so we don't leave orphans.
-    await admin.storage.from(MATERIALS_BUCKET).remove([path]);
+    // Roll back the uploaded objects so we don't leave orphans.
+    const orphans = thumbnailPath ? [path, thumbnailPath] : [path];
+    await admin.storage.from(MATERIALS_BUCKET).remove(orphans);
     return NextResponse.json(
       { error: "Opslaan van het materiaal is mislukt." },
       { status: 500 },
