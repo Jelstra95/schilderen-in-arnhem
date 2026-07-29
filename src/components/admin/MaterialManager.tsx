@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Select } from "@/components/ui/Field";
 import { Modal } from "@/components/ui/Modal";
-import { PdfThumb } from "@/components/admin/PdfThumb";
+import {
+  MaterialTileCaption,
+  MaterialTileImage,
+  tileFrameClass,
+} from "@/components/MaterialTile";
 import { PdfViewer } from "@/components/PdfViewer";
 import { capitalize, formatDate, formatDay, formatShortDate } from "@/lib/format";
 import {
@@ -90,53 +94,42 @@ export function MaterialManager({
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {materials.map((m) => (
-            <div
-              key={m.id}
-              className="group flex flex-col overflow-hidden rounded-xl border border-line bg-paper"
-            >
+            // Same tile the participants see (stored thumbnail = fast), with
+            // the admin actions layered on top.
+            <div key={m.id} className={tileFrameClass}>
+              <MaterialTileImage
+                id={m.id}
+                isPdf={isPdf(m)}
+                hasThumbnail={m.thumbnail_path != null}
+              />
+              {/* Clicking anywhere on the tile opens the viewer; the buttons
+                  below sit above this layer. */}
               <button
                 type="button"
                 onClick={() => setViewing(m)}
                 aria-label={`${m.title} bekijken`}
-                className="relative block aspect-[4/3] w-full overflow-hidden border-b border-line focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay/40"
-              >
-                {isPdf(m) ? (
-                  <PdfThumb src={streamSrc(m.id)} />
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={streamSrc(m.id)}
-                    alt={m.title}
-                    draggable={false}
-                    className="h-full w-full select-none object-cover"
-                  />
-                )}
-                <span className="absolute inset-0 flex items-center justify-center bg-ink/0 text-sm font-medium text-paper opacity-0 transition-opacity group-hover:bg-ink/30 group-hover:opacity-100">
-                  Bekijken
-                </span>
-              </button>
-
-              <div className="flex flex-1 flex-col gap-3 p-4">
-                <div className="flex-1">
-                  <p className="font-medium leading-snug text-ink">{m.title}</p>
-                  <p className="mt-1 text-xs text-muted">{metaLine(m)}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => setEditing(m)}
-                    disabled={busy}
-                  >
-                    Bewerken
-                  </Button>
-                  <DeleteButton
-                    id={m.id}
-                    busy={busy}
-                    setBusy={setBusy}
-                    onDone={() => router.refresh()}
-                  />
-                </div>
+                className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-clay/60"
+              />
+              <MaterialTileCaption
+                title={m.title}
+                subtitle={metaLine(m)}
+                className="pb-14"
+              />
+              <div className="absolute inset-x-0 bottom-0 z-20 flex justify-center gap-2 bg-gradient-to-t from-ink/70 to-transparent p-3">
+                <Button
+                  variant="onDark"
+                  size="sm"
+                  onClick={() => setEditing(m)}
+                  disabled={busy}
+                >
+                  Bewerken
+                </Button>
+                <DeleteButton
+                  id={m.id}
+                  busy={busy}
+                  setBusy={setBusy}
+                  onDone={() => router.refresh()}
+                />
               </div>
             </div>
           ))}
@@ -215,7 +208,13 @@ function DeleteButton({
     }
   }
   return (
-    <Button variant="ghost" size="sm" onClick={remove} disabled={busy}>
+    <Button
+      variant="onDark"
+      size="sm"
+      onClick={remove}
+      disabled={busy}
+      className="hover:bg-red-700 hover:text-paper"
+    >
       Verwijderen
     </Button>
   );
