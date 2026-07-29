@@ -66,7 +66,7 @@ export function AuthShell({
           href="/"
           className="mt-6 flex items-center gap-2.5 font-title text-lg tracking-wide text-paper hover:text-clay"
         >
-          <Logo className="h-8 w-auto" />
+          <Logo variant="paper" className="h-8 w-auto" />
           Schilderen in Arnhem
         </Link>
 
