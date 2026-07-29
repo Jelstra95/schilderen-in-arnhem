@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Field, Input } from "@/components/ui/Field";
 
-export function LoginForm({ redirectTo }: { redirectTo: string }) {
+export function LoginForm({ redirectTo }: { redirectTo?: string | null }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,18 +20,29 @@ export function LoginForm({ redirectTo }: { redirectTo: string }) {
 
     setSubmitting(true);
     const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    setSubmitting(false);
+    const { data, error: signInError } = await supabase.auth.signInWithPassword(
+      { email, password },
+    );
 
-    if (signInError) {
+    if (signInError || !data.user) {
+      setSubmitting(false);
       setError("E-mailadres of wachtwoord is onjuist.");
       return;
     }
 
-    router.push(redirectTo);
+    // Came here from a protected page? Go back there. Otherwise the beheerder
+    // lands straight in the admin area, cursisten on their dashboard.
+    let target = redirectTo;
+    if (!target) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+      target = profile?.role === "admin" ? "/admin" : "/dashboard";
+    }
+
+    router.push(target);
     router.refresh();
   }
 

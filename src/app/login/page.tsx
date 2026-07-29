@@ -7,10 +7,11 @@ export const metadata: Metadata = {
   title: "Inloggen",
 };
 
-function safeRedirect(value: string | undefined): string {
-  // Only allow internal paths to avoid open-redirects.
+function safeRedirect(value: string | undefined): string | null {
+  // Only allow internal paths to avoid open-redirects. Without an explicit
+  // target the form picks one based on the role (admin → /admin).
   if (value && value.startsWith("/") && !value.startsWith("//")) return value;
-  return "/dashboard";
+  return null;
 }
 
 export default async function LoginPage({
