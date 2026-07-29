@@ -45,7 +45,8 @@ export default async function MaterialViewerPage({
       </Link>
       <h1 className="mt-4 font-title text-3xl text-ink">{material.title}</h1>
 
-      <div className="mt-8 rounded-xl border border-line bg-mist/30 p-4 sm:p-8">
+      {/* Padding stays tight on phones so the page itself gets the width. */}
+      <div className="mt-8 rounded-xl border border-line bg-mist/30 p-2 sm:p-8">
         {isPdf ? (
           <PdfViewer src={streamSrc} />
         ) : (
