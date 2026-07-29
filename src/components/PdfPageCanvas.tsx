@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as pdfjs from "pdfjs-dist";
+import { cn } from "@/lib/cn";
 
 // Load the worker from the bundled package (no external CDN).
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -12,10 +13,19 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 type Status = "loading" | "ready" | "error";
 
 /**
- * Renders the first page of a PDF (served by `src`) into a canvas thumbnail.
- * Used for the admin material gallery cards.
+ * Renders a single page of a PDF (served by `src`) into a canvas that fills its
+ * container. `page` is clamped to the document's page count, so asking for page
+ * 2 of a one-page PDF falls back to page 1.
  */
-export function PdfThumb({ src }: { src: string }) {
+export function PdfPageCanvas({
+  src,
+  page = 1,
+  className,
+}: {
+  src: string;
+  page?: number;
+  className?: string;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [status, setStatus] = useState<Status>("loading");
 
@@ -29,20 +39,22 @@ export function PdfThumb({ src }: { src: string }) {
         const data = await res.arrayBuffer();
         const pdf = await pdfjs.getDocument({ data }).promise;
         if (cancelled) return;
-        const page = await pdf.getPage(1);
+
+        const pageNum = Math.min(Math.max(page, 1), pdf.numPages);
+        const p = await pdf.getPage(pageNum);
         if (cancelled) return;
 
         const canvas = canvasRef.current;
         if (!canvas) return;
-        const viewport = page.getViewport({ scale: 1 });
-        // Fit to a ~300px-wide thumbnail, capped by device pixel ratio.
-        const scale = (300 / viewport.width) * (window.devicePixelRatio || 1);
-        const scaled = page.getViewport({ scale });
+        const base = p.getViewport({ scale: 1 });
+        // Render at ~600px wide, honouring device pixel ratio for crispness.
+        const scale = (600 / base.width) * (window.devicePixelRatio || 1);
+        const viewport = p.getViewport({ scale });
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
-        canvas.width = scaled.width;
-        canvas.height = scaled.height;
-        await page.render({ canvasContext: ctx, viewport: scaled }).promise;
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await p.render({ canvasContext: ctx, viewport }).promise;
         if (cancelled) return;
         setStatus("ready");
       } catch {
@@ -54,24 +66,15 @@ export function PdfThumb({ src }: { src: string }) {
     return () => {
       cancelled = true;
     };
-  }, [src]);
+  }, [src, page]);
 
   return (
-    <div className="flex h-full w-full items-center justify-center bg-mist/40">
-      {status === "loading" && (
-        <span className="text-xs text-muted">Laden…</span>
-      )}
-      {status === "error" && (
-        <span className="text-xs text-muted">PDF</span>
-      )}
+    <>
+      {status !== "ready" && <div className="absolute inset-0 bg-mist" />}
       <canvas
         ref={canvasRef}
-        className={
-          status === "ready"
-            ? "h-full w-full object-cover object-top"
-            : "hidden"
-        }
+        className={cn(className, status === "ready" ? "" : "opacity-0")}
       />
-    </div>
+    </>
   );
 }
