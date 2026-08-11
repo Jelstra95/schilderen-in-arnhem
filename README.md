@@ -43,6 +43,7 @@ cp .env.example .env.local
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | **Secret.** Server-only. Never commit or expose to the client. |
 | `SUPABASE_MATERIALS_BUCKET` | Storage bucket name (default `course-materials`) |
+| `CRON_SECRET` | **Secret.** Random 16+ char string guarding the keep-alive cron. |
 
 ### 3. Apply the database migration
 
@@ -105,9 +106,28 @@ materials.
 ## Deploy to Vercel
 
 1. Import the repo in Vercel.
-2. Add the four environment variables (above) in Project Settings → Environment
+2. Add the environment variables (above) in Project Settings → Environment
    Variables. Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only.
 3. Deploy. Route handlers run as serverless functions automatically.
+
+### Keeping Supabase awake
+
+Supabase pauses free-tier projects that show low activity over a 7-day period,
+which would take the site down until someone restores it from the dashboard.
+[`vercel.json`](vercel.json) therefore schedules a daily cron job that calls
+`GET /api/cron/keepalive`, which runs one cheap `count` query against Postgres —
+enough real API activity to reset the clock, with six days of margin if a run is
+missed (Vercel does not retry failed invocations).
+
+Requirements:
+
+- `CRON_SECRET` must be set in Vercel, or the endpoint returns 500 and the
+  project will eventually pause. Vercel sends it as the `Authorization` header
+  automatically; nothing else needs configuring.
+- On the Hobby plan, cron jobs may run **once per day** at most, and fire
+  anywhere within the scheduled hour. Both are fine here.
+
+Check **Settings → Cron Jobs → View Logs** in Vercel to confirm it runs.
 
 ## Project structure
 
@@ -118,7 +138,7 @@ src/
     (participant)/   dashboard, materiaal/[id]
     (admin)/         admin: data, deelnemers, materiaal
     login/
-    api/             enrollments, admin/*, materials/[id]/stream
+    api/             enrollments, admin/*, materials/[id]/stream, cron/keepalive
   components/        UI primitives, calendar, viewers, managers
   lib/               supabase clients, auth, availability, formatting
   proxy.ts           session refresh + role-based route protection
