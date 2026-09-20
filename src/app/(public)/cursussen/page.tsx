@@ -57,18 +57,30 @@ const practical = [
   { label: "Startdatum", value: "Vanaf heden!" },
 ];
 
-const materials = [
-  { product: "Old Holland Olieverf Set Scheveningen Algemeen 10x40ml", price: "130", category: "Verf(set)" },
-  { product: "Old Holland Olieverf A002 40ml Zinkwit", price: "11", category: "Verf" },
-  { product: "Old Holland Olieverf B103 40ml Brilliant Yellow Light", price: "18", category: "Verf" },
-  { product: "Old Holland Olieverf A054 40ml Yellow Ochre Deep", price: "11", category: "Verf" },
-  { product: "Gamblin Gamsol OMS 125ml", price: "13", category: "Oplosmiddel" },
-  { product: "Da Vinci Penselenzeep", price: "5", category: "Kwastenzeep" },
-  { product: "Gamblin Solvent Free Fluid Medium 125ml", price: "18", category: "Medium" },
-  { product: "Ami Hout Palet Rechthoek 18x27cm", price: "4", category: "Palet" },
-  { product: "Van Beek Penselen Set Filament 12x", price: "23", category: "Penselen zacht" },
-  { product: "Van Beek Penselen Set in Koker Varkenshaar Plat 10 Stuks", price: "17", category: "Penselen stug" },
+const materials: {
+  product: string;
+  /** Optional second line, set in a smaller type below the product. */
+  detail?: string;
+  price: number;
+  category: string;
+}[] = [
+  {
+    product: "Olieverf in veertien kleuren",
+    detail:
+      "Titaanwit, zinkwit, zwart, rauwe omber, sienna, oker, kobaltblauw, ultramarijnblauw, napelsgeel, karmijn, azogeel citroen, cadmiumrood, groene aarde en phtalogroen.",
+    price: 150,
+    category: "Verf",
+  },
+  { product: "Gamblin Gamsol OMS 125ml", price: 13, category: "Oplosmiddel" },
+  { product: "Da Vinci Penselenzeep", price: 5, category: "Kwastenzeep" },
+  { product: "Gamblin Solvent Free Fluid Medium 125ml", price: 18, category: "Medium" },
+  { product: "Ami Hout Palet Rechthoek 18x27cm", price: 4, category: "Palet" },
+  { product: "Van Beek Penselen Set Filament 12x", price: 23, category: "Penselen zacht" },
+  { product: "Van Beek Penselen Set in Koker Varkenshaar Plat 10 Stuks", price: 17, category: "Penselen stug" },
 ];
+
+/** Derived, so the total can never drift away from the rows above it. */
+const materialsTotal = materials.reduce((sum, m) => sum + m.price, 0);
 
 const reviews = [
   {
@@ -363,7 +375,14 @@ export default function LandingPage() {
               <tbody>
                 {materials.map((m) => (
                   <tr key={m.product} className="border-b border-line/70">
-                    <td className="py-3 pr-4 text-ink">{m.product}</td>
+                    <td className="py-3 pr-4 text-ink">
+                      {m.product}
+                      {m.detail && (
+                        <span className="mt-1 block max-w-md text-sm leading-relaxed text-muted">
+                          {m.detail}
+                        </span>
+                      )}
+                    </td>
                     <td className="py-3 pr-4 text-muted">{m.category}</td>
                     <td className="py-3 text-right tabular-nums text-ink">
                       € {m.price}
@@ -375,7 +394,7 @@ export default function LandingPage() {
                     Totaal
                   </td>
                   <td className="py-4 text-right tabular-nums text-ink">
-                    € 250
+                    € {materialsTotal}
                   </td>
                 </tr>
               </tbody>
