@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Schilderworkshops in Arnhem",
@@ -35,7 +36,7 @@ export default function WorkshopsPage() {
           </p>
           <p>
             De workshops vinden plaats op bijzondere locaties in en rond Arnhem.
-            Een enkele keer werken we in het atelier aan de Schrassertstraat,
+            Een enkele keer werken we in het atelier aan de {site.street},
             maar vaker trekken we eropuit naar een plek die zich leent voor het
             onderwerp van die dag.
           </p>

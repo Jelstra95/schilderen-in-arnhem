@@ -28,8 +28,7 @@ export const metadata: Metadata = {
     default: "Schildercursus in Arnhem · Leer schilderen in olieverf",
     template: "%s · Schilderen in Arnhem",
   },
-  description:
-    "Leer schilderen in olieverf in Arnhem. Een doorlopende schildercursus van acht lessen in een kleine groep van maximaal zes cursisten, in het atelier aan de Schrassertstraat.",
+  description: `Leer schilderen in olieverf in Arnhem. Een doorlopende schildercursus van acht lessen in een kleine groep van maximaal zes cursisten, in het atelier in ${site.district}.`,
 
   // "./" resolves against the current pathname, so every route gets a
   // self-referencing canonical without any per-page code. A page that needs a

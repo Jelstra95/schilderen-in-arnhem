@@ -12,9 +12,11 @@ export const site = {
   tagline: "Schildercursussen door Jelle van de Ridder",
   instructor: "Jelle van de Ridder",
 
-  street: "Schrassertstraat 99",
-  postalCode: "6821 AK",
+  street: "Sint Janskerkstraat 86A",
+  postalCode: "6822 EN",
   city: "Arnhem",
+  /** The Arnhem neighbourhood, used in prose. Not part of the postal address. */
+  district: "Klarendal",
   region: "Gelderland",
   country: "NL",
 
@@ -47,5 +49,5 @@ export const site = {
   },
 } as const;
 
-/** "Schrassertstraat 99, 6821 AK Arnhem" */
+/** "Sint Janskerkstraat 86A, 6822 EN Arnhem" */
 export const fullAddress = `${site.street}, ${site.postalCode} ${site.city}`;

@@ -14,8 +14,7 @@ import { site, fullAddress } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Olieverf schildercursus in Arnhem",
-  description:
-    "Leer olieverf schilderen in Arnhem. Acht lessen in een kleine groep van maximaal zes cursisten, in het atelier aan de Schrassertstraat 99. Geschikt voor beginners en gevorderden.",
+  description: `Leer olieverf schilderen in Arnhem. Acht lessen in een kleine groep van maximaal zes cursisten, in het atelier aan de ${site.street} in ${site.district}. Geschikt voor beginners en gevorderden.`,
   alternates: { canonical: "/cursussen" },
 };
 
@@ -106,7 +105,7 @@ const faq = [
   },
   {
     q: "Waar vinden de schilderlessen plaats?",
-    a: "De lessen vinden plaats in mijn atelier aan de Schrassertstraat 99 in Arnhem.",
+    a: `De lessen vinden plaats in mijn atelier aan de ${site.street}, in de wijk ${site.district} in ${site.city}.`,
   },
   {
     q: "Schilder ik in olieverf of in acrylverf?",
@@ -277,9 +276,9 @@ export default function LandingPage() {
             </h2>
             <div className="mt-6 space-y-5 text-lg leading-relaxed text-muted">
               <p>
-                De lessen vinden plaats in mijn atelier aan de
-                Schrassertstraat 99 in Arnhem, op woensdagavond van 19:00 tot
-                21:30 uur.
+                De lessen vinden plaats in mijn atelier aan de {site.street},
+                in de Arnhemse wijk {site.district}, op woensdagavond van{" "}
+                {site.course.startTime} tot {site.course.endTime} uur.
               </p>
               <p>
                 De kleine groep zorgt voor veel persoonlijke aandacht. In acht
