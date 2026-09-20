@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 // Titles — Avenir Light (matches jellevanderidder.com)
@@ -21,12 +23,47 @@ const fraunces = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: {
-    default: "Schilderen in Arnhem — Schildercursussen door Jelle van de Ridder",
+    default: "Schildercursus in Arnhem · Leer schilderen in olieverf",
     template: "%s · Schilderen in Arnhem",
   },
-  description:
-    "Ontdek het plezier van schilderen tijdens een persoonlijke cursus in Arnhem. Kleine groepen, professionele begeleiding en alle materialen aanwezig.",
+  description: `Leer schilderen in olieverf in Arnhem. Een doorlopende schildercursus van acht lessen in een kleine groep van maximaal zes cursisten, in het atelier in ${site.district}.`,
+
+  // "./" resolves against the current pathname, so every route gets a
+  // self-referencing canonical without any per-page code. A page that needs a
+  // different canonical overrides `alternates` itself.
+  alternates: { canonical: "./" },
+
+  // No openGraph.title or .description on purpose. `openGraph` is shallow
+  // merged across segments, so setting them here would stamp the homepage
+  // title onto every child page. Next backfills them from each page's own
+  // resolved title and description, and fills the twitter:* tags from these.
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    locale: "nl_NL",
+    url: "./",
+  },
+  twitter: { card: "summary_large_image" },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  // Undefined until GOOGLE_SITE_VERIFICATION is set in Vercel, in which case
+  // the tag is simply omitted.
+  verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
+
+  authors: [{ name: site.instructor, url: "https://www.jellevanderidder.com" }],
+  creator: site.instructor,
 };
 
 export default function RootLayout({
@@ -39,6 +76,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
         {children}
+        <Analytics />
       </body>
     </html>
   );

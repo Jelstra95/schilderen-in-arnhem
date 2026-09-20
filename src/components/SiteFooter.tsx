@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/Logo";
+import { site, fullAddress } from "@/lib/site";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -10,27 +11,27 @@ export function SiteFooter() {
         <div>
           <p className="flex items-center gap-2.5 font-title text-lg text-ink">
             <Logo className="h-8 w-auto" />
-            Schilderen in Arnhem
+            {site.name}
           </p>
           <p className="mt-1 text-sm text-muted">
-            Schildercursussen door Jelle van de Ridder
+            {site.tagline}
           </p>
           <address className="mt-4 space-y-0.5 text-sm not-italic text-muted">
-            <p>Schrassertstraat 99, 6821 AK Arnhem</p>
+            <p>{fullAddress}</p>
             <p>
               <a
-                href="tel:+31623837071"
+                href={`tel:${site.phone}`}
                 className="hover:text-ink transition-colors"
               >
-                +31 (0)6 23 83 70 71
+                {site.phoneDisplay}
               </a>
             </p>
             <p>
               <a
-                href="mailto:info@jellevanderidder.com"
+                href={`mailto:${site.email}`}
                 className="hover:text-ink transition-colors"
               >
-                info@jellevanderidder.com
+                {site.email}
               </a>
             </p>
           </address>
@@ -43,7 +44,7 @@ export function SiteFooter() {
             Inloggen
           </Link>
           <a
-            href="https://www.jellevanderidder.com"
+            href={site.sameAs[0]}
             target="_blank"
             rel="noreferrer"
             className="hover:text-ink transition-colors"
@@ -54,7 +55,7 @@ export function SiteFooter() {
       </Container>
       <Container className="border-t border-line/70 py-6">
         <p className="text-xs text-muted">
-          © {year} Jelle van de Ridder · Arnhem
+          © {year} {site.instructor} · {site.city}
         </p>
       </Container>
     </footer>

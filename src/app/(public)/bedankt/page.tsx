@@ -4,6 +4,8 @@ import { ButtonLink } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Bedankt voor je inschrijving",
+  // Not useful in search: a confirmation page or an auth screen.
+  robots: { index: false, follow: true },
 };
 
 export default function BedanktPage() {

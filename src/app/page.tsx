@@ -1,17 +1,27 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingHero } from "@/components/LandingHero";
 import { Logo } from "@/components/Logo";
+import { JsonLd } from "@/components/JsonLd";
+import { homeGraph } from "@/lib/schema";
+
+export const metadata: Metadata = {
+  title: "Schilderen in Arnhem",
+  description:
+    "Schildercursussen en workshops in Arnhem. Leer schilderen in olieverf in een kleine groep, onder persoonlijke begeleiding van kunstenaar Jelle van de Ridder.",
+  alternates: { canonical: "/" },
+};
 
 const actions = [
   {
     href: "/cursussen",
     label: "Cursussen",
-    hint: "De doorlopende schildercursus",
+    hint: "De doorlopende olieverfcursus in Arnhem",
   },
   {
     href: "/workshops",
     label: "Workshops",
-    hint: "Verdiepende sessies op locatie",
+    hint: "Verdiepende sessies op bijzondere locaties",
   },
   {
     href: "/login",
@@ -23,6 +33,7 @@ const actions = [
 export default function HomePage() {
   return (
     <LandingHero>
+      <JsonLd data={homeGraph()} />
       <div className="relative z-10 max-w-3xl text-center text-paper">
         <p className="mb-5 text-sm uppercase tracking-[0.25em] text-paper/70">
           Schildercursus · Arnhem
@@ -32,8 +43,9 @@ export default function HomePage() {
           Schilderen in Arnhem
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-paper/80">
-          Leer schilderen als de oude en nieuwe meesters — in een kleine groep,
-          onder persoonlijke begeleiding van Jelle van de Ridder.
+          Leer schilderen in olieverf zoals de oude en nieuwe meesters dat
+          deden. Je werkt in een kleine groep onder persoonlijke begeleiding van
+          kunstenaar Jelle van de Ridder, in zijn atelier in Arnhem.
         </p>
 
         <div className="mt-11 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">

@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import { AppHeader } from "@/components/AppHeader";
 import { PreviewBanner } from "@/components/PreviewBanner";
 import { requireParticipant } from "@/lib/auth";
 import { getViewerContext } from "@/lib/preview";
+
+// Everything under this group is behind auth. robots.txt disallows it too;
+// this is the belt to that braces.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 const nav = [
   { href: "/dashboard", label: "Mijn cursus" },
