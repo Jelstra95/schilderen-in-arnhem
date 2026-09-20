@@ -89,23 +89,17 @@ const reviews = [
 ];
 
 /**
- * Deliberately plain HTML, with no FAQPage markup: Google retired FAQ rich
- * results for every site in May 2026, so the schema buys nothing in the SERP.
- * The visible text still gets read by the AI answer engines, which is the
- * reason these answers are short, factual and self-contained.
+ * Plain HTML, with no FAQPage markup: Google retired FAQ rich results for every
+ * site in May 2026, so the schema buys nothing in the SERP.
+ *
+ * Only questions whose answer is not already somewhere else on the page belong
+ * here. Prijs, locatie, duur en groepsgrootte staan in de lijst met praktische
+ * informatie en horen daar thuis, niet ook nog een keer hier.
  */
 const faq = [
   {
     q: "Heb ik ervaring nodig om mee te doen?",
-    a: "Nee, de cursus is geschikt voor beginners en voor mensen die al jaren schilderen. Omdat de groep uit maximaal zes cursisten bestaat, krijgt iedereen begeleiding op het eigen niveau.",
-  },
-  {
-    q: "Wat kost de schildercursus?",
-    a: "De cursus kost €240 voor acht lessen. Dat bedrag is exclusief materiaal.",
-  },
-  {
-    q: "Waar vinden de schilderlessen plaats?",
-    a: `De lessen vinden plaats in mijn atelier aan de ${site.street}, in de wijk ${site.district} in ${site.city}.`,
+    a: "Nee. In de groep zitten mensen die nog nooit geschilderd hebben naast mensen die al jaren bezig zijn. Je werkt op je eigen tempo aan opdrachten die bij jouw niveau passen.",
   },
   {
     q: "Schilder ik in olieverf of in acrylverf?",
@@ -113,11 +107,7 @@ const faq = [
   },
   {
     q: "Welke materialen moet ik zelf aanschaffen?",
-    a: "Je zorgt zelf voor verf, penselen en een palet. Hierboven staat een prijsindicatie van ongeveer €250 voor een complete startset. Heb je al materiaal in huis, dan volstaat dat meestal prima.",
-  },
-  {
-    q: "Kan ik instromen als een reeks al begonnen is?",
-    a: "De lespakketten zijn doorlopend, dus na afloop van een reeks stroom je direct door naar de volgende. Neem contact op om te horen wanneer er een plek vrijkomt.",
+    a: "Je zorgt zelf voor verf, penselen en een palet. In de tabel hierboven staat precies wat je nodig hebt. Heb je al materiaal in huis, dan volstaat dat meestal prima.",
   },
 ];
 
@@ -190,11 +180,6 @@ export default function LandingPage() {
             <h2 className="font-title text-4xl text-ink">Over de olieverfcursus</h2>
           </div>
           <div className="space-y-5 text-lg leading-relaxed text-muted">
-            <p>
-              De schildercursus in Arnhem bestaat uit acht lessen van
-              tweeënhalf uur en kost €240 exclusief materiaal. Je schildert in
-              olieverf, in een kleine groep van maximaal zes cursisten.
-            </p>
             <p>
               Wil je leren schilderen met de technieken en inzichten van de oude
               meesters? Je leert niet alleen hoe je schildert, maar vooral ook
@@ -276,15 +261,10 @@ export default function LandingPage() {
             </h2>
             <div className="mt-6 space-y-5 text-lg leading-relaxed text-muted">
               <p>
-                De lessen vinden plaats in mijn atelier aan de {site.street},
-                in de Arnhemse wijk {site.district}, op woensdagavond van{" "}
-                {site.course.startTime} tot {site.course.endTime} uur.
-              </p>
-              <p>
-                De kleine groep zorgt voor veel persoonlijke aandacht. In acht
-                lessen kun je een sterke basis leggen of juist de diepte ingaan,
-                afhankelijk van je niveau. De lespakketten zijn doorlopend: na
-                afloop kun je direct instromen in een nieuwe reeks.
+                De kleine groep zorgt voor veel persoonlijke aandacht. Je kunt
+                een sterke basis leggen of juist de diepte ingaan, afhankelijk
+                van je niveau. De lespakketten zijn doorlopend, dus na afloop
+                stroom je direct door naar een nieuwe reeks.
               </p>
               <p>
                 We doorlopen gezamenlijk de geschiedenis van de schilderkunst op
@@ -359,10 +339,6 @@ export default function LandingPage() {
             Materiaalkosten voor het schilderen in olieverf
           </h2>
           <div className="mt-6 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
-            <p>
-              Reken op ongeveer €250 aan olieverf, penselen en toebehoren als je
-              nog niets in huis hebt. Dit bedrag komt bovenop het cursusgeld.
-            </p>
             <p>
               Om aan de cursus mee te doen is het nodig om, als je dat nog niet
               hebt, te investeren in goede materialen. Tijdens de cursus word je
