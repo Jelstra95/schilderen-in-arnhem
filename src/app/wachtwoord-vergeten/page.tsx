@@ -5,6 +5,8 @@ import { ForgotPasswordForm } from "@/components/ForgotPasswordForm";
 
 export const metadata: Metadata = {
   title: "Wachtwoord vergeten",
+  // Not useful in search: a confirmation page or an auth screen.
+  robots: { index: false, follow: true },
 };
 
 export default async function ForgotPasswordPage({

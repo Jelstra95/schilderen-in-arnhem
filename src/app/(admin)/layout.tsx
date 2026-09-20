@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import { AppHeader } from "@/components/AppHeader";
 import { requireAdmin } from "@/lib/auth";
+
+// Everything under this group is behind auth. robots.txt disallows it too;
+// this is the belt to that braces.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 const nav = [
   { href: "/admin", label: "Overzicht" },

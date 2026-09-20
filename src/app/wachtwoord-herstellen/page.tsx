@@ -5,6 +5,8 @@ import { ResetPasswordForm } from "@/components/ResetPasswordForm";
 
 export const metadata: Metadata = {
   title: "Nieuw wachtwoord instellen",
+  // Not useful in search: a confirmation page or an auth screen.
+  robots: { index: false, follow: true },
 };
 
 export default function ResetPasswordPage() {

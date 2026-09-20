@@ -5,6 +5,8 @@ import { LoginForm } from "@/components/LoginForm";
 
 export const metadata: Metadata = {
   title: "Inloggen",
+  // Not useful in search: a confirmation page or an auth screen.
+  robots: { index: false, follow: true },
 };
 
 function safeRedirect(value: string | undefined): string | null {

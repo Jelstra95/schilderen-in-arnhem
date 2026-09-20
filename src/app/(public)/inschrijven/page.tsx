@@ -3,9 +3,10 @@ import { Container } from "@/components/ui/Container";
 import { AanmeldForm } from "@/components/AanmeldForm";
 
 export const metadata: Metadata = {
-  title: "Aanmelden",
+  title: "Aanmelden voor de schildercursus in Arnhem",
   description:
-    "Meld je aan voor de schildercursus in Arnhem. Kies je voorkeursavond en laat je gegevens achter.",
+    "Meld je aan voor de olieverf schildercursus in Arnhem. Kies je voorkeursavond en laat je gegevens achter, daarna neem ik persoonlijk contact met je op.",
+  alternates: { canonical: "/inschrijven" },
 };
 
 export default function InschrijvenPage() {

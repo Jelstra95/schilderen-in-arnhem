@@ -8,11 +8,15 @@ import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/JsonLd";
+import { courseGraph } from "@/lib/schema";
+import { site, fullAddress } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Cursussen",
+  title: "Olieverf schildercursus in Arnhem",
   description:
-    "Leer schilderen als de oude en nieuwe meesters. Doorlopende schildercursus in Arnhem: kleine groepen, persoonlijke begeleiding, 8 lessen.",
+    "Leer olieverf schilderen in Arnhem. Acht lessen in een kleine groep van maximaal zes cursisten, in het atelier aan de Schrassertstraat 99. Geschikt voor beginners en gevorderden.",
+  alternates: { canonical: "/cursussen" },
 };
 
 const steps = [
@@ -38,12 +42,19 @@ const curriculum = [
   "Natuurgetrouw schilderen van landschappen, portretten en stillevens",
 ];
 
+const dagen = site.course.days
+  .map((d) => site.course.dayLabelsNl[d])
+  .join(" of ");
+
 const practical = [
-  { label: "Wanneer", value: "Iedere dinsdag- of woensdagavond van 19:00 tot 21:30 uur" },
-  { label: "Duur", value: "8 lessen" },
-  { label: "Kosten", value: "€240 (exclusief materiaal)" },
-  { label: "Locatie", value: "Schrassertstraat 99, in mijn atelier" },
-  { label: "Groepsgrootte", value: "Maximaal 6 personen" },
+  {
+    label: "Wanneer",
+    value: `Iedere ${dagen} van ${site.course.startTime} tot ${site.course.endTime} uur`,
+  },
+  { label: "Duur", value: `${site.course.lessons} lessen` },
+  { label: "Kosten", value: `\u20AC${site.course.price} (exclusief materiaal)` },
+  { label: "Locatie", value: `${fullAddress}, in mijn atelier` },
+  { label: "Groepsgrootte", value: `Maximaal ${site.course.maxStudents} personen` },
   { label: "Startdatum", value: "Vanaf heden!" },
 ];
 
@@ -78,24 +89,59 @@ const reviews = [
   },
 ];
 
+/**
+ * Deliberately plain HTML, with no FAQPage markup: Google retired FAQ rich
+ * results for every site in May 2026, so the schema buys nothing in the SERP.
+ * The visible text still gets read by the AI answer engines, which is the
+ * reason these answers are short, factual and self-contained.
+ */
+const faq = [
+  {
+    q: "Heb ik ervaring nodig om mee te doen?",
+    a: "Nee, de cursus is geschikt voor beginners en voor mensen die al jaren schilderen. Omdat de groep uit maximaal zes cursisten bestaat, krijgt iedereen begeleiding op het eigen niveau.",
+  },
+  {
+    q: "Wat kost de schildercursus?",
+    a: "De cursus kost €240 voor acht lessen. Dat bedrag is exclusief materiaal.",
+  },
+  {
+    q: "Waar vinden de schilderlessen plaats?",
+    a: "De lessen vinden plaats in mijn atelier aan de Schrassertstraat 99 in Arnhem.",
+  },
+  {
+    q: "Schilder ik in olieverf of in acrylverf?",
+    a: "Je schildert in olieverf. De opbouw in lagen die we behandelen komt uit de werkwijze van de oude meesters en werkt het beste met olieverf.",
+  },
+  {
+    q: "Welke materialen moet ik zelf aanschaffen?",
+    a: "Je zorgt zelf voor verf, penselen en een palet. Hierboven staat een prijsindicatie van ongeveer €250 voor een complete startset. Heb je al materiaal in huis, dan volstaat dat meestal prima.",
+  },
+  {
+    q: "Kan ik instromen als een reeks al begonnen is?",
+    a: "De lespakketten zijn doorlopend, dus na afloop van een reeks stroom je direct door naar de volgende. Neem contact op om te horen wanneer er een plek vrijkomt.",
+  },
+];
+
 export default function LandingPage() {
   return (
     <>
+      <JsonLd data={courseGraph({ reviews, teaches: curriculum })} />
       {/* Hero ------------------------------------------------------------- */}
       <section className="relative overflow-hidden">
         <Container className="grid gap-12 py-20 sm:py-28 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
             <p className="mb-5 text-sm uppercase tracking-[0.2em] text-clay">
-              Schildercursus · Arnhem
+              Schildercursus in Arnhem
             </p>
             <h1 className="font-title text-5xl leading-[1.05] text-ink sm:text-6xl">
-              Leer schilderen als de oude en nieuwe meesters
+              Leer schilderen in olieverf als de oude en nieuwe meesters
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-              Stap voor stap. Of je nu een beginner bent of al ervaring hebt: in
-              mijn cursussen en workshops leer je schilderen met aandacht voor
-              tekenen, licht, kleur en compositie, op een manier die zowel
-              technisch degelijk als creatief vrij is.
+              Je leert schilderen in olieverf in mijn atelier in Arnhem, in een
+              kleine groep van maximaal zes cursisten. Of je nu net begint of al
+              jaren schildert, er is aandacht voor tekenen, licht, kleur en
+              compositie. De aanpak is technisch degelijk en laat tegelijk veel
+              ruimte voor je eigen werk.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <ButtonLink href="/inschrijven" size="lg">
@@ -142,9 +188,14 @@ export default function LandingPage() {
       <section id="cursus" className="scroll-mt-20 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
-            <h2 className="font-title text-4xl text-ink">Over de cursus</h2>
+            <h2 className="font-title text-4xl text-ink">Over de olieverfcursus</h2>
           </div>
           <div className="space-y-5 text-lg leading-relaxed text-muted">
+            <p>
+              De schildercursus in Arnhem bestaat uit acht lessen van
+              tweeënhalf uur en kost €240 exclusief materiaal. Je schildert in
+              olieverf, in een kleine groep van maximaal zes cursisten.
+            </p>
             <p>
               Wil je leren schilderen met de technieken en inzichten van de oude
               meesters? Je leert niet alleen hoe je schildert, maar vooral ook
@@ -163,7 +214,9 @@ export default function LandingPage() {
       <section id="impressie" className="scroll-mt-20 pb-8">
         <Container>
           <div className="mb-8 max-w-xl">
-            <h2 className="font-title text-4xl text-ink">Impressie</h2>
+            <h2 className="font-title text-4xl text-ink">
+              Impressie van de schilderlessen
+            </h2>
             <p className="mt-2 text-muted">
               Een indruk van het plein-air schilderen met de cursusgroep.
             </p>
@@ -175,7 +228,9 @@ export default function LandingPage() {
       {/* Lesinhoud: drie stappen ----------------------------------------- */}
       <section id="lesinhoud" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
-          <h2 className="font-title text-4xl text-ink">Lesinhoud</h2>
+          <h2 className="font-title text-4xl text-ink">
+            Lesinhoud van de schildercursus
+          </h2>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
             {steps.map((s, i) => (
               <div key={s.title} className="border-t border-line pt-5">
@@ -218,9 +273,14 @@ export default function LandingPage() {
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <h2 className="font-title text-4xl text-ink">
-              Praktische informatie
+              Praktische informatie over de cursus in Arnhem
             </h2>
             <div className="mt-6 space-y-5 text-lg leading-relaxed text-muted">
+              <p>
+                De lessen vinden plaats in mijn atelier aan de
+                Schrassertstraat 99 in Arnhem, op woensdagavond van 19:00 tot
+                21:30 uur.
+              </p>
               <p>
                 De kleine groep zorgt voor veel persoonlijke aandacht. In acht
                 lessen kun je een sterke basis leggen of juist de diepte ingaan,
@@ -257,7 +317,9 @@ export default function LandingPage() {
       <section id="docent" className="scroll-mt-20 bg-mist/50 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
-            <h2 className="font-title text-4xl text-ink">Over de docent</h2>
+            <h2 className="font-title text-4xl text-ink">
+              Over je docent Jelle van de Ridder
+            </h2>
             <div className="mt-8 overflow-hidden rounded-xl border border-line">
               <Image
                 src={jelleDocent}
@@ -294,8 +356,14 @@ export default function LandingPage() {
       {/* Materiaalkosten ------------------------------------------------- */}
       <section id="materiaal" className="scroll-mt-20 py-20">
         <Container>
-          <h2 className="font-title text-4xl text-ink">Materiaalkosten</h2>
+          <h2 className="font-title text-4xl text-ink">
+            Materiaalkosten voor het schilderen in olieverf
+          </h2>
           <div className="mt-6 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
+            <p>
+              Reken op ongeveer €250 aan olieverf, penselen en toebehoren als je
+              nog niets in huis hebt. Dit bedrag komt bovenop het cursusgeld.
+            </p>
             <p>
               Om aan de cursus mee te doen is het nodig om, als je dat nog niet
               hebt, te investeren in goede materialen. Tijdens de cursus word je
@@ -365,7 +433,7 @@ export default function LandingPage() {
       <section id="ervaringen" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
           <h2 className="font-title text-4xl text-ink">
-            Deze cursus volgens anderen
+            Ervaringen van cursisten
           </h2>
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             {reviews.map((r) => (
@@ -385,6 +453,21 @@ export default function LandingPage() {
               </figure>
             ))}
           </div>
+        </Container>
+      </section>
+
+      {/* Veelgestelde vragen ---------------------------------------------- */}
+      <section id="vragen" className="scroll-mt-20 py-20">
+        <Container>
+          <h2 className="font-title text-4xl text-ink">Veelgestelde vragen</h2>
+          <dl className="mt-12 grid gap-x-20 gap-y-10 md:grid-cols-2">
+            {faq.map((item) => (
+              <div key={item.q} className="border-t border-line pt-5">
+                <dt className="font-title text-xl text-ink">{item.q}</dt>
+                <dd className="mt-2 leading-relaxed text-muted">{item.a}</dd>
+              </div>
+            ))}
+          </dl>
         </Container>
       </section>
 
