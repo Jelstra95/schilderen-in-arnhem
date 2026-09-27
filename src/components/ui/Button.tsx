@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "ghost" | "onDark";
+type Variant = "primary" | "secondary" | "ghost" | "onDark" | "outlineOnDark";
 type Size = "md" | "lg" | "sm";
 
 const base =
@@ -13,6 +13,7 @@ const variants: Record<Variant, string> = {
   secondary: "border border-ink/15 bg-transparent text-ink hover:bg-mist",
   ghost: "text-ink hover:text-clay",
   onDark: "bg-paper text-ink hover:bg-clay hover:text-paper",
+  outlineOnDark: "border border-paper/40 bg-transparent text-paper hover:bg-paper/10",
 };
 
 const sizes: Record<Size, string> = {
