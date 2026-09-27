@@ -3,6 +3,7 @@ import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
 import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
 import monetBg from "@/assets/cursus/monet-landscape.jpg";
 import quoteBg from "@/assets/cursus/quote-bg.jpg";
+import impressieSlides from "@/assets/cursus/impressie-slides.webp";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
@@ -292,9 +293,42 @@ export default function LandingPage() {
             </ul>
           </div>
 
-          <p className="mt-16 max-w-2xl font-title text-2xl leading-snug text-ink">
-            Na deze cursus zal een museumbezoek nooit meer hetzelfde zijn.
-          </p>
+          <div className="mt-16 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
+            <div>
+              <h3 className="font-title text-2xl text-ink">
+                Alle theorie terugzien op het cursusplatform
+              </h3>
+              <p className="mt-3 text-lg leading-relaxed text-muted">
+                Als cursist krijg je toegang tot het online cursusplatform. Daar
+                staan de slides van de lessen en het theoretische materiaal, van
+                aard- en synthetische pigmenten tot kleurenleer en de
+                onderschildering van de oude meesters. Zo kun je thuis alles
+                rustig teruglezen.
+              </p>
+            </div>
+            <Image
+              src={impressieSlides}
+              alt="Impressie van lesslides over pigmenten, kleurenleer, mengschema's en de onderschildering bij Rembrandt"
+              placeholder="blur"
+              sizes="(min-width: 1024px) 40rem, 100vw"
+              className="h-auto w-full"
+            />
+          </div>
+
+          <figure className="mx-auto mt-20 max-w-3xl text-center">
+            <span
+              aria-hidden
+              className="block font-title text-7xl leading-none text-clay/40"
+            >
+              &ldquo;
+            </span>
+            <blockquote className="font-title text-3xl leading-snug text-ink sm:text-4xl">
+              Na deze cursus zal een museumbezoek nooit meer hetzelfde zijn.
+            </blockquote>
+            <figcaption className="mt-5 text-sm text-muted">
+              — Jelle van de Ridder, docent
+            </figcaption>
+          </figure>
         </Container>
       </section>
 
