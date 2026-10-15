@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { site } from "@/lib/site";
+import { delay } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Schilderworkshops in Arnhem",
@@ -14,13 +15,19 @@ export default function WorkshopsPage() {
   return (
     <section className="py-24 sm:py-32">
       <Container className="max-w-2xl">
-        <p className="mb-4 text-sm uppercase tracking-[0.2em] text-clay">
+        <p className="rise mb-4 text-sm uppercase tracking-[0.2em] text-clay">
           Binnenkort
         </p>
-        <h1 className="font-title text-4xl text-ink sm:text-5xl">
+        <h1
+          className="rise font-title text-4xl text-ink sm:text-5xl"
+          style={delay(120)}
+        >
           Schilderworkshops in Arnhem
         </h1>
-        <div className="mt-6 space-y-5 text-lg leading-relaxed text-muted">
+        <div
+          className="rise mt-6 space-y-5 text-lg leading-relaxed text-muted"
+          style={delay(260)}
+        >
           <p>
             Naast de doorlopende schildercursus komen er losse workshops. Waar
             de cursus acht lessen beslaat en je stap voor stap een brede basis
@@ -47,7 +54,7 @@ export default function WorkshopsPage() {
             gerust contact op.
           </p>
         </div>
-        <div className="mt-9 flex flex-wrap gap-4">
+        <div className="rise mt-9 flex flex-wrap gap-4" style={delay(400)}>
           <ButtonLink href="/cursussen">Bekijk de cursus</ButtonLink>
           <ButtonLink
             href="mailto:info@jellevanderidder.com"

@@ -12,6 +12,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { courseGraph } from "@/lib/schema";
 import { site, fullAddress } from "@/lib/site";
+import { delay } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Olieverf schildercursus in Arnhem",
@@ -158,13 +159,19 @@ export default function LandingPage() {
       <section id="hero" className="relative overflow-hidden">
         <Container className="grid gap-12 py-20 sm:py-28 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
-            <p className="mb-5 text-sm uppercase tracking-[0.2em] text-clay">
+            <p className="rise mb-5 text-sm uppercase tracking-[0.2em] text-clay">
               Schildercursus in Arnhem
             </p>
-            <h1 className="font-title text-5xl leading-[1.05] text-ink sm:text-6xl">
+            <h1
+              className="rise font-title text-5xl leading-[1.05] text-ink sm:text-6xl"
+              style={delay(120)}
+            >
               Leer schilderen in olieverf als de oude en nieuwe meesters
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+            <p
+              className="rise mt-6 max-w-xl text-lg leading-relaxed text-muted"
+              style={delay(260)}
+            >
               Waarom bestaat een schilderij van Rembrandt van dichtbij uit losse
               vegen, en komt het van een afstand tot leven? In acht avonden in
               mijn atelier in {site.district}{" "}
@@ -172,7 +179,10 @@ export default function LandingPage() {
               olieverf schilderen in een groep van hooguit zes mensen, of je nu nog nooit een penseel
               hebt vastgehouden of al jaren schildert.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <div
+              className="rise mt-9 flex flex-wrap items-center gap-4"
+              style={delay(400)}
+            >
               <ButtonLink href="/inschrijven" size="lg">
                 Ik meld mij aan!
               </ButtonLink>
@@ -180,14 +190,14 @@ export default function LandingPage() {
                 Stel eerst een vraag
               </a>
             </div>
-            <p className="mt-6 text-sm text-muted">
+            <p className="rise mt-6 text-sm text-muted" style={delay(500)}>
               Iedere {dagen} van {site.course.startTime} tot{" "}
               {site.course.endTime} uur · maximaal {site.course.maxStudents}{" "}
               cursisten · op elk moment instromen
             </p>
           </div>
 
-          <div className="relative">
+          <div className="rise relative" style={delay(300)}>
             <figure className="relative aspect-[4/5] overflow-hidden rounded-xl border border-line bg-mist">
               <Image
                 src={quoteBg}
@@ -218,7 +228,7 @@ export default function LandingPage() {
       {/* Werk van cursisten ---------------------------------------------- */}
       <section id="werk" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
-          <div className="mb-8 max-w-xl">
+          <div data-reveal className="mb-8 max-w-xl">
             <h2 className="font-title text-4xl text-ink">
               Werk van cursisten van de schildercursus
             </h2>
@@ -229,6 +239,7 @@ export default function LandingPage() {
             </p>
           </div>
           <Image
+            data-reveal="zoom"
             src={werkCursisten}
             alt="Collage van olieverfschilderijen gemaakt door eerdere cursisten van de schildercursus in Arnhem"
             placeholder="blur"
@@ -242,10 +253,17 @@ export default function LandingPage() {
       <section id="cursus" className="scroll-mt-20 py-20">
         <Container>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-            <h2 id="lesinhoud" className="scroll-mt-20 font-title text-4xl text-ink">
+            <h2
+              id="lesinhoud"
+              data-reveal="left"
+              className="scroll-mt-20 font-title text-4xl text-ink"
+            >
               Lesinhoud: in acht avonden leren schilderen in olieverf
             </h2>
-            <div className="space-y-5 text-lg leading-relaxed text-muted">
+            <div
+              data-reveal="right"
+              className="space-y-5 text-lg leading-relaxed text-muted"
+            >
               <p>
                 Je leert niet alleen hoe je schildert, maar vooral hoe je kijkt.
                 We werken vanuit een heldere en beproefde opbouw, geïnspireerd op
@@ -255,9 +273,9 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-14 grid gap-10 sm:grid-cols-3">
+          <div data-reveal-stagger className="mt-14 grid gap-10 sm:grid-cols-3">
             {steps.map((s, i) => (
-              <div key={s.title} className="border-t border-line pt-5">
+              <div key={s.title} data-reveal className="border-t border-line pt-5">
                 <span className="font-title text-3xl text-clay/60">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -271,7 +289,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-20">
-            <div>
+            <div data-reveal>
               <h3 className="font-title text-2xl text-ink">
                 Wat komt er aan bod
               </h3>
@@ -280,10 +298,11 @@ export default function LandingPage() {
                 bod:
               </p>
             </div>
-            <ul className="space-y-4">
+            <ul data-reveal-stagger className="space-y-4">
               {curriculum.map((item) => (
                 <li
                   key={item}
+                  data-reveal
                   className="flex gap-3 border-t border-line pt-4 leading-relaxed text-muted"
                 >
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />
@@ -294,7 +313,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-16 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
-            <div>
+            <div data-reveal="left">
               <h3 className="font-title text-2xl text-ink">
                 Alle theorie terugzien op het cursusplatform
               </h3>
@@ -307,6 +326,7 @@ export default function LandingPage() {
               </p>
             </div>
             <Image
+              data-reveal="right"
               src={impressieSlides}
               alt="Impressie van lesslides over pigmenten, kleurenleer, mengschema's en de onderschildering bij Rembrandt"
               placeholder="blur"
@@ -315,7 +335,7 @@ export default function LandingPage() {
             />
           </div>
 
-          <figure className="mx-auto mt-20 max-w-3xl text-center">
+          <figure data-reveal="zoom" className="mx-auto mt-20 max-w-3xl text-center">
             <span
               aria-hidden
               className="block font-title text-7xl leading-none text-clay/40"
@@ -336,10 +356,13 @@ export default function LandingPage() {
       <section id="impressie" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
           <div className="mb-10 grid gap-12 lg:grid-cols-2 lg:gap-20">
-            <h2 className="font-title text-4xl text-ink">
+            <h2 data-reveal="left" className="font-title text-4xl text-ink">
               Zo ziet een schilderles in Arnhem eruit
             </h2>
-            <div className="space-y-5 text-lg leading-relaxed text-muted">
+            <div
+              data-reveal="right"
+              className="space-y-5 text-lg leading-relaxed text-muted"
+            >
               <p>
                 Iedere {dagen} kom je met een kleine groep samen in het atelier
                 in {site.district}. We beginnen met koffie. Daarna nemen we een
@@ -359,14 +382,16 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-          <CourseCarousel />
+          <div data-reveal>
+            <CourseCarousel />
+          </div>
         </Container>
       </section>
 
       {/* Over de docent -------------------------------------------------- */}
       <section id="docent" className="scroll-mt-20 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <div>
+          <div data-reveal="left">
             <h2 className="font-title text-4xl text-ink">
               Over je docent Jelle van de Ridder
             </h2>
@@ -380,7 +405,10 @@ export default function LandingPage() {
               />
             </div>
           </div>
-          <div className="space-y-5 text-lg leading-relaxed text-muted">
+          <div
+            data-reveal="right"
+            className="space-y-5 text-lg leading-relaxed text-muted"
+          >
             <p className="font-title text-2xl leading-snug text-ink">
               Als autodidact heb ik zelf alle denkbare obstakels van het
               schilderen doorlopen. Juist daardoor weet ik waar je tegenaan loopt.
@@ -414,13 +442,14 @@ export default function LandingPage() {
       {/* Reviews --------------------------------------------------------- */}
       <section id="ervaringen" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
-          <h2 className="font-title text-4xl text-ink">
+          <h2 data-reveal className="font-title text-4xl text-ink">
             Ervaringen van cursisten
           </h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          <div data-reveal-stagger className="mt-12 grid gap-8 md:grid-cols-3">
             {reviews.map((r) => (
               <figure
                 key={r.name}
+                data-reveal
                 className="flex flex-col rounded-xl border border-line bg-paper p-7"
               >
                 <span className="font-title text-5xl leading-none text-clay/30">
@@ -441,7 +470,7 @@ export default function LandingPage() {
       {/* Praktische informatie en materiaal ------------------------------ */}
       <section id="praktisch" className="scroll-mt-20 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <div>
+          <div data-reveal="left">
             <h2 className="font-title text-4xl text-ink">
               Praktische informatie over de cursus in Arnhem
             </h2>
@@ -455,7 +484,10 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <dl className="divide-y divide-line border-y border-line">
+          <dl
+            data-reveal="right"
+            className="divide-y divide-line border-y border-line"
+          >
             {practical.map((item) => (
               <div
                 key={item.label}
@@ -471,7 +503,7 @@ export default function LandingPage() {
         </Container>
 
         <Container>
-          <div id="materiaal" className="mt-20 scroll-mt-20">
+          <div id="materiaal" data-reveal className="mt-20 scroll-mt-20">
             <h3 className="font-title text-3xl text-ink">
               Materiaalkosten voor het schilderen in olieverf
             </h3>
@@ -541,10 +573,15 @@ export default function LandingPage() {
       {/* Veelgestelde vragen ---------------------------------------------- */}
       <section id="vragen" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
-          <h2 className="font-title text-4xl text-ink">Veelgestelde vragen</h2>
-          <dl className="mt-12 grid gap-x-20 gap-y-10 md:grid-cols-2">
+          <h2 data-reveal className="font-title text-4xl text-ink">
+            Veelgestelde vragen
+          </h2>
+          <dl
+            data-reveal-stagger
+            className="mt-12 grid gap-x-20 gap-y-10 md:grid-cols-2"
+          >
             {faq.map((item) => (
-              <div key={item.q} className="border-t border-line pt-5">
+              <div key={item.q} data-reveal className="border-t border-line pt-5">
                 <dt className="font-title text-xl text-ink">{item.q}</dt>
                 <dd className="mt-2 leading-relaxed text-muted">{item.a}</dd>
               </div>
@@ -566,7 +603,10 @@ export default function LandingPage() {
       {/* Slot-CTA -------------------------------------------------------- */}
       <section id="aanmelden" className="py-20">
         <Container>
-          <div className="relative overflow-hidden rounded-xl px-8 py-16 text-center text-paper sm:px-16">
+          <div
+            data-reveal="zoom"
+            className="relative overflow-hidden rounded-xl px-8 py-16 text-center text-paper sm:px-16"
+          >
             <Image
               src={monetBg}
               alt=""
