@@ -11,7 +11,24 @@ export const metadata: Metadata = {
 };
 
 /** Shown on the page, so update it together with any change to the terms. */
-const lastUpdated = "15 oktober 2026";
+const lastUpdated = "16 oktober 2026";
+
+const summary = [
+  {
+    title: "Eén keer vrij",
+    body: "Eén keer per reeks afzeggen mag altijd, zonder uitleg. Die les haal je gewoon in.",
+  },
+  {
+    title: "De dag ervoor",
+    body: "Laat het me uiterlijk de dag vóór de les weten.",
+  },
+  {
+    title: "Daarna telt het",
+    body: "Nog een keer afzeggen, of pas op de dag zelf, gaat van je reeks af.",
+  },
+];
+
+const linkClass = "text-ink underline underline-offset-4 hover:text-clay";
 
 export default function VoorwaardenPage() {
   return (
@@ -19,7 +36,7 @@ export default function VoorwaardenPage() {
       <Container>
         <div className="max-w-2xl">
           <p className="rise mb-4 text-sm uppercase tracking-[0.2em] text-clay">
-            Afspraken
+            De huisregels van het atelier
           </p>
           <h1
             className="rise font-title text-4xl text-ink sm:text-5xl"
@@ -31,117 +48,216 @@ export default function VoorwaardenPage() {
             className="rise mt-6 text-lg leading-relaxed text-muted"
             style={delay(260)}
           >
-            Fijn dat je meedoet aan de schildercursus. Hieronder staan de
-            afspraken die we samen maken. Ze zijn er zodat het voor iedereen in
-            de groep duidelijk en eerlijk blijft.
+            Geen kleine lettertjes, wel een paar heldere afspraken. Zo blijft
+            het in het atelier gezellig en eerlijk voor iedereen.
+          </p>
+        </div>
+
+        {/* In het kort ------------------------------------------------- */}
+        <div
+          data-reveal-stagger
+          className="mt-14 grid max-w-4xl gap-4 sm:grid-cols-3"
+        >
+          {summary.map((item, i) => (
+            <div
+              key={item.title}
+              data-reveal
+              className="border-t-2 border-clay bg-mist/60 px-5 pt-4 pb-5"
+            >
+              <span className="font-title text-3xl text-clay/60">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <p className="mt-2 font-title text-lg text-ink">{item.title}</p>
+              <p className="mt-1 leading-relaxed text-muted">{item.body}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-20 max-w-2xl space-y-14">
+          <div data-reveal>
+            <h2 className="font-title text-2xl text-ink">
+              Kun je een keer niet? Geen probleem
+            </h2>
+            <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
+              <p>
+                Het leven gebeurt. Een verjaardag, een griepje, of een trein die
+                besluit niet te rijden. Daarom mag je per lessenreeks één keer
+                afzeggen, zonder dat je mij hoeft uit te leggen waarom.
+              </p>
+              <p>
+                Die les raak je niet kwijt. Hij schuift door naar het einde van
+                je reeks en je haalt hem gewoon in.
+              </p>
+              <p>
+                Zeg je in dezelfde reeks nog een keer af, dan gaat die les wel
+                van je reeks af. Jammer, maar zo blijft het eerlijk voor de rest
+                van de groep.
+              </p>
+            </div>
+          </div>
+
+          <div data-reveal>
+            <h2 className="font-title text-2xl text-ink">
+              Laat het op tijd weten
+            </h2>
+            <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
+              <p>
+                Zeg uiterlijk de dag vóór de les af. Dan houd ik er rekening mee
+                bij het voorbereiden, en staat jouw ezel niet voor niets klaar.
+              </p>
+              <p>
+                Zeg je op de dag zelf af, of kom je niet zonder iets te laten
+                horen, dan gaat de les van je reeks af. Ook als het je eerste
+                keer is.
+              </p>
+              <p>
+                Een mailtje naar{" "}
+                <a href={`mailto:${site.email}`} className={linkClass}>
+                  {site.email}
+                </a>{" "}
+                of een appje naar{" "}
+                <a href={`tel:${site.phone}`} className={linkClass}>
+                  {site.phoneDisplay}
+                </a>{" "}
+                is genoeg.
+              </p>
+            </div>
+          </div>
+
+          <SeriesExample />
+
+          <div data-reveal>
+            <h2 className="font-title text-2xl text-ink">
+              Aanmelden en betalen
+            </h2>
+            <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
+              <p>
+                Een les kost €{site.course.pricePerLesson}. Een reeks van{" "}
+                {site.course.lessons} lessen kost dus €{coursePrice}. Verf en
+                penselen zijn niet inbegrepen, maar die zijn daarna wel lekker
+                van jou.
+              </p>
+              <p>
+                Na je aanmelding neem ik persoonlijk contact met je op over de
+                startdatum en de betaling. Zodra die binnen is, staat je plek
+                vast en krijg je toegang tot het cursusplatform.
+              </p>
+            </div>
+          </div>
+
+          <p data-reveal className="text-lg text-muted">
+            Twijfel je ergens over? Mail me gerust op{" "}
+            <a href={`mailto:${site.email}`} className={linkClass}>
+              {site.email}
+            </a>
+            , dan zoeken we het samen uit.
           </p>
 
-          <div className="mt-16 space-y-14">
-            <div data-reveal>
-              <h2 className="font-title text-2xl text-ink">
-                Afzeggen en inhalen
-              </h2>
-              <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
-                <p>
-                  Kun je een keer niet? Dat kan gebeuren. Per lessenreeks mag je
-                  één keer afzeggen, zonder dat je daar een reden voor hoeft te
-                  geven. Die les haal je later in: hij schuift door naar het
-                  einde van je reeks, zodat je er niets van mist.
-                </p>
-                <p>
-                  Zeg je binnen dezelfde reeks nog een keer af, dan gaat die les
-                  van je reeks af en kun je hem niet meer inhalen.
-                </p>
-              </div>
-            </div>
-
-            <div data-reveal>
-              <h2 className="font-title text-2xl text-ink">Op tijd afzeggen</h2>
-              <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
-                <p>
-                  Laat het me uiterlijk de dag vóór de les weten. Zeg je op de
-                  dag van de les zelf af, of kom je zonder bericht niet, dan
-                  gaat de les van je reeks af. Dat geldt ook als het je eerste
-                  keer afzeggen is.
-                </p>
-                <p>
-                  In de groep is plek voor maximaal {site.course.maxStudents}{" "}
-                  cursisten, en ik bereid iedere les voor op wie er komt. Door
-                  op tijd af te zeggen houden we het overzichtelijk en eerlijk
-                  voor iedereen.
-                </p>
-                <p>
-                  Afzeggen doe je door te mailen naar{" "}
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="text-ink underline underline-offset-4 hover:text-clay"
-                  >
-                    {site.email}
-                  </a>{" "}
-                  of een bericht te sturen naar{" "}
-                  <a
-                    href={`tel:${site.phone}`}
-                    className="text-ink underline underline-offset-4 hover:text-clay"
-                  >
-                    {site.phoneDisplay}
-                  </a>
-                  .
-                </p>
-              </div>
-            </div>
-
-            <aside
-              data-reveal
-              className="rounded-sm border-l-2 border-clay bg-mist/60 px-6 py-5"
-            >
-              <p className="text-sm uppercase tracking-[0.2em] text-clay">
-                Een voorbeeld
-              </p>
-              <p className="mt-3 leading-relaxed text-ink/80">
-                Je reeks telt {site.course.lessons} lessen. In de derde week zeg
-                je de dag ervoor af. Die les haal je in na je laatste les, dus
-                je volgt nog steeds alle {site.course.lessons} lessen. Zeg je in
-                de zesde week opnieuw af, dan gaat die les van je reeks af en
-                volg je er in totaal {site.course.lessons - 1}.
-              </p>
-            </aside>
-
-            <div data-reveal>
-              <h2 className="font-title text-2xl text-ink">
-                Aanmelden en betalen
-              </h2>
-              <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
-                <p>
-                  Een les kost €{site.course.pricePerLesson}, een reeks van{" "}
-                  {site.course.lessons} lessen dus €{coursePrice}. Materiaal is
-                  niet inbegrepen.
-                </p>
-                <p>
-                  Na je aanmelding neem ik persoonlijk contact met je op over de
-                  startdatum en de betaling. Zodra de betaling binnen is, is je
-                  plek bevestigd en krijg je toegang tot het cursusmateriaal op
-                  het cursusplatform.
-                </p>
-              </div>
-            </div>
-
-            <p data-reveal className="text-muted">
-              Heb je een vraag over deze afspraken? Mail me gerust op{" "}
-              <a
-                href={`mailto:${site.email}`}
-                className="text-ink underline underline-offset-4 hover:text-clay"
-              >
-                {site.email}
-              </a>
-              .
-            </p>
-
-            <p className="text-sm text-muted">
-              Laatst bijgewerkt: {lastUpdated}
-            </p>
-          </div>
+          <p className="text-sm text-muted">Laatst bijgewerkt: {lastUpdated}</p>
         </div>
       </Container>
     </section>
+  );
+}
+
+type Dot = { n: number; state: "attended" | "skipped" | "caughtUp" | "lost" };
+
+/**
+ * The cancellation rules drawn as a row of lessons, once with a single
+ * cancellation and once with two. Built from site.course.lessons, so the
+ * picture stays right if the series length changes.
+ */
+function SeriesExample() {
+  const lessons = site.course.lessons;
+  const base = (skipped: number[], lost: number[]): Dot[] =>
+    Array.from({ length: lessons }, (_, i) => {
+      const n = i + 1;
+      if (skipped.includes(n)) return { n, state: "skipped" };
+      if (lost.includes(n)) return { n, state: "lost" };
+      return { n, state: "attended" };
+    });
+
+  const rows = [
+    {
+      label: "Je zegt één keer op tijd af",
+      dots: [...base([3], []), { n: 3, state: "caughtUp" } as Dot],
+      result: `Je volgt alle ${lessons} lessen`,
+    },
+    {
+      label: "Je zegt een tweede keer af",
+      dots: [...base([3], [6]), { n: 3, state: "caughtUp" } as Dot],
+      result: `Je volgt ${lessons - 1} lessen`,
+    },
+  ];
+
+  return (
+    <aside data-reveal className="border-l-2 border-clay bg-mist/60 px-6 py-6">
+      <p className="text-sm uppercase tracking-[0.2em] text-clay">
+        Zo ziet dat eruit
+      </p>
+      <div className="mt-5 space-y-6">
+        {rows.map((row) => (
+          <div key={row.label}>
+            <p className="text-ink">{row.label}</p>
+            <ol className="mt-3 flex flex-wrap items-center gap-1.5">
+              {row.dots.map((dot, i) => (
+                <li key={i} className="flex items-center">
+                  {dot.state === "caughtUp" && (
+                    <span aria-hidden className="mr-1.5 text-clay">
+                      +
+                    </span>
+                  )}
+                  <span
+                    aria-label={dotLabel(dot)}
+                    className={`flex size-6 items-center justify-center rounded-full text-[0.7rem] tabular-nums ${dotClass[dot.state]}`}
+                  >
+                    {dot.n}
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-2 text-sm text-muted">{row.result}</p>
+          </div>
+        ))}
+      </div>
+      <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted">
+        <Legend state="attended">gevolgd</Legend>
+        <Legend state="skipped">afgezegd</Legend>
+        <Legend state="caughtUp">ingehaald</Legend>
+        <Legend state="lost">vervallen</Legend>
+      </ul>
+    </aside>
+  );
+}
+
+const dotClass: Record<Dot["state"], string> = {
+  attended: "bg-ink/80 text-paper",
+  skipped: "border border-dashed border-ink/40 text-ink/50",
+  caughtUp: "bg-clay text-paper",
+  lost: "border border-ink/20 text-ink/30 line-through",
+};
+
+function dotLabel(dot: Dot) {
+  const what = {
+    attended: "gevolgd",
+    skipped: "afgezegd",
+    caughtUp: "ingehaald",
+    lost: "vervallen",
+  }[dot.state];
+  return `Les ${dot.n}, ${what}`;
+}
+
+function Legend({
+  state,
+  children,
+}: {
+  state: Dot["state"];
+  children: string;
+}) {
+  return (
+    <li className="flex items-center gap-2">
+      <span aria-hidden className={`size-3 rounded-full ${dotClass[state]}`} />
+      {children}
+    </li>
   );
 }
