@@ -16,7 +16,7 @@ const lastUpdated = "16 oktober 2026";
 const summary = [
   {
     title: "Eén keer vrij",
-    body: "Eén keer per reeks afzeggen mag altijd, zonder uitleg. Die les haal je gewoon in.",
+    body: "Eén keer per reeks afzeggen mag zonder opgave van reden. Die les haal je later in.",
   },
   {
     title: "De dag ervoor",
@@ -36,7 +36,7 @@ export default function VoorwaardenPage() {
       <Container>
         <div className="max-w-2xl">
           <p className="rise mb-4 text-sm uppercase tracking-[0.2em] text-clay">
-            De huisregels van het atelier
+            Afspraken
           </p>
           <h1
             className="rise font-title text-4xl text-ink sm:text-5xl"
@@ -48,8 +48,8 @@ export default function VoorwaardenPage() {
             className="rise mt-6 text-lg leading-relaxed text-muted"
             style={delay(260)}
           >
-            Geen kleine lettertjes, wel een paar heldere afspraken. Zo blijft
-            het in het atelier gezellig en eerlijk voor iedereen.
+            Een paar heldere afspraken, zodat het voor iedereen in de groep
+            duidelijk en eerlijk is.
           </p>
         </div>
 
@@ -76,34 +76,27 @@ export default function VoorwaardenPage() {
         <div className="mt-20 max-w-2xl space-y-14">
           <div data-reveal>
             <h2 className="font-title text-2xl text-ink">
-              Kun je een keer niet? Geen probleem
+              Afzeggen en inhalen
             </h2>
             <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
               <p>
-                Het leven gebeurt. Een verjaardag, een griepje, of een trein die
-                besluit niet te rijden. Daarom mag je per lessenreeks één keer
-                afzeggen, zonder dat je mij hoeft uit te leggen waarom.
+                Per lessenreeks mag je één keer afzeggen, zonder dat je daar een
+                reden voor hoeft te geven. Die les raak je niet kwijt: hij
+                schuift door naar het einde van je reeks en je haalt hem dan in.
               </p>
               <p>
-                Die les raak je niet kwijt. Hij schuift door naar het einde van
-                je reeks en je haalt hem gewoon in.
-              </p>
-              <p>
-                Zeg je in dezelfde reeks nog een keer af, dan gaat die les wel
-                van je reeks af. Jammer, maar zo blijft het eerlijk voor de rest
-                van de groep.
+                Zeg je in dezelfde reeks nog een keer af, dan gaat die les van
+                je reeks af. Zo blijft het eerlijk voor de rest van de groep.
               </p>
             </div>
           </div>
 
           <div data-reveal>
-            <h2 className="font-title text-2xl text-ink">
-              Laat het op tijd weten
-            </h2>
+            <h2 className="font-title text-2xl text-ink">Op tijd afzeggen</h2>
             <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
               <p>
-                Zeg uiterlijk de dag vóór de les af. Dan houd ik er rekening mee
-                bij het voorbereiden, en staat jouw ezel niet voor niets klaar.
+                Zeg uiterlijk de dag vóór de les af. Dan kan ik daar bij het
+                voorbereiden van de les rekening mee houden.
               </p>
               <p>
                 Zeg je op de dag zelf af, of kom je niet zonder iets te laten
@@ -111,15 +104,15 @@ export default function VoorwaardenPage() {
                 keer is.
               </p>
               <p>
-                Een mailtje naar{" "}
+                Afzeggen kan per mail naar{" "}
                 <a href={`mailto:${site.email}`} className={linkClass}>
                   {site.email}
                 </a>{" "}
-                of een appje naar{" "}
+                of met een bericht naar{" "}
                 <a href={`tel:${site.phone}`} className={linkClass}>
                   {site.phoneDisplay}
-                </a>{" "}
-                is genoeg.
+                </a>
+                .
               </p>
             </div>
           </div>
@@ -133,8 +126,8 @@ export default function VoorwaardenPage() {
             <div className="mt-4 space-y-5 text-lg leading-relaxed text-muted">
               <p>
                 Een les kost €{site.course.pricePerLesson}. Een reeks van{" "}
-                {site.course.lessons} lessen kost dus €{coursePrice}. Verf en
-                penselen zijn niet inbegrepen, maar die zijn daarna wel lekker
+                {site.course.lessons} lessen kost dus €{coursePrice}. Materiaal
+                is niet inbegrepen. Dat schaf je zelf aan en het blijft daarna
                 van jou.
               </p>
               <p>
@@ -146,11 +139,11 @@ export default function VoorwaardenPage() {
           </div>
 
           <p data-reveal className="text-lg text-muted">
-            Twijfel je ergens over? Mail me gerust op{" "}
+            Heb je een vraag over deze afspraken? Mail me gerust op{" "}
             <a href={`mailto:${site.email}`} className={linkClass}>
               {site.email}
             </a>
-            , dan zoeken we het samen uit.
+            .
           </p>
 
           <p className="text-sm text-muted">Laatst bijgewerkt: {lastUpdated}</p>
