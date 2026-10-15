@@ -1,4 +1,4 @@
-import { site, fullAddress } from "@/lib/site";
+import { site, fullAddress, coursePrice } from "@/lib/site";
 
 /**
  * JSON-LD graphs. Every node carries a stable `@id` so that nodes can
@@ -109,7 +109,7 @@ export function courseGraph({
     provider: { "@id": ORGANIZATION_ID },
     offers: {
       "@type": "Offer",
-      price: site.course.price,
+      price: coursePrice,
       priceCurrency: site.course.currency,
       category: "Paid",
       availability: "https://schema.org/InStock",

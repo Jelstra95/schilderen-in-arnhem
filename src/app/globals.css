@@ -102,9 +102,10 @@ h4,
       start state only applies once `html.reveal-ready` is set by the inline
       script in the root layout, so without JavaScript nothing is ever hidden.
       `RevealObserver` adds `.is-revealed` when the element enters the
-      viewport. Everything slides in sideways, never up or zooming: from the
-      left by default, or `data-reveal="right"` for content in a right-hand
-      column. Put `data-reveal-stagger` on a parent to cascade its children. */
+      viewport. Text slides in sideways: from the left by default, or
+      `data-reveal="right"` for a right-hand column. Images zoom in with
+      `data-reveal="zoom"` (or `.rise-zoom` on load). Put
+      `data-reveal-stagger` on a parent to cascade its children. */
 @keyframes rise {
   from {
     opacity: 0;
@@ -114,6 +115,22 @@ h4,
     opacity: 1;
     transform: none;
   }
+}
+
+@keyframes rise-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise-zoom {
+  animation: rise-zoom 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--delay, 0ms);
 }
 
 .rise {
@@ -132,6 +149,9 @@ h4,
 }
 .reveal-ready [data-reveal="right"] {
   transform: translate3d(3rem, 0, 0);
+}
+.reveal-ready [data-reveal="zoom"] {
+  transform: scale(0.94);
 }
 .reveal-ready [data-reveal].is-revealed {
   opacity: 1;
@@ -175,7 +195,8 @@ h4,
   .float-b {
     animation: none;
   }
-  .rise {
+  .rise,
+  .rise-zoom {
     animation: none;
   }
   .reveal-ready [data-reveal] {
