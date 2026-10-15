@@ -240,7 +240,7 @@ export default function LandingPage() {
             </p>
           </div>
           <Image
-            data-reveal="zoom"
+            data-reveal
             src={werkCursisten}
             alt="Collage van olieverfschilderijen gemaakt door eerdere cursisten van de schildercursus in Arnhem"
             placeholder="blur"
@@ -256,7 +256,7 @@ export default function LandingPage() {
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
             <h2
               id="lesinhoud"
-              data-reveal="left"
+              data-reveal
               className="scroll-mt-20 font-title text-4xl text-ink"
             >
               Lesinhoud: in acht avonden leren schilderen in olieverf
@@ -314,7 +314,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-16 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
-            <div data-reveal="left">
+            <div data-reveal>
               <h3 className="font-title text-2xl text-ink">
                 Alle theorie terugzien op het cursusplatform
               </h3>
@@ -336,7 +336,7 @@ export default function LandingPage() {
             />
           </div>
 
-          <figure data-reveal="zoom" className="mx-auto mt-20 max-w-3xl text-center">
+          <figure data-reveal className="mx-auto mt-20 max-w-3xl text-center">
             <span
               aria-hidden
               className="block font-title text-7xl leading-none text-clay/40"
@@ -357,7 +357,7 @@ export default function LandingPage() {
       <section id="impressie" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
           <div className="mb-10 grid gap-12 lg:grid-cols-2 lg:gap-20">
-            <h2 data-reveal="left" className="font-title text-4xl text-ink">
+            <h2 data-reveal className="font-title text-4xl text-ink">
               Zo ziet een schilderles in Arnhem eruit
             </h2>
             <div
@@ -392,7 +392,7 @@ export default function LandingPage() {
       {/* Over de docent -------------------------------------------------- */}
       <section id="docent" className="scroll-mt-20 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <div data-reveal="left">
+          <div data-reveal>
             <h2 className="font-title text-4xl text-ink">
               Over je docent Jelle van de Ridder
             </h2>
@@ -471,7 +471,7 @@ export default function LandingPage() {
       {/* Praktische informatie en materiaal ------------------------------ */}
       <section id="praktisch" className="scroll-mt-20 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <div data-reveal="left">
+          <div data-reveal>
             <h2 className="font-title text-4xl text-ink">
               Praktische informatie over de cursus in Arnhem
             </h2>
@@ -678,7 +678,7 @@ function Painting({
   const left = side === "left";
   return (
     <div
-      data-reveal={side}
+      data-reveal={left ? "" : "right"}
       style={delay(left ? 0 : 150)}
       className="mx-auto w-full max-w-[16rem] sm:max-w-xs lg:max-w-none"
     >
