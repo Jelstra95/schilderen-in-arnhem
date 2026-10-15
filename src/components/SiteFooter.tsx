@@ -43,6 +43,12 @@ export function SiteFooter() {
           <Link href="/login" className="hover:text-ink transition-colors">
             Inloggen
           </Link>
+          <Link
+            href="/algemene-voorwaarden"
+            className="hover:text-ink transition-colors"
+          >
+            Algemene voorwaarden
+          </Link>
           <a
             href={site.sameAs[0]}
             target="_blank"

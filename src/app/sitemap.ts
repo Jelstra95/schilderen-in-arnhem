@@ -37,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      url: `${site.url}/algemene-voorwaarden`,
+      lastModified: "2026-10-15",
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
     // /bedankt and every auth or gated route are noindex and stay out.
   ];
 }
