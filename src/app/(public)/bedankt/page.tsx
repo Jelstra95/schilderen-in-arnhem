@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function BedanktPage() {
   return (
     <section className="py-24">
-      <Container className="max-w-2xl text-center">
+      <Container className="rise max-w-2xl text-center">
         <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-clay/10 text-3xl text-clay">
           ✓
         </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { AanmeldForm } from "@/components/AanmeldForm";
+import { delay } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Aanmelden voor de schildercursus in Arnhem",
@@ -13,7 +14,7 @@ export default function InschrijvenPage() {
   return (
     <section className="py-16 sm:py-20">
       <Container>
-        <div className="max-w-2xl">
+        <div className="rise max-w-2xl">
           <p className="mb-3 text-sm uppercase tracking-[0.2em] text-clay">
             Aanmelden
           </p>
@@ -27,7 +28,7 @@ export default function InschrijvenPage() {
           </p>
         </div>
 
-        <div className="mt-12">
+        <div className="rise mt-12" style={delay(180)}>
           <AanmeldForm />
         </div>
       </Container>

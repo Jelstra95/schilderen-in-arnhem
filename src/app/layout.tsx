@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { site } from "@/lib/site";
+import { RevealObserver } from "@/components/RevealObserver";
 import "./globals.css";
 
 // Titles — Avenir Light (matches jellevanderidder.com)
@@ -66,6 +67,14 @@ export const metadata: Metadata = {
   creator: site.instructor,
 };
 
+/**
+ * Runs before first paint. Marks the page as able to animate, so scroll
+ * reveals can start hidden without a flash of visible content first. If the
+ * app bundle never boots, the timer unhides everything again after a few
+ * seconds rather than leaving the page blank.
+ */
+const revealBootstrap = `(function(){var d=document.documentElement;d.classList.add("reveal-ready");setTimeout(function(){if(!("revealLive" in d.dataset))d.classList.remove("reveal-ready")},4000)})()`;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -73,9 +82,15 @@ export default function RootLayout({
     <html
       lang="nl"
       className={`${avenir.variable} ${fraunces.variable} h-full antialiased`}
+      // The bootstrap script adds a class before React hydrates.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
+      </head>
       <body className="min-h-full flex flex-col bg-paper text-ink">
         {children}
+        <RevealObserver />
         <Analytics />
       </body>
     </html>
