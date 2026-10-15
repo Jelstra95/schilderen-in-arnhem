@@ -14,54 +14,56 @@ export const metadata: Metadata = {
 export default function WorkshopsPage() {
   return (
     <section className="py-24 sm:py-32">
-      <Container className="max-w-2xl">
-        <p className="rise mb-4 text-sm uppercase tracking-[0.2em] text-clay">
-          Binnenkort
-        </p>
-        <h1
-          className="rise font-title text-4xl text-ink sm:text-5xl"
-          style={delay(120)}
-        >
-          Schilderworkshops in Arnhem
-        </h1>
-        <div
-          className="rise mt-6 space-y-5 text-lg leading-relaxed text-muted"
-          style={delay(260)}
-        >
-          <p>
-            Naast de doorlopende schildercursus komen er losse workshops. Waar
-            de cursus acht lessen beslaat en je stap voor stap een brede basis
-            geeft, duurt een workshop één dagdeel en gaat die juist heel diep op
-            één onderwerp in.
+      <Container>
+        <div className="max-w-2xl">
+          <p className="rise mb-4 text-sm uppercase tracking-[0.2em] text-clay">
+            Binnenkort
           </p>
-          <p>
-            Ook in de workshops werk je in olieverf. Denk aan een middag die
-            volledig over het schilderen van licht gaat, aan een portretstudie
-            naar levend model, of aan een dag buiten schilderen op locatie. Je
-            hoeft er geen cursus voor te volgen en je hoeft geen ervaring te
-            hebben.
-          </p>
-          <p>
-            De workshops vinden plaats op bijzondere locaties in en rond Arnhem.
-            Een enkele keer werken we in het atelier aan de {site.street},
-            maar vaker trekken we eropuit naar een plek die zich leent voor het
-            onderwerp van die dag.
-          </p>
-          <p>
-            Binnenkort verschijnt hier de agenda met de geplande workshops, met
-            per workshop de datum, de locatie en de kosten. Heb je alvast
-            interesse, of ken je een locatie die zich hiervoor leent? Neem dan
-            gerust contact op.
-          </p>
-        </div>
-        <div className="rise mt-9 flex flex-wrap gap-4" style={delay(400)}>
-          <ButtonLink href="/cursussen">Bekijk de cursus</ButtonLink>
-          <ButtonLink
-            href="mailto:info@jellevanderidder.com"
-            variant="secondary"
+          <h1
+            className="rise font-title text-4xl text-ink sm:text-5xl"
+            style={delay(120)}
           >
-            Neem contact op
-          </ButtonLink>
+            Schilderworkshops in Arnhem
+          </h1>
+          <div
+            className="rise mt-6 space-y-5 text-lg leading-relaxed text-muted"
+            style={delay(260)}
+          >
+            <p>
+              Naast de doorlopende schildercursus komen er losse workshops. Waar
+              de cursus acht lessen beslaat en je stap voor stap een brede basis
+              geeft, duurt een workshop één dagdeel en gaat die juist heel diep
+              op één onderwerp in.
+            </p>
+            <p>
+              Ook in de workshops werk je in olieverf. Denk aan een middag die
+              volledig over het schilderen van licht gaat, aan een portretstudie
+              naar levend model, of aan een dag buiten schilderen op locatie. Je
+              hoeft er geen cursus voor te volgen en je hoeft geen ervaring te
+              hebben.
+            </p>
+            <p>
+              De workshops vinden plaats op bijzondere locaties in en rond
+              Arnhem. Een enkele keer werken we in het atelier aan de{" "}
+              {site.street}, maar vaker trekken we eropuit naar een plek die
+              zich leent voor het onderwerp van die dag.
+            </p>
+            <p>
+              Binnenkort verschijnt hier de agenda met de geplande workshops,
+              met per workshop de datum, de locatie en de kosten. Heb je alvast
+              interesse, of ken je een locatie die zich hiervoor leent? Neem dan
+              gerust contact op.
+            </p>
+          </div>
+          <div className="rise mt-9 flex flex-wrap gap-4" style={delay(400)}>
+            <ButtonLink href="/cursussen">Bekijk de cursus</ButtonLink>
+            <ButtonLink
+              href="mailto:info@jellevanderidder.com"
+              variant="secondary"
+            >
+              Neem contact op
+            </ButtonLink>
+          </div>
         </div>
       </Container>
     </section>

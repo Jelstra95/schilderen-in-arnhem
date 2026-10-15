@@ -1,4 +1,6 @@
 import Image, { type StaticImageData } from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
 import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
 import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
 import vermeer from "@/assets/cursus/vermeer-waterkan.jpg";
@@ -127,7 +129,7 @@ const heroReview = reviews[2];
  * here. Prijs, locatie, duur, groepsgrootte en instromen staan in de lijst met
  * praktische informatie en horen daar thuis, niet ook nog een keer hier.
  */
-const faq = [
+const faq: { q: string; a: ReactNode }[] = [
   {
     q: "Heb ik ervaring nodig om mee te doen?",
     a: "Nee. In de groep zitten mensen die nog nooit geschilderd hebben naast mensen die al jaren bezig zijn. Je werkt op je eigen tempo aan opdrachten die bij jouw niveau passen.",
@@ -138,7 +140,21 @@ const faq = [
   },
   {
     q: "Wat als ik een les mis?",
-    a: "Binnen een reeks van acht lessen mag je één keer afzeggen. Die gemiste les schuift dan door. Mis je daarna nog een les, dan gaat die van je reeks af.",
+    a: (
+      <>
+        Per reeks mag je één keer afzeggen zonder reden, en die les haal je
+        later in. Laat het me wel uiterlijk de dag vóór de les weten. Zeg je
+        daarna nog een keer af, of pas op de dag zelf, dan gaat de les van je
+        reeks af. Alles staat in de{" "}
+        <Link
+          href="/algemene-voorwaarden"
+          className="text-ink underline underline-offset-4 hover:text-clay"
+        >
+          algemene voorwaarden
+        </Link>
+        .
+      </>
+    ),
   },
   {
     q: "Schilder ik in olieverf of in acrylverf?",

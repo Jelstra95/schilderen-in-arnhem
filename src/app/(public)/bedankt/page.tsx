@@ -11,21 +11,23 @@ export const metadata: Metadata = {
 export default function BedanktPage() {
   return (
     <section className="py-24">
-      <Container className="rise max-w-2xl text-center">
-        <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-clay/10 text-3xl text-clay">
-          ✓
-        </div>
-        <h1 className="font-title text-4xl text-ink sm:text-5xl">
-          Je plek is gereserveerd
-        </h1>
-        <p className="mt-5 text-lg leading-relaxed text-muted">
-          Bedankt voor je inschrijving! We hebben je aanmelding ontvangen en
-          nemen persoonlijk contact met je op over de betaling en de verdere
-          details. Zodra de betaling binnen is, krijg je toegang tot het
-          cursusmateriaal.
-        </p>
-        <div className="mt-9 flex justify-center gap-3">
-          <ButtonLink href="/cursussen">Terug naar de cursus</ButtonLink>
+      <Container>
+        <div className="rise mx-auto max-w-2xl text-center">
+          <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-clay/10 text-3xl text-clay">
+            ✓
+          </div>
+          <h1 className="font-title text-4xl text-ink sm:text-5xl">
+            Je plek is gereserveerd
+          </h1>
+          <p className="mt-5 text-lg leading-relaxed text-muted">
+            Bedankt voor je inschrijving! We hebben je aanmelding ontvangen en
+            nemen persoonlijk contact met je op over de betaling en de verdere
+            details. Zodra de betaling binnen is, krijg je toegang tot het
+            cursusmateriaal.
+          </p>
+          <div className="mt-9 flex justify-center gap-3">
+            <ButtonLink href="/cursussen">Terug naar de cursus</ButtonLink>
+          </div>
         </div>
       </Container>
     </section>

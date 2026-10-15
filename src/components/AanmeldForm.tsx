@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Textarea } from "@/components/ui/Field";
@@ -131,7 +132,15 @@ export function AanmeldForm() {
         <p className="mt-3 text-xs text-muted">
           Je aanmelding opent in je eigen e-mailprogramma, gericht aan{" "}
           {CONTACT_EMAIL}. Na ontvangst neem ik persoonlijk contact met je op
-          over de betaling en bevestiging.
+          over de betaling en bevestiging. Met je aanmelding ga je akkoord
+          met de{" "}
+          <Link
+            href="/algemene-voorwaarden"
+            className="underline underline-offset-2 hover:text-ink"
+          >
+            algemene voorwaarden
+          </Link>
+          .
         </p>
       </div>
     </form>
