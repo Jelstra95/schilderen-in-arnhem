@@ -32,7 +32,8 @@ export const site = {
   priceRange: "\u20AC\u20AC",
 
   course: {
-    price: 240,
+    /** The price of one lesson. A series is `lessons` of them, see coursePrice. */
+    pricePerLesson: 36,
     currency: "EUR",
     lessons: 8,
     maxStudents: 6,
@@ -51,3 +52,6 @@ export const site = {
 
 /** "Sint Janskerkstraat 86A, 6822 EN Arnhem" */
 export const fullAddress = `${site.street}, ${site.postalCode} ${site.city}`;
+
+/** The price of a full series of lessons, derived so it can never drift. */
+export const coursePrice = site.course.pricePerLesson * site.course.lessons;

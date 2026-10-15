@@ -12,7 +12,7 @@ import { StickyCta } from "@/components/StickyCta";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { courseGraph } from "@/lib/schema";
-import { site, fullAddress } from "@/lib/site";
+import { site, fullAddress, coursePrice } from "@/lib/site";
 import { delay } from "@/lib/motion";
 
 export const metadata: Metadata = {
@@ -61,7 +61,10 @@ const practical = [
     value: `Iedere ${dagen} van ${site.course.startTime} tot ${site.course.endTime} uur`,
   },
   { label: "Duur", value: `${site.course.lessons} lessen` },
-  { label: "Kosten", value: `€${site.course.price} (exclusief materiaal)` },
+  {
+    label: "Kosten",
+    value: `€${site.course.pricePerLesson} per les, €${coursePrice} voor ${site.course.lessons} lessen (exclusief materiaal)`,
+  },
   { label: "Locatie", value: `${fullAddress}, in mijn atelier` },
   { label: "Groepsgrootte", value: `Maximaal ${site.course.maxStudents} personen` },
   { label: "Instromen", value: "Op elk moment, de lespakketten zijn doorlopend" },
@@ -198,7 +201,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="rise relative" style={delay(300)}>
+          <div className="rise-zoom relative" style={delay(300)}>
             <figure className="relative aspect-[4/5] overflow-hidden rounded-xl border border-line bg-mist">
               <Image
                 src={quoteBg}
@@ -240,7 +243,7 @@ export default function LandingPage() {
             </p>
           </div>
           <Image
-            data-reveal
+            data-reveal="zoom"
             src={werkCursisten}
             alt="Collage van olieverfschilderijen gemaakt door eerdere cursisten van de schildercursus in Arnhem"
             placeholder="blur"
@@ -327,7 +330,7 @@ export default function LandingPage() {
               </p>
             </div>
             <Image
-              data-reveal="right"
+              data-reveal="zoom"
               src={impressieSlides}
               alt="Impressie van lesslides over pigmenten, kleurenleer, mengschema's en de onderschildering bij Rembrandt"
               placeholder="blur"
@@ -383,7 +386,7 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-          <div data-reveal>
+          <div data-reveal="zoom">
             <CourseCarousel />
           </div>
         </Container>
@@ -392,11 +395,14 @@ export default function LandingPage() {
       {/* Over de docent -------------------------------------------------- */}
       <section id="docent" className="scroll-mt-20 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <div data-reveal>
-            <h2 className="font-title text-4xl text-ink">
+          <div>
+            <h2 data-reveal className="font-title text-4xl text-ink">
               Over je docent Jelle van de Ridder
             </h2>
-            <div className="mt-8 overflow-hidden rounded-xl border border-line">
+            <div
+              data-reveal="zoom"
+              className="mt-8 overflow-hidden rounded-xl border border-line"
+            >
               <Image
                 src={jelleDocent}
                 alt="Jelle van de Ridder in zijn atelier met penselen naast twee olieverfschilderijen"
@@ -601,10 +607,12 @@ export default function LandingPage() {
         </Container>
       </section>
 
-      {/* Slot-CTA: an old and a new master on either side of the signup */}
+      {/* Slot-CTA: an old and a new master on either side of the signup.
+          The negative bottom margin cancels the footer's top margin, so the
+          dark band runs straight into the footer without a cream strip. */}
       <section
         id="aanmelden"
-        className="relative isolate overflow-hidden bg-ink py-24 text-paper sm:py-32 lg:py-40"
+        className="relative isolate -mb-24 overflow-hidden bg-ink py-24 text-paper sm:py-32 lg:py-40"
       >
         {/* A warm glow behind the text, picking up the clay of the paintings. */}
         <div
@@ -659,7 +667,7 @@ export default function LandingPage() {
 }
 
 /**
- * One painting in the closing banner. It flies in from its own side, hangs at
+ * One painting in the closing banner. It zooms into place, hangs at
  * a slight tilt like a canvas on an easel, floats gently, and straightens when
  * you hover it. On small screens the two paintings frame the text, above and
  * below it.
@@ -678,7 +686,7 @@ function Painting({
   const left = side === "left";
   return (
     <div
-      data-reveal={left ? "" : "right"}
+      data-reveal="zoom"
       style={delay(left ? 0 : 150)}
       className="mx-auto w-full max-w-[16rem] sm:max-w-xs lg:max-w-none"
     >
