@@ -1,7 +1,8 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
 import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
-import monetBg from "@/assets/cursus/monet-landscape.jpg";
+import vermeer from "@/assets/cursus/vermeer-waterkan.jpg";
+import abstractNieuw from "@/assets/cursus/abstract-nieuw.jpg";
 import quoteBg from "@/assets/cursus/quote-bg.jpg";
 import impressieSlides from "@/assets/cursus/impressie-slides.webp";
 import { Container } from "@/components/ui/Container";
@@ -600,49 +601,107 @@ export default function LandingPage() {
         </Container>
       </section>
 
-      {/* Slot-CTA -------------------------------------------------------- */}
-      <section id="aanmelden" className="py-20">
-        <Container>
-          <div
-            data-reveal="zoom"
-            className="relative overflow-hidden rounded-xl px-8 py-16 text-center text-paper sm:px-16"
-          >
-            <Image
-              src={monetBg}
-              alt=""
-              fill
-              placeholder="blur"
-              sizes="(max-width: 768px) 100vw, 1024px"
-              className="object-cover"
-            />
-            {/* Darken the bright Monet sky so white text stays legible. */}
-            <div className="absolute inset-0 bg-ink/65" />
-            <div className="relative z-10">
-              <h2 className="font-title text-4xl text-paper">
-                Klaar om anders te leren kijken?
-              </h2>
-              <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-paper/85">
-                Meld je aan voor de schildercursus in Arnhem. Na je aanmelding
-                neem ik persoonlijk contact met je op over de startdatum, de
-                betaling en de bevestiging van je plek.
-              </p>
-              <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <ButtonLink href="/inschrijven" size="lg" variant="onDark">
-                  Ik meld mij aan!
-                </ButtonLink>
-                <a
-                  href={questionHref}
-                  className={buttonClasses("outlineOnDark", "lg")}
-                >
-                  Stel eerst een vraag
-                </a>
-              </div>
+      {/* Slot-CTA: an old and a new master on either side of the signup */}
+      <section
+        id="aanmelden"
+        className="relative isolate overflow-hidden bg-ink py-24 text-paper sm:py-32 lg:py-40"
+      >
+        {/* A warm glow behind the text, picking up the clay of the paintings. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(157,92,63,0.35),transparent_65%)]"
+        />
+        <Container className="grid items-center gap-14 lg:grid-cols-[1fr_1.6fr_1fr] lg:gap-12">
+          <Painting
+            src={vermeer}
+            alt="Johannes Vermeer, Jonge vrouw met een waterkan: een vrouw bij een open raam in zacht daglicht"
+            label="De oude meesters"
+            side="left"
+          />
+
+          <div data-reveal className="text-center">
+            <p className="mb-5 text-sm uppercase tracking-[0.25em] text-clay">
+              Van Vermeer tot vandaag
+            </p>
+            <h2 className="font-title text-4xl leading-tight text-paper sm:text-5xl xl:text-6xl">
+              Klaar om anders te leren kijken?
+            </h2>
+            <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-paper/75">
+              Meld je aan voor de schildercursus in Arnhem. Na je aanmelding
+              neem ik persoonlijk contact met je op over de startdatum, de
+              betaling en de bevestiging van je plek.
+            </p>
+            <div className="mt-9 flex flex-wrap justify-center gap-4">
+              <ButtonLink href="/inschrijven" size="lg" variant="onDark">
+                Ik meld mij aan!
+              </ButtonLink>
+              <a
+                href={questionHref}
+                className={buttonClasses("outlineOnDark", "lg")}
+              >
+                Stel eerst een vraag
+              </a>
             </div>
           </div>
+
+          <Painting
+            src={abstractNieuw}
+            alt="Abstract olieverfschilderij met losse, brede vegen in roze, rood, blauw en wit"
+            label="De nieuwe meesters"
+            side="right"
+          />
         </Container>
       </section>
 
       <StickyCta hideWhileVisible={ctaSections} />
     </>
+  );
+}
+
+/**
+ * One painting in the closing banner. It flies in from its own side, hangs at
+ * a slight tilt like a canvas on an easel, floats gently, and straightens when
+ * you hover it. On small screens the two paintings frame the text, above and
+ * below it.
+ */
+function Painting({
+  src,
+  alt,
+  label,
+  side,
+}: {
+  src: StaticImageData;
+  alt: string;
+  label: string;
+  side: "left" | "right";
+}) {
+  const left = side === "left";
+  return (
+    <div
+      data-reveal={side}
+      style={delay(left ? 0 : 150)}
+      className="mx-auto w-full max-w-[16rem] sm:max-w-xs lg:max-w-none"
+    >
+      <div className={left ? "float-a" : "float-b"}>
+        <figure
+          className={`group transition-transform duration-700 ease-out hover:rotate-0 hover:scale-[1.03] ${
+            left ? "-rotate-3" : "rotate-3"
+          }`}
+        >
+          <div className="overflow-hidden rounded-sm shadow-[0_30px_60px_-15px_rgba(0,0,0,0.6)] ring-1 ring-paper/10">
+            <Image
+              src={src}
+              alt={alt}
+              placeholder="blur"
+              sizes="(min-width: 1024px) 22rem, 20rem"
+              className="h-auto w-full"
+            />
+          </div>
+          <figcaption className="mt-4 text-center text-xs uppercase tracking-[0.25em] text-paper/50">
+            {label}
+          </figcaption>
+        </figure>
+      </div>
+    </div>
   );
 }

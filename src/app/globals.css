@@ -159,7 +159,27 @@ h4,
   --delay: 600ms;
 }
 
+/* Slow drift for the paintings in the closing banner. */
+@keyframes float {
+  from {
+    transform: translate3d(0, -0.4rem, 0);
+  }
+  to {
+    transform: translate3d(0, 0.4rem, 0);
+  }
+}
+.float-a {
+  animation: float 7s ease-in-out infinite alternate;
+}
+.float-b {
+  animation: float 8s ease-in-out -3s infinite alternate;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .float-a,
+  .float-b {
+    animation: none;
+  }
   .rise {
     animation: none;
   }
