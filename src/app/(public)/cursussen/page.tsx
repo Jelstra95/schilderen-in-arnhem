@@ -221,11 +221,10 @@ export default function LandingPage() {
               style={delay(260)}
             >
               Waarom bestaat een schilderij van Rembrandt van dichtbij uit losse
-              vegen, en komt het van een afstand tot leven? In acht avonden in
-              mijn atelier in {site.district} ontdek je hoe dat werkt, en
-              schilder je het zelf. Je leert olieverf schilderen in een groep
-              van hooguit zes mensen, of je nu nog nooit een penseel hebt
-              vastgehouden of al jaren schildert.
+              toetsen, en komt het van een afstand tot leven? In het atelier van
+              Jelle van de Ridder in {site.district} ontdek je hoe dat werkt, en
+              schilder je het zelf. Je leert olieverf schilderen in een kleine
+              groep, voor beginners en gevorderden.
             </p>
             <div
               className="rise mt-9 flex flex-wrap items-center gap-4"
