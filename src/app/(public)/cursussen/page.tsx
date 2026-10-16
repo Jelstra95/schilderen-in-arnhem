@@ -5,11 +5,11 @@ import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
 import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
 import vermeer from "@/assets/cursus/vermeer-waterkan.jpg";
 import abstractNieuw from "@/assets/cursus/abstract-nieuw.jpg";
-import quoteBg from "@/assets/cursus/quote-bg.jpg";
 import impressieSlides from "@/assets/cursus/impressie-slides.webp";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
+import { HeroVideo } from "@/components/HeroVideo";
 import { StickyCta } from "@/components/StickyCta";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
@@ -30,12 +30,14 @@ export const metadata: Metadata = {
 const steps = [
   {
     title: "Tekenen",
-    question: "Waarom tekenen de meeste mensen wat ze denken te zien, in plaats van wat er echt staat?",
+    question:
+      "Waarom tekenen de meeste mensen wat ze denken te zien, in plaats van wat er echt staat?",
     body: "Je leert meten, vergelijken en kijken zoals de academies het eeuwenlang deden. Dat is de basis van elke sterke schildering.",
   },
   {
     title: "Licht en donker",
-    question: "Waarom begonnen de oude meesters een schilderij vaak in één kleur?",
+    question:
+      "Waarom begonnen de oude meesters een schilderij vaak in één kleur?",
     body: "Je ontdekt hoe je met alleen licht en donker vorm, diepte en sfeer opbouwt, laag voor laag.",
   },
   {
@@ -68,8 +70,14 @@ const practical = [
     value: `€${site.course.pricePerLesson} per les, €${coursePrice} voor ${site.course.lessons} lessen (exclusief materiaal)`,
   },
   { label: "Locatie", value: `${fullAddress}, in mijn atelier` },
-  { label: "Groepsgrootte", value: `Maximaal ${site.course.maxStudents} personen` },
-  { label: "Instromen", value: "Op elk moment, de lespakketten zijn doorlopend" },
+  {
+    label: "Groepsgrootte",
+    value: `Maximaal ${site.course.maxStudents} personen`,
+  },
+  {
+    label: "Instromen",
+    value: "Op elk moment, de lespakketten zijn doorlopend",
+  },
 ];
 
 const materials: {
@@ -88,10 +96,22 @@ const materials: {
   },
   { product: "Gamblin Gamsol OMS 125ml", price: 13, category: "Oplosmiddel" },
   { product: "Da Vinci Penselenzeep", price: 5, category: "Kwastenzeep" },
-  { product: "Gamblin Solvent Free Fluid Medium 125ml", price: 18, category: "Medium" },
+  {
+    product: "Gamblin Solvent Free Fluid Medium 125ml",
+    price: 18,
+    category: "Medium",
+  },
   { product: "Ami Hout Palet Rechthoek 18x27cm", price: 4, category: "Palet" },
-  { product: "Van Beek Penselen Set Filament 12x", price: 23, category: "Penselen zacht" },
-  { product: "Van Beek Penselen Set in Koker Varkenshaar Plat 10 Stuks", price: 17, category: "Penselen stug" },
+  {
+    product: "Van Beek Penselen Set Filament 12x",
+    price: 23,
+    category: "Penselen zacht",
+  },
+  {
+    product: "Van Beek Penselen Set in Koker Varkenshaar Plat 10 Stuks",
+    price: 17,
+    category: "Penselen stug",
+  },
 ];
 
 /** Derived, so the total can never drift away from the rows above it. */
@@ -117,9 +137,6 @@ const reviews = [
       "Jelle is een inspirerende leraar! Hij brengt de academische achtergrond en artistieke vrijheid goed in balans.",
   },
 ];
-
-/** The short review that sits next to the hero, as a first piece of proof. */
-const heroReview = reviews[2];
 
 /**
  * Plain HTML, with no FAQPage markup: Google retired FAQ rich results for every
@@ -175,72 +192,60 @@ export default function LandingPage() {
   return (
     <>
       <JsonLd data={courseGraph({ reviews, teaches: curriculum })} />
-      {/* Hero ------------------------------------------------------------- */}
-      <section id="hero" className="relative overflow-hidden">
-        <Container className="grid gap-12 py-20 sm:py-28 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div>
-            <p className="rise mb-5 text-sm uppercase tracking-[0.2em] text-clay">
+      {/* Hero: text over a silent loop of painting close-ups ------------- */}
+      <section
+        id="hero"
+        className="relative isolate flex min-h-[85svh] items-center overflow-hidden bg-ink text-paper"
+      >
+        <HeroVideo
+          src="/video/schilderhandelingen.mp4"
+          poster="/video/schilderhandelingen-poster.jpg"
+        />
+        {/* Darken the footage, most of all behind the text on the left. */}
+        <div className="absolute inset-0 bg-ink/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/40 to-transparent" />
+
+        <Container className="relative z-10 py-24 sm:py-32">
+          <div className="max-w-2xl">
+            <p className="rise mb-5 text-sm uppercase tracking-[0.2em] text-paper/70">
               Schildercursus in Arnhem
             </p>
             <h1
-              className="rise font-title text-5xl leading-[1.05] text-ink sm:text-6xl"
+              className="rise font-title text-5xl leading-[1.05] text-paper sm:text-6xl"
               style={delay(120)}
             >
               Leer schilderen in olieverf als de oude en nieuwe meesters
             </h1>
             <p
-              className="rise mt-6 max-w-xl text-lg leading-relaxed text-muted"
+              className="rise mt-6 max-w-xl text-lg leading-relaxed text-paper/85"
               style={delay(260)}
             >
               Waarom bestaat een schilderij van Rembrandt van dichtbij uit losse
               vegen, en komt het van een afstand tot leven? In acht avonden in
-              mijn atelier in {site.district}{" "}
-              ontdek je hoe dat werkt, en schilder je het zelf. Je leert
-              olieverf schilderen in een groep van hooguit zes mensen, of je nu nog nooit een penseel
-              hebt vastgehouden of al jaren schildert.
+              mijn atelier in {site.district} ontdek je hoe dat werkt, en
+              schilder je het zelf. Je leert olieverf schilderen in een groep
+              van hooguit zes mensen, of je nu nog nooit een penseel hebt
+              vastgehouden of al jaren schildert.
             </p>
             <div
               className="rise mt-9 flex flex-wrap items-center gap-4"
               style={delay(400)}
             >
-              <ButtonLink href="/inschrijven" size="lg">
+              <ButtonLink href="/inschrijven" size="lg" variant="onDark">
                 Ik meld mij aan!
               </ButtonLink>
-              <a href={questionHref} className={buttonClasses("secondary", "lg")}>
+              <a
+                href={questionHref}
+                className={buttonClasses("outlineOnDark", "lg")}
+              >
                 Stel eerst een vraag
               </a>
             </div>
-            <p className="rise mt-6 text-sm text-muted" style={delay(500)}>
+            <p className="rise mt-6 text-sm text-paper/70" style={delay(500)}>
               Iedere {dagen} van {site.course.startTime} tot{" "}
               {site.course.endTime} uur · maximaal {site.course.maxStudents}{" "}
               cursisten · op elk moment instromen
             </p>
-          </div>
-
-          <div className="rise-zoom relative" style={delay(300)}>
-            <figure className="relative aspect-[4/5] overflow-hidden rounded-xl border border-line bg-mist">
-              <Image
-                src={quoteBg}
-                alt=""
-                fill
-                placeholder="blur"
-                sizes="(min-width: 1024px) 40vw, 100vw"
-                className="object-cover"
-              />
-              {/* Darken the photo so the light quote text stays legible. */}
-              <div className="absolute inset-0 bg-ink/65" />
-              <div className="relative z-10 flex h-full flex-col justify-end p-8">
-                <span className="font-title text-7xl leading-none text-clay/40">
-                  &ldquo;
-                </span>
-                <blockquote className="font-body text-xl italic leading-relaxed text-paper/90">
-                  {heroReview.quote}
-                </blockquote>
-                <figcaption className="mt-3 text-sm text-paper/70">
-                  — {heroReview.name}, {heroReview.level}
-                </figcaption>
-              </div>
-            </figure>
           </div>
         </Container>
       </section>
@@ -286,16 +291,20 @@ export default function LandingPage() {
             >
               <p>
                 Je leert niet alleen hoe je schildert, maar vooral hoe je kijkt.
-                We werken vanuit een heldere en beproefde opbouw, geïnspireerd op
-                de werkwijze van oude én nieuwere meesters. In drie stappen leer
-                je ideeën omzetten in overtuigende schilderijen.
+                We werken vanuit een heldere en beproefde opbouw, geïnspireerd
+                op de werkwijze van oude én nieuwere meesters. In drie stappen
+                leer je ideeën omzetten in overtuigende schilderijen.
               </p>
             </div>
           </div>
 
           <div data-reveal-stagger className="mt-14 grid gap-10 sm:grid-cols-3">
             {steps.map((s, i) => (
-              <div key={s.title} data-reveal className="border-t border-line pt-5">
+              <div
+                key={s.title}
+                data-reveal
+                className="border-t border-line pt-5"
+              >
                 <span className="font-title text-3xl text-clay/60">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -434,14 +443,15 @@ export default function LandingPage() {
           >
             <p className="font-title text-2xl leading-snug text-ink">
               Als autodidact heb ik zelf alle denkbare obstakels van het
-              schilderen doorlopen. Juist daardoor weet ik waar je tegenaan loopt.
+              schilderen doorlopen. Juist daardoor weet ik waar je tegenaan
+              loopt.
             </p>
             <p>
               Lesgeven is voor mij meer dan kennis overdragen; het is samen
               kijken, onderzoeken en groeien. Mijn eerste ervaring met lesgeven
               in olieverfschilderen begon in 2019, toen ik tijdens de
-              coronaperiode online les gaf aan vrienden en kennissen. Dit groeide
-              al snel uit tot structurele cursussen.
+              coronaperiode online les gaf aan vrienden en kennissen. Dit
+              groeide al snel uit tot structurele cursussen.
             </p>
             <p>
               In 2024 en 2025 werkte ik als kunstdocent bij SKVR, het centrum
@@ -450,13 +460,14 @@ export default function LandingPage() {
               verder helpt.
             </p>
             <blockquote className="border-l-2 border-clay pl-5 font-body italic text-ink/80">
-              Je leert niet alleen hoe je schildert, maar vooral ook hoe je kijkt
-              en denkt als kunstenaar. Na deze cursus ben je in staat je eigen
-              projecten te realiseren met een sterke basis in de schilderkunst.
+              Je leert niet alleen hoe je schildert, maar vooral ook hoe je
+              kijkt en denkt als kunstenaar. Na deze cursus ben je in staat je
+              eigen projecten te realiseren met een sterke basis in de
+              schilderkunst.
             </blockquote>
             <p>
-              Mijn aanpak is technisch serieus, maar altijd visueel, praktisch en
-              persoonlijk.
+              Mijn aanpak is technisch serieus, maar altijd visueel, praktisch
+              en persoonlijk.
             </p>
           </div>
         </Container>
@@ -604,7 +615,11 @@ export default function LandingPage() {
             className="mt-12 grid gap-x-20 gap-y-10 md:grid-cols-2"
           >
             {faq.map((item) => (
-              <div key={item.q} data-reveal className="border-t border-line pt-5">
+              <div
+                key={item.q}
+                data-reveal
+                className="border-t border-line pt-5"
+              >
                 <dt className="font-title text-xl text-ink">{item.q}</dt>
                 <dd className="mt-2 leading-relaxed text-muted">{item.a}</dd>
               </div>
