@@ -41,11 +41,10 @@ export const site = {
     endTime: "21:30",
     /**
      * Schema.org DayOfWeek names for the evenings that actually run.
-     * Only Wednesday is bookable: AanmeldForm marks Tuesday "Binnenkort".
-     * Add "Tuesday" here once that group starts, and the course page, the
-     * schema and the opening hours all follow from this one edit.
+     * The course page, the schema and the opening hours all follow from this
+     * list. Keep AanmeldForm's dayOptions in sync.
      */
-    days: ["Wednesday"],
+    days: ["Tuesday", "Wednesday"],
     dayLabelsNl: { Tuesday: "dinsdagavond", Wednesday: "woensdagavond" },
   },
 } as const;
