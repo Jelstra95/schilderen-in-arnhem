@@ -32,25 +32,25 @@ const steps = [
     title: "Tekenen",
     question:
       "Waarom tekenen de meeste mensen wat ze denken te zien, in plaats van wat er echt staat?",
-    body: "Je leert meten, vergelijken en kijken zoals de academies het eeuwenlang deden. Dat is de basis van elke sterke schildering.",
+    body: "Je leert merten, kijken en tekenen zoals de academies het eeuwenlang deden. Dat is de basis van een sterk schilderij.",
   },
   {
     title: "Licht en donker",
     question:
-      "Waarom begonnen de oude meesters een schilderij vaak in één kleur?",
+      "Waarom begonnen de oude meesters niet gelijk met kleur?",
     body: "Je ontdekt hoe je met alleen licht en donker vorm, diepte en sfeer opbouwt, laag voor laag.",
   },
   {
     title: "Kleur",
     question: "Waarom is een schaduw in de natuur bijna nooit zwart?",
-    body: "Je leert kleuren mengen en combineren tot harmonie, contrast en expressie, in plaats van losse vlakken verf.",
+    body: "Je leert kleuren mengen en spelen met harmonie, contrast en expressie.",
   },
 ];
 
 const curriculum = [
-  "Kijken als een kunstenaar: ontdekken waarom het ene schilderij je raakt en het andere niet",
-  "Kunstgeschiedenis: de verhalen en werkwijzen van de grote meesters, en wat je er vandaag nog van leert",
-  "Materiaalkennis: olieverf, penselen, mediums en dragers, en hoe je ze laat samenwerken",
+  "Kijken als een kunstenaar: het ontleden van schilderijen. Wat maakt ze sterk, en welke technieken horen daar bij?",
+  "Kunstgeschiedenis: de verhalen en werkwijzen van de oude én nieuwe meesters.",
+  "Materiaalkennis: olieverf, penselen, mediums en dragers en hoe deze samenwerken",
   "Het ‘ontwerpen’ van een schilderij, ook vanuit verbeelding en fantasie",
   "Natuurgetrouw schilderen van landschappen, portretten en stillevens",
 ];
@@ -153,7 +153,7 @@ const faq: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Ik kan helemaal niet tekenen. Kan ik dan toch meedoen?",
-    a: "Ja. Tekenen is geen voorwaarde, het is juist een onderdeel van de cursus. Je leert kijken en meten, en dat blijkt voor bijna iedereen beter te leren dan ze zelf denken.",
+    a: "Ja. Tekenen is geen voorwaarde, het is juist een onderdeel van de cursus. Je leert kijken en meten, en dat is beter te leren dan de meeste mensen denken.",
   },
   {
     q: "Wat als ik een les mis?",
@@ -175,7 +175,7 @@ const faq: { q: string; a: ReactNode }[] = [
   },
   {
     q: "Schilder ik in olieverf of in acrylverf?",
-    a: "Je schildert in olieverf. De opbouw in lagen die we behandelen komt uit de werkwijze van de oude meesters en werkt het beste met olieverf.",
+    a: "Je schildert in olieverf. De opbouw in lagen die we behandelen komt onder andere voort uit de werkwijze van de oude meesters en dit werkt het beste met olieverf.",
   },
   {
     q: "Welke materialen moet ik zelf aanschaffen?",
@@ -220,8 +220,8 @@ export default function LandingPage() {
               className="rise mt-6 max-w-xl text-lg leading-relaxed text-paper/85"
               style={delay(260)}
             >
-              Waarom bestaat een schilderij van Rembrandt van dichtbij uit losse
-              toetsen, en komt het van een afstand tot leven? In het atelier van
+              Hoe creëert Rembrandt het licht en donker? Waarom zit er zoveel beweging in de schilderijen van 
+              Van Gogh? In het atelier van
               Jelle van de Ridder in {site.district} ontdek je hoe dat werkt, en
               schilder je het zelf. Je leert olieverf schilderen in een kleine
               groep, voor beginners en gevorderden.
@@ -258,8 +258,8 @@ export default function LandingPage() {
             </h2>
             <p className="mt-2 text-muted">
               Dit schilderden eerdere cursisten tijdens de cursus. Sommigen
-              begonnen net, anderen schilderden al langer. Allemaal werkten ze
-              met dezelfde opbouw die jij ook leert.
+              waren pas net begonnen, anderen schilderden al langer. Allemaal werkten ze
+              volgens dezelfde opbouw die jij ook leert.
             </p>
           </div>
           <Image
@@ -455,14 +455,12 @@ export default function LandingPage() {
             <p>
               In 2024 en 2025 werkte ik als kunstdocent bij SKVR, het centrum
               voor kunsten in Rotterdam. Daar zag ik hoe beginners én
-              gevorderden vastlopen op dezelfde vragen, en hoe je ze gericht
+              gevorderden tegen dezelfde schilderobstakels aanlopen, en hoe je ze gericht
               verder helpt.
             </p>
             <blockquote className="border-l-2 border-clay pl-5 font-body italic text-ink/80">
               Je leert niet alleen hoe je schildert, maar vooral ook hoe je
-              kijkt en denkt als kunstenaar. Na deze cursus ben je in staat je
-              eigen projecten te realiseren met een sterke basis in de
-              schilderkunst.
+              kijkt en denkt als kunstenaar.
             </blockquote>
             <p>
               Mijn aanpak is technisch serieus, maar altijd visueel, praktisch
@@ -542,10 +540,8 @@ export default function LandingPage() {
             </h3>
             <div className="mt-6 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
               <p>
-                Je schildert met goede materialen, en die blijven na de cursus
-                van jou. Tijdens de cursus word je aangemoedigd (het is
-                vrijblijvend) om thuis verder te schilderen, en dan heb je de
-                spullen al. Heb je al materiaal in huis, neem het dan gewoon
+                Je schildert met goede materialen die je zelf in huis haalt. Tijdens de cursus word je aangemoedigd (het is
+                vrijblijvend) om thuis verder te schilderen, en dan heb je alles al! Heb je al materiaal in huis, neem het dan gewoon
                 mee.
               </p>
               <p>
