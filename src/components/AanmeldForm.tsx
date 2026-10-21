@@ -8,11 +8,10 @@ import { cn } from "@/lib/cn";
 
 const CONTACT_EMAIL = "info@jellevanderidder.com";
 
-// Day-of-the-week options. Only the Wednesday evening class runs at the moment;
-// other days are shown but not yet selectable.
+// Day-of-the-week options. Set available to false to show a day as "Binnenkort".
 const dayOptions = [
+  { value: "Dinsdagavond", time: "19:00 – 21:30 uur", available: true },
   { value: "Woensdagavond", time: "19:00 – 21:30 uur", available: true },
-  { value: "Dinsdagavond", time: "19:00 – 21:30 uur", available: false },
 ];
 
 export function AanmeldForm() {
