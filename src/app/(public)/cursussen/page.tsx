@@ -1,6 +1,4 @@
 import Image, { type StaticImageData } from "next/image";
-import Link from "next/link";
-import type { ReactNode } from "react";
 import werkCursisten from "@/assets/cursus/werk-cursisten.avif";
 import jelleDocent from "@/assets/cursus/jelle-docent.jpg";
 import vermeer from "@/assets/cursus/vermeer-waterkan.jpg";
@@ -11,187 +9,45 @@ import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
 import { HeroVideo } from "@/components/HeroVideo";
 import { StickyCta } from "@/components/StickyCta";
+import { RichText } from "@/components/RichText";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { courseGraph } from "@/lib/schema";
-import { site, fullAddress, coursePrice } from "@/lib/site";
 import { delay } from "@/lib/motion";
+import { cursus } from "@/content/cursus";
 
 export const metadata: Metadata = {
-  title: "Olieverf schildercursus in Arnhem",
-  description: `Leer olieverf schilderen in Arnhem. Acht lessen in een kleine groep van maximaal zes cursisten, in het atelier aan de ${site.street} in ${site.district}. Geschikt voor beginners en gevorderden.`,
+  ...cursus.meta,
   alternates: { canonical: "/cursussen" },
 };
 
-/**
- * Each step opens with a question the lessons actually answer: it makes the
- * visitor curious without promising anything the course does not deliver.
- */
-const steps = [
-  {
-    title: "Tekenen",
-    question:
-      "Waarom tekenen de meeste mensen wat ze denken te zien, in plaats van wat er echt staat?",
-    body: "Je leert merten, kijken en tekenen zoals de academies het eeuwenlang deden. Dat is de basis van een sterk schilderij.",
-  },
-  {
-    title: "Licht en donker",
-    question:
-      "Waarom begonnen de oude meesters niet gelijk met kleur?",
-    body: "Je ontdekt hoe je met alleen licht en donker vorm, diepte en sfeer opbouwt, laag voor laag.",
-  },
-  {
-    title: "Kleur",
-    question: "Waarom is een schaduw in de natuur bijna nooit zwart?",
-    body: "Je leert kleuren mengen en spelen met harmonie, contrast en expressie.",
-  },
-];
-
-const curriculum = [
-  "Kijken als een kunstenaar: het ontleden van schilderijen. Wat maakt ze sterk, en welke technieken horen daar bij?",
-  "Kunstgeschiedenis: de verhalen en werkwijzen van de oude én nieuwe meesters.",
-  "Materiaalkennis: olieverf, penselen, mediums en dragers en hoe deze samenwerken",
-  "Het ‘ontwerpen’ van een schilderij, ook vanuit verbeelding en fantasie",
-  "Natuurgetrouw schilderen van landschappen, portretten en stillevens",
-];
-
-const dagen = site.course.days
-  .map((d) => site.course.dayLabelsNl[d])
-  .join(" of ");
-
-const practical = [
-  {
-    label: "Wanneer",
-    value: `Iedere ${dagen} van ${site.course.startTime} tot ${site.course.endTime} uur`,
-  },
-  { label: "Duur", value: `${site.course.lessons} lessen` },
-  {
-    label: "Kosten",
-    value: `€${site.course.pricePerLesson} per les, €${coursePrice} voor ${site.course.lessons} lessen (exclusief materiaal)`,
-  },
-  { label: "Locatie", value: `${fullAddress}, in mijn atelier` },
-  {
-    label: "Groepsgrootte",
-    value: `Maximaal ${site.course.maxStudents} personen`,
-  },
-  {
-    label: "Instromen",
-    value: "Op elk moment, de lespakketten zijn doorlopend",
-  },
-];
-
-const materials: {
-  product: string;
-  /** Optional second line, set in a smaller type below the product. */
-  detail?: string;
-  price: number;
-  category: string;
-}[] = [
-  {
-    product: "Olieverf in veertien kleuren",
-    detail:
-      "Titaanwit, zinkwit, zwart, rauwe omber, sienna, oker, kobaltblauw, ultramarijnblauw, napelsgeel, karmijn, azogeel citroen, cadmiumrood, groene aarde en phtalogroen.",
-    price: 150,
-    category: "Verf",
-  },
-  { product: "Gamblin Gamsol OMS 125ml", price: 13, category: "Oplosmiddel" },
-  { product: "Da Vinci Penselenzeep", price: 5, category: "Kwastenzeep" },
-  {
-    product: "Gamblin Solvent Free Fluid Medium 125ml",
-    price: 18,
-    category: "Medium",
-  },
-  { product: "Ami Hout Palet Rechthoek 18x27cm", price: 4, category: "Palet" },
-  {
-    product: "Van Beek Penselen Set Filament 12x",
-    price: 23,
-    category: "Penselen zacht",
-  },
-  {
-    product: "Van Beek Penselen Set in Koker Varkenshaar Plat 10 Stuks",
-    price: 17,
-    category: "Penselen stug",
-  },
-];
-
-/** Derived, so the total can never drift away from the rows above it. */
-const materialsTotal = materials.reduce((sum, m) => sum + m.price, 0);
-
-const reviews = [
-  {
-    name: "Franca",
-    level: "cursist op gemiddeld niveau",
-    quote:
-      "Jelle zijn schildercursus is erg no nonsense. Geen droge theorie, duidelijk referentiemateriaal en hele goede hulp. Met prachtige resultaten!",
-  },
-  {
-    name: "Jacob",
-    level: "begon als beginner",
-    quote:
-      "Ik heb onlangs een schildercursus gevolgd bij Jelle en het was een geweldige ervaring. Jelle is een docent die op alle niveaus kan lesgeven, waardoor ik werd uitgedaagd. Zijn passie voor schilderen en zijn geduldige aanpak hebben me geholpen om mezelf aanzienlijk te verbeteren.",
-  },
-  {
-    name: "Arnout",
-    level: "gevorderde cursist",
-    quote:
-      "Jelle is een inspirerende leraar! Hij brengt de academische achtergrond en artistieke vrijheid goed in balans.",
-  },
-];
-
-/**
- * Plain HTML, with no FAQPage markup: Google retired FAQ rich results for every
- * site in May 2026, so the schema buys nothing in the SERP.
- *
- * Only questions whose answer is not already somewhere else on the page belong
- * here. Prijs, locatie, duur, groepsgrootte en instromen staan in de lijst met
- * praktische informatie en horen daar thuis, niet ook nog een keer hier.
- */
-const faq: { q: string; a: ReactNode }[] = [
-  {
-    q: "Heb ik ervaring nodig om mee te doen?",
-    a: "Nee. In de groep zitten mensen die nog nooit geschilderd hebben naast mensen die al jaren bezig zijn. Je werkt op je eigen tempo aan opdrachten die bij jouw niveau passen.",
-  },
-  {
-    q: "Ik kan helemaal niet tekenen. Kan ik dan toch meedoen?",
-    a: "Ja. Tekenen is geen voorwaarde, het is juist een onderdeel van de cursus. Je leert kijken en meten, en dat is beter te leren dan de meeste mensen denken.",
-  },
-  {
-    q: "Wat als ik een les mis?",
-    a: (
-      <>
-        Per reeks mag je één keer afzeggen zonder reden, en die les haal je
-        later in. Laat het me wel uiterlijk de dag vóór de les weten. Zeg je
-        daarna nog een keer af, of pas op de dag zelf, dan gaat de les van je
-        reeks af. Alles staat in de{" "}
-        <Link
-          href="/algemene-voorwaarden"
-          className="text-ink underline underline-offset-4 hover:text-clay"
-        >
-          algemene voorwaarden
-        </Link>
-        .
-      </>
-    ),
-  },
-  {
-    q: "Schilder ik in olieverf of in acrylverf?",
-    a: "Je schildert in olieverf. De opbouw in lagen die we behandelen komt onder andere voort uit de werkwijze van de oude meesters en dit werkt het beste met olieverf.",
-  },
-  {
-    q: "Welke materialen moet ik zelf aanschaffen?",
-    a: "Je zorgt zelf voor verf, penselen en een palet. Bij de materiaalkosten hierboven staat precies wat je nodig hebt. Heb je al materiaal in huis, dan volstaat dat meestal prima.",
-  },
-];
+/** All texts on this page live in src/content/cursus.ts. */
+const {
+  cta,
+  hero,
+  werk,
+  lesinhoud,
+  impressie,
+  docent,
+  ervaringen,
+  praktisch,
+  materiaal,
+  vragen,
+  aanmelden,
+} = cursus;
 
 /** Sections that already show a signup button, so the sticky bar hides there. */
 const ctaSections = ["hero", "aanmelden"];
 
-const questionHref = `mailto:${site.email}?subject=${encodeURIComponent("Vraag over de schildercursus")}`;
-
 export default function LandingPage() {
   return (
     <>
-      <JsonLd data={courseGraph({ reviews, teaches: curriculum })} />
+      <JsonLd
+        data={courseGraph({
+          reviews: ervaringen.reviews,
+          teaches: lesinhoud.curriculum,
+        })}
+      />
       {/* Hero: text over a silent loop of painting close-ups ------------- */}
       <section
         id="hero"
@@ -208,42 +64,36 @@ export default function LandingPage() {
         <Container className="relative z-10 py-24 sm:py-32">
           <div className="max-w-2xl">
             <p className="rise mb-5 text-sm uppercase tracking-[0.2em] text-paper/70">
-              Schildercursus in Arnhem
+              {hero.eyebrow}
             </p>
             <h1
               className="rise font-title text-5xl leading-[1.05] text-paper sm:text-6xl"
               style={delay(120)}
             >
-              Leer schilderen in olieverf als de oude en nieuwe meesters
+              {hero.title}
             </h1>
             <p
               className="rise mt-6 max-w-xl text-lg leading-relaxed text-paper/85"
               style={delay(260)}
             >
-              Hoe creëert Rembrandt het licht en donker? Waarom zit er zoveel beweging in de schilderijen van 
-              Van Gogh? In het atelier van
-              Jelle van de Ridder in {site.district} ontdek je hoe dat werkt, en
-              schilder je het zelf. Je leert olieverf schilderen in een kleine
-              groep, voor beginners en gevorderden.
+              {hero.intro}
             </p>
             <div
               className="rise mt-9 flex flex-wrap items-center gap-4"
               style={delay(400)}
             >
               <ButtonLink href="/inschrijven" size="lg" variant="onDark">
-                Ik meld mij aan!
+                {cta.signup}
               </ButtonLink>
               <a
-                href={questionHref}
+                href={cta.questionHref}
                 className={buttonClasses("outlineOnDark", "lg")}
               >
-                Stel eerst een vraag
+                {cta.question}
               </a>
             </div>
             <p className="rise mt-6 text-sm text-paper/70" style={delay(500)}>
-              Iedere {dagen} van {site.course.startTime} tot{" "}
-              {site.course.endTime} uur · maximaal {site.course.maxStudents}{" "}
-              cursisten · op elk moment instromen
+              {hero.facts}
             </p>
           </div>
         </Container>
@@ -253,19 +103,13 @@ export default function LandingPage() {
       <section id="werk" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
           <div data-reveal className="mb-8 max-w-xl">
-            <h2 className="font-title text-4xl text-ink">
-              Werk van cursisten van de schildercursus
-            </h2>
-            <p className="mt-2 text-muted">
-              Dit schilderden eerdere cursisten tijdens de cursus. Sommigen
-              waren pas net begonnen, anderen schilderden al langer. Allemaal werkten ze
-              volgens dezelfde opbouw die jij ook leert.
-            </p>
+            <h2 className="font-title text-4xl text-ink">{werk.title}</h2>
+            <p className="mt-2 text-muted">{werk.intro}</p>
           </div>
           <Image
             data-reveal="zoom"
             src={werkCursisten}
-            alt="Collage van olieverfschilderijen gemaakt door eerdere cursisten van de schildercursus in Arnhem"
+            alt={werk.imageAlt}
             placeholder="blur"
             sizes="(min-width: 1024px) 48rem, 100vw"
             className="mx-auto h-auto w-full max-w-3xl"
@@ -282,23 +126,18 @@ export default function LandingPage() {
               data-reveal
               className="scroll-mt-20 font-title text-4xl text-ink"
             >
-              Lesinhoud: in acht avonden leren schilderen in olieverf
+              {lesinhoud.title}
             </h2>
             <div
               data-reveal="right"
               className="space-y-5 text-lg leading-relaxed text-muted"
             >
-              <p>
-                Je leert niet alleen hoe je schildert, maar vooral hoe je kijkt.
-                We werken vanuit een heldere en beproefde opbouw, geïnspireerd
-                op de werkwijze van oude én nieuwere meesters. In drie stappen
-                leer je ideeën omzetten in overtuigende schilderijen.
-              </p>
+              <p>{lesinhoud.intro}</p>
             </div>
           </div>
 
           <div data-reveal-stagger className="mt-14 grid gap-10 sm:grid-cols-3">
-            {steps.map((s, i) => (
+            {lesinhoud.steps.map((s, i) => (
               <div
                 key={s.title}
                 data-reveal
@@ -319,15 +158,12 @@ export default function LandingPage() {
           <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-20">
             <div data-reveal>
               <h3 className="font-title text-2xl text-ink">
-                Wat komt er aan bod
+                {lesinhoud.curriculumTitle}
               </h3>
-              <p className="mt-2 text-muted">
-                Tijdens de cursus komen onder andere de volgende onderdelen aan
-                bod:
-              </p>
+              <p className="mt-2 text-muted">{lesinhoud.curriculumIntro}</p>
             </div>
             <ul data-reveal-stagger className="space-y-4">
-              {curriculum.map((item) => (
+              {lesinhoud.curriculum.map((item) => (
                 <li
                   key={item}
                   data-reveal
@@ -343,20 +179,16 @@ export default function LandingPage() {
           <div className="mt-16 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-16">
             <div data-reveal>
               <h3 className="font-title text-2xl text-ink">
-                Alle theorie terugzien op het cursusplatform
+                {lesinhoud.platformTitle}
               </h3>
               <p className="mt-3 text-lg leading-relaxed text-muted">
-                Als cursist krijg je toegang tot het online cursusplatform. Daar
-                staan de slides van de lessen en het theoretische materiaal, van
-                aard- en synthetische pigmenten tot kleurenleer en de
-                onderschildering van de oude meesters. Zo kun je thuis alles
-                rustig teruglezen.
+                {lesinhoud.platformText}
               </p>
             </div>
             <Image
               data-reveal="zoom"
               src={impressieSlides}
-              alt="Impressie van lesslides over pigmenten, kleurenleer, mengschema's en de onderschildering bij Rembrandt"
+              alt={lesinhoud.platformImageAlt}
               placeholder="blur"
               sizes="(min-width: 1024px) 40rem, 100vw"
               className="h-auto w-full"
@@ -371,10 +203,10 @@ export default function LandingPage() {
               &ldquo;
             </span>
             <blockquote className="font-title text-3xl leading-snug text-ink sm:text-4xl">
-              Na deze cursus zal een museumbezoek nooit meer hetzelfde zijn.
+              {lesinhoud.quote}
             </blockquote>
             <figcaption className="mt-5 text-sm text-muted">
-              — Jelle van de Ridder, docent
+              — {lesinhoud.quoteBy}
             </figcaption>
           </figure>
         </Container>
@@ -385,29 +217,17 @@ export default function LandingPage() {
         <Container>
           <div className="mb-10 grid gap-12 lg:grid-cols-2 lg:gap-20">
             <h2 data-reveal className="font-title text-4xl text-ink">
-              Zo ziet een schilderles in Arnhem eruit
+              {impressie.title}
             </h2>
             <div
               data-reveal="right"
               className="space-y-5 text-lg leading-relaxed text-muted"
             >
-              <p>
-                Iedere {dagen} kom je met een kleine groep samen in het atelier
-                in {site.district}. We beginnen met koffie. Daarna nemen we een
-                kwartier voor theorie of kunst kijken: we bekijken werk uit de
-                kunstgeschiedenis en ontleden samen wat het sterk maakt.
-              </p>
-              <p>
-                De rest van de avond schilder je zelf, aan een opdracht die bij
-                jouw niveau past, en ik loop rond om iedereen persoonlijk te
-                helpen. De laatste tien minuten sluiten we samen af.
-              </p>
-              <p>
-                Heb je eigen ideeën of projecten waar je aan wilt werken, maar
-                weet je niet goed hoe je die moet aanpakken? Ook daarvoor is
-                volop ruimte. En soms trekken we met de groep naar buiten om
-                plein-air te schilderen.
-              </p>
+              {impressie.paragraphs.map((p) => (
+                <p key={p}>
+                  <RichText text={p} />
+                </p>
+              ))}
             </div>
           </div>
           <div data-reveal="zoom">
@@ -421,7 +241,7 @@ export default function LandingPage() {
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
             <h2 data-reveal className="font-title text-4xl text-ink">
-              Over je docent Jelle van de Ridder
+              {docent.title}
             </h2>
             <div
               data-reveal="zoom"
@@ -429,7 +249,7 @@ export default function LandingPage() {
             >
               <Image
                 src={jelleDocent}
-                alt="Jelle van de Ridder in zijn atelier met penselen naast twee olieverfschilderijen"
+                alt={docent.imageAlt}
                 placeholder="blur"
                 sizes="(min-width: 1024px) 32rem, 100vw"
                 className="h-auto w-full"
@@ -441,30 +261,18 @@ export default function LandingPage() {
             className="space-y-5 text-lg leading-relaxed text-muted"
           >
             <p className="font-title text-2xl leading-snug text-ink">
-              Als autodidact heb ik zelf alle denkbare obstakels van het
-              schilderen doorlopen. Juist daardoor weet ik waar je tegenaan
-              loopt.
+              {docent.lead}
             </p>
-            <p>
-              Lesgeven is voor mij meer dan kennis overdragen; het is samen
-              kijken, onderzoeken en groeien. Mijn eerste ervaring met lesgeven
-              in olieverfschilderen begon in 2019, toen ik tijdens de
-              coronaperiode online les gaf aan vrienden en kennissen. Dit
-              groeide al snel uit tot structurele cursussen.
-            </p>
-            <p>
-              In 2024 en 2025 werkte ik als kunstdocent bij SKVR, het centrum
-              voor kunsten in Rotterdam. Daar zag ik hoe beginners én
-              gevorderden tegen dezelfde schilderobstakels aanlopen, en hoe je ze gericht
-              verder helpt.
-            </p>
+            {docent.paragraphs.map((p) => (
+              <p key={p}>
+                <RichText text={p} />
+              </p>
+            ))}
             <blockquote className="border-l-2 border-clay pl-5 font-body italic text-ink/80">
-              Je leert niet alleen hoe je schildert, maar vooral ook hoe je
-              kijkt en denkt als kunstenaar.
+              {docent.quote}
             </blockquote>
             <p>
-              Mijn aanpak is technisch serieus, maar altijd visueel, praktisch
-              en persoonlijk.
+              <RichText text={docent.closing} />
             </p>
           </div>
         </Container>
@@ -474,10 +282,10 @@ export default function LandingPage() {
       <section id="ervaringen" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
           <h2 data-reveal className="font-title text-4xl text-ink">
-            Ervaringen van cursisten
+            {ervaringen.title}
           </h2>
           <div data-reveal-stagger className="mt-12 grid gap-8 md:grid-cols-3">
-            {reviews.map((r) => (
+            {ervaringen.reviews.map((r) => (
               <figure
                 key={r.name}
                 data-reveal
@@ -502,15 +310,10 @@ export default function LandingPage() {
       <section id="praktisch" className="scroll-mt-20 py-20">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div data-reveal>
-            <h2 className="font-title text-4xl text-ink">
-              Praktische informatie over de cursus in Arnhem
-            </h2>
+            <h2 className="font-title text-4xl text-ink">{praktisch.title}</h2>
             <div className="mt-6 space-y-5 text-lg leading-relaxed text-muted">
               <p>
-                De kleine groep zorgt voor veel persoonlijke aandacht. Je kunt
-                een sterke basis leggen of juist de diepte ingaan, afhankelijk
-                van je niveau. De lespakketten zijn doorlopend, dus na afloop
-                stroom je direct door naar een nieuwe reeks.
+                <RichText text={praktisch.intro} />
               </p>
             </div>
           </div>
@@ -519,7 +322,7 @@ export default function LandingPage() {
             data-reveal="right"
             className="divide-y divide-line border-y border-line"
           >
-            {practical.map((item) => (
+            {praktisch.items.map((item) => (
               <div
                 key={item.label}
                 className="grid grid-cols-[9rem_1fr] gap-4 py-4"
@@ -535,24 +338,18 @@ export default function LandingPage() {
 
         <Container>
           <div id="materiaal" data-reveal className="mt-20 scroll-mt-20">
-            <h3 className="font-title text-3xl text-ink">
-              Materiaalkosten voor het schilderen in olieverf
-            </h3>
+            <h3 className="font-title text-3xl text-ink">{materiaal.title}</h3>
             <div className="mt-6 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
-              <p>
-                Je schildert met goede materialen die je zelf in huis haalt. Tijdens de cursus word je aangemoedigd (het is
-                vrijblijvend) om thuis verder te schilderen, en dan heb je alles al! Heb je al materiaal in huis, neem het dan gewoon
-                mee.
-              </p>
-              <p>
-                Een complete set om mee te beginnen kost ongeveer{" "}
-                <span className="text-ink">€ {materialsTotal}</span>.
-              </p>
+              {materiaal.paragraphs.map((p) => (
+                <p key={p}>
+                  <RichText text={p} />
+                </p>
+              ))}
             </div>
 
             <details className="group mt-8 border-y border-line">
               <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-ink [&::-webkit-details-marker]:hidden">
-                <span>Bekijk de volledige materiaallijst</span>
+                <span>{materiaal.toggle}</span>
                 <span className="text-clay transition-transform duration-200 group-open:rotate-45">
                   +
                 </span>
@@ -561,13 +358,19 @@ export default function LandingPage() {
                 <table className="w-full min-w-[36rem] border-collapse text-left">
                   <thead>
                     <tr className="border-b border-line text-sm uppercase tracking-wide text-clay">
-                      <th className="py-3 pr-4 font-normal">Product</th>
-                      <th className="py-3 pr-4 font-normal">Categorie</th>
-                      <th className="py-3 text-right font-normal">Prijs (±)</th>
+                      <th className="py-3 pr-4 font-normal">
+                        {materiaal.columns.product}
+                      </th>
+                      <th className="py-3 pr-4 font-normal">
+                        {materiaal.columns.category}
+                      </th>
+                      <th className="py-3 text-right font-normal">
+                        {materiaal.columns.price}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {materials.map((m) => (
+                    {materiaal.items.map((m) => (
                       <tr key={m.product} className="border-b border-line/70">
                         <td className="py-3 pr-4 text-ink">
                           {m.product}
@@ -585,10 +388,10 @@ export default function LandingPage() {
                     ))}
                     <tr className="border-t-2 border-ink font-title">
                       <td className="py-4 pr-4 text-ink" colSpan={2}>
-                        Totaal
+                        {materiaal.totalLabel}
                       </td>
                       <td className="py-4 text-right tabular-nums text-ink">
-                        € {materialsTotal}
+                        € {materiaal.total}
                       </td>
                     </tr>
                   </tbody>
@@ -603,32 +406,27 @@ export default function LandingPage() {
       <section id="vragen" className="scroll-mt-20 bg-mist/50 py-20">
         <Container>
           <h2 data-reveal className="font-title text-4xl text-ink">
-            Veelgestelde vragen
+            {vragen.title}
           </h2>
           <dl
             data-reveal-stagger
             className="mt-12 grid gap-x-20 gap-y-10 md:grid-cols-2"
           >
-            {faq.map((item) => (
+            {vragen.items.map((item) => (
               <div
                 key={item.q}
                 data-reveal
                 className="border-t border-line pt-5"
               >
                 <dt className="font-title text-xl text-ink">{item.q}</dt>
-                <dd className="mt-2 leading-relaxed text-muted">{item.a}</dd>
+                <dd className="mt-2 leading-relaxed text-muted">
+                  <RichText text={item.a} />
+                </dd>
               </div>
             ))}
           </dl>
           <p className="mt-12 text-muted">
-            Staat je vraag er niet tussen? Mail me op{" "}
-            <a
-              href={questionHref}
-              className="text-ink underline underline-offset-4 hover:text-clay"
-            >
-              {site.email}
-            </a>
-            .
+            <RichText text={vragen.footer} />
           </p>
         </Container>
       </section>
@@ -648,40 +446,38 @@ export default function LandingPage() {
         <Container className="grid items-center gap-14 lg:grid-cols-[1fr_1.6fr_1fr] lg:gap-12">
           <Painting
             src={vermeer}
-            alt="Johannes Vermeer, Jonge vrouw met een waterkan: een vrouw bij een open raam in zacht daglicht"
-            label="De oude meesters"
+            alt={aanmelden.paintingLeft.alt}
+            label={aanmelden.paintingLeft.label}
             side="left"
           />
 
           <div data-reveal className="text-center">
             <p className="mb-5 text-sm uppercase tracking-[0.25em] text-clay">
-              Van Vermeer tot vandaag
+              {aanmelden.eyebrow}
             </p>
             <h2 className="font-title text-4xl leading-tight text-paper sm:text-5xl xl:text-6xl">
-              Klaar om anders te leren kijken?
+              {aanmelden.title}
             </h2>
             <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-paper/75">
-              Meld je aan voor de schildercursus in Arnhem. Na je aanmelding
-              neem ik persoonlijk contact met je op over de startdatum, de
-              betaling en de bevestiging van je plek.
+              {aanmelden.text}
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               <ButtonLink href="/inschrijven" size="lg" variant="onDark">
-                Ik meld mij aan!
+                {cta.signup}
               </ButtonLink>
               <a
-                href={questionHref}
+                href={cta.questionHref}
                 className={buttonClasses("outlineOnDark", "lg")}
               >
-                Stel eerst een vraag
+                {cta.question}
               </a>
             </div>
           </div>
 
           <Painting
             src={abstractNieuw}
-            alt="Abstract olieverfschilderij met losse, brede vegen in roze, rood, blauw en wit"
-            label="De nieuwe meesters"
+            alt={aanmelden.paintingRight.alt}
+            label={aanmelden.paintingRight.label}
             side="right"
           />
         </Container>

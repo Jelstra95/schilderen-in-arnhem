@@ -2,11 +2,9 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { Logo } from "@/components/Logo";
+import { algemeen } from "@/content/algemeen";
 
-const navLinks = [
-  { href: "/cursussen", label: "Cursussen" },
-  { href: "/workshops", label: "Workshops" },
-];
+const { header } = algemeen;
 
 export function SiteHeader() {
   return (
@@ -23,7 +21,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+          {header.nav.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -39,10 +37,10 @@ export function SiteHeader() {
             href="/login"
             className="text-sm text-muted transition-colors hover:text-ink"
           >
-            Inloggen
+            {header.login}
           </Link>
           <ButtonLink href="/inschrijven" size="sm">
-            Inschrijven
+            {header.signup}
           </ButtonLink>
         </div>
       </Container>

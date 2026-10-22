@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { algemeen } from "@/content/algemeen";
 
 /**
  * Mobile-only signup bar. It stays hidden while any of the watched sections
@@ -43,7 +44,7 @@ export function StickyCta({ hideWhileVisible }: { hideWhileVisible: string[] }) 
         className="w-full"
         tabIndex={visible ? undefined : -1}
       >
-        Ik meld mij aan
+        {algemeen.stickyCta}
       </ButtonLink>
     </div>
   );

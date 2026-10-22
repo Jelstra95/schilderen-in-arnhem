@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/Logo";
 import { site, fullAddress } from "@/lib/site";
+import { algemeen } from "@/content/algemeen";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -37,25 +38,22 @@ export function SiteFooter() {
           </address>
         </div>
         <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted">
-          <Link href="/inschrijven" className="hover:text-ink transition-colors">
-            Inschrijven
-          </Link>
-          <Link href="/login" className="hover:text-ink transition-colors">
-            Inloggen
-          </Link>
-          <Link
-            href="/algemene-voorwaarden"
-            className="hover:text-ink transition-colors"
-          >
-            Algemene voorwaarden
-          </Link>
+          {algemeen.footer.links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="hover:text-ink transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
           <a
             href={site.sameAs[0]}
             target="_blank"
             rel="noreferrer"
             className="hover:text-ink transition-colors"
           >
-            jellevanderidder.com
+            {algemeen.footer.websiteLabel}
           </a>
         </div>
       </Container>
