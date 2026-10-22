@@ -88,17 +88,17 @@ export const cursus = {
         title: "Tekenen",
         question:
           "Waarom tekenen de meeste mensen wat ze denken te zien, in plaats van wat er echt staat?",
-        body: "Je leert meten, kijken en tekenen zoals de academies het eeuwenlang deden. Dat is de basis van een sterk schilderij.",
+        body: "Je leert meten, kijken en tekenen zoals op de academies werd gedaan. Dit is de basis van ieder sterk schilderij.",
       },
       {
         title: "Licht en donker",
-        question: "Waarom begonnen de oude meesters niet gelijk met kleur?",
-        body: "Je ontdekt hoe je met alleen licht en donker vorm, diepte en sfeer opbouwt, laag voor laag.",
+        question: "Waarom begonnen de oude meesters eerst in 'zwart-wit'?",
+        body: "Je ontdekt hoe je met licht en donker diepte en sfeer creëert.",
       },
       {
         title: "Kleur",
         question: "Waarom is een schaduw in de natuur bijna nooit zwart?",
-        body: "Je leert kleuren mengen en spelen met harmonie, contrast en expressie.",
+        body: "Je leert kleuren mengen en stuurt hiermee de harmonie, contrast en expressie.",
       },
     ],
 
@@ -110,7 +110,7 @@ export const cursus = {
       "Kijken als een kunstenaar: het ontleden van schilderijen. Wat maakt ze sterk, en welke technieken horen daar bij?",
       "Kunstgeschiedenis: de verhalen en werkwijzen van de oude én nieuwe meesters.",
       "Materiaalkennis: olieverf, penselen, mediums en dragers en hoe deze samenwerken",
-      "Het ‘ontwerpen’ van een schilderij, ook vanuit verbeelding en fantasie",
+      "Het ‘ontwerpen’ van een schilderij: Hoe je een idee omzet in een schilderij.",
       "Natuurgetrouw schilderen van landschappen, portretten en stillevens",
     ],
 
@@ -127,9 +127,9 @@ export const cursus = {
   impressie: {
     title: "Zo ziet een schilderles in Arnhem eruit",
     paragraphs: [
-      `Iedere ${dagen} kom je met een kleine groep samen in het atelier in ${site.district}. We beginnen met koffie. Daarna nemen we een kwartier voor theorie of kunst kijken: we bekijken werk uit de kunstgeschiedenis en ontleden samen wat het sterk maakt.`,
-      "De rest van de avond schilder je zelf, aan een opdracht die bij jouw niveau past, en ik loop rond om iedereen persoonlijk te helpen. De laatste tien minuten sluiten we samen af.",
-      "Heb je eigen ideeën of projecten waar je aan wilt werken, maar weet je niet goed hoe je die moet aanpakken? Ook daarvoor is volop ruimte. En soms trekken we met de groep naar buiten om plein-air te schilderen.",
+      `Iedere ${dagen} kom je met een kleine groep samen in het atelier in ${site.district}. Tijdens de koffie of thee behandelen we theorie en gaan we kunst kijken: we bekijken werk uit de kunstgeschiedenis en bestuderen samen wat het sterk maakt.`,
+      "Daarna gaan we schilderen en zal ik rondlopen voor vragen en verdere instructies. Je kan op je eigen tempo werken, volgens het lesprogramma of aan een zelfgekozen opdracht.",
+      "Heb je eigen ideeën of projecten waar je aan wilt werken, maar weet je niet goed hoe je die moet aanpakken? Ook daarvoor is volop ruimte.",
     ],
   },
 
@@ -145,7 +145,7 @@ export const cursus = {
     quote:
       "Je leert niet alleen hoe je schildert, maar vooral ook hoe je kijkt en denkt als kunstenaar.",
     closing:
-      "Mijn aanpak is technisch serieus, maar altijd visueel, praktisch en persoonlijk.",
+      "Mijn aanpak is technisch serieus, altijd visueel, praktisch en persoonlijk.",
   },
 
   ervaringen: {
@@ -160,9 +160,9 @@ export const cursus = {
       },
       {
         name: "Jacob",
-        level: "begon als beginner",
+        level: "beginnende cursist",
         quote:
-          "Ik heb onlangs een schildercursus gevolgd bij Jelle en het was een geweldige ervaring. Jelle is een docent die op alle niveaus kan lesgeven, waardoor ik werd uitgedaagd. Zijn passie voor schilderen en zijn geduldige aanpak hebben me geholpen om mezelf aanzienlijk te verbeteren.",
+          "Ik heb onlangs een schildercursus gevolgd bij Jelle en het was echt top. Jelle is een docent die op alle niveaus kan lesgeven. Zijn passie voor schilderen en zijn geduldige aanpak hebben me geholpen om wat mooie stappen te zetten.",
       },
       {
         name: "Arnout",
@@ -176,7 +176,7 @@ export const cursus = {
   praktisch: {
     title: "Praktische informatie over de cursus in Arnhem",
     intro:
-      "De kleine groep zorgt voor veel persoonlijke aandacht. Je kunt een sterke basis leggen of juist de diepte ingaan, afhankelijk van je niveau. De lespakketten zijn doorlopend, dus na afloop stroom je direct door naar een nieuwe reeks.",
+      "De kleine groep zorgt voor veel persoonlijke aandacht. Je kunt een sterke basis leggen of de diepte ingaan, afhankelijk van je niveau. De lespakketten zijn doorlopend, dus je kunt na een reeks gewoon doorgaan.",
     items: [
       {
         label: "Wanneer",
@@ -202,7 +202,7 @@ export const cursus = {
   materiaal: {
     title: "Materiaalkosten voor het schilderen in olieverf",
     paragraphs: [
-      "Je schildert met goede materialen die je zelf in huis haalt. Tijdens de cursus word je aangemoedigd (het is vrijblijvend) om thuis verder te schilderen, en dan heb je alles al! Heb je al materiaal in huis, neem het dan gewoon mee.",
+      "Je schildert met goede materialen die je zelf in huis haalt. Tijdens de cursus word je (vrijblijvend) aangemoedigd om thuis verder te schilderen, en dan heb je alles al! Heb je al wat spullen, neem het dan gewoon mee.",
       `Een complete set om mee te beginnen kost ongeveer **€ ${materialsTotal}**.`,
     ],
     toggle: "Bekijk de volledige materiaallijst",
@@ -252,7 +252,7 @@ export const cursus = {
   aanmelden: {
     eyebrow: "Van Vermeer tot vandaag",
     title: "Klaar om anders te leren kijken?",
-    text: "Meld je aan voor de schildercursus in Arnhem. Na je aanmelding neem ik persoonlijk contact met je op over de startdatum, de betaling en de bevestiging van je plek.",
+    text: "Meld je aan voor de schildercursus in Arnhem. Na je aanmelding neemt Jelle contact met je op.",
     paintingLeft: {
       label: "De oude meesters",
       alt: "Johannes Vermeer, Jonge vrouw met een waterkan: een vrouw bij een open raam in zacht daglicht",
