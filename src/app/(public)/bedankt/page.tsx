@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
+import { bedankt } from "@/content/aanmelden";
 
 export const metadata: Metadata = {
-  title: "Bedankt voor je inschrijving",
+  ...bedankt.meta,
   // Not useful in search: a confirmation page or an auth screen.
   robots: { index: false, follow: true },
 };
@@ -17,16 +18,15 @@ export default function BedanktPage() {
             ✓
           </div>
           <h1 className="font-title text-4xl text-ink sm:text-5xl">
-            Je plek is gereserveerd
+            {bedankt.title}
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-muted">
-            Bedankt voor je inschrijving! We hebben je aanmelding ontvangen en
-            nemen persoonlijk contact met je op over de betaling en de verdere
-            details. Zodra de betaling binnen is, krijg je toegang tot het
-            cursusmateriaal.
+            {bedankt.text}
           </p>
           <div className="mt-9 flex justify-center gap-3">
-            <ButtonLink href="/cursussen">Terug naar de cursus</ButtonLink>
+            <ButtonLink href={bedankt.button.href}>
+              {bedankt.button.label}
+            </ButtonLink>
           </div>
         </div>
       </Container>

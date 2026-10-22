@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { AanmeldForm } from "@/components/AanmeldForm";
 import { delay } from "@/lib/motion";
+import { inschrijven } from "@/content/aanmelden";
 
 export const metadata: Metadata = {
-  title: "Aanmelden voor de schildercursus in Arnhem",
-  description:
-    "Meld je aan voor de olieverf schildercursus in Arnhem. Kies je voorkeursavond en laat je gegevens achter, daarna neem ik persoonlijk contact met je op.",
+  ...inschrijven.meta,
   alternates: { canonical: "/inschrijven" },
 };
 
@@ -16,15 +15,13 @@ export default function InschrijvenPage() {
       <Container>
         <div className="rise max-w-2xl">
           <p className="mb-3 text-sm uppercase tracking-[0.2em] text-clay">
-            Aanmelden
+            {inschrijven.eyebrow}
           </p>
           <h1 className="font-title text-4xl text-ink sm:text-5xl">
-            Ik meld mij aan
+            {inschrijven.title}
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-muted">
-            Kies je voorkeursavond en laat je gegevens achter. Ik neem daarna
-            persoonlijk contact met je op over de startdatum, betaling en
-            bevestiging.
+            {inschrijven.intro}
           </p>
         </div>
 

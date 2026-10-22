@@ -5,31 +5,12 @@ import { Logo } from "@/components/Logo";
 import { JsonLd } from "@/components/JsonLd";
 import { homeGraph } from "@/lib/schema";
 import { delay } from "@/lib/motion";
+import { home } from "@/content/home";
 
 export const metadata: Metadata = {
-  title: "Schilderen in Arnhem",
-  description:
-    "Schildercursussen en workshops in Arnhem. Leer schilderen in olieverf in een kleine groep, onder persoonlijke begeleiding van kunstenaar Jelle van de Ridder.",
+  ...home.meta,
   alternates: { canonical: "/" },
 };
-
-const actions = [
-  {
-    href: "/cursussen",
-    label: "Cursussen",
-    hint: "De doorlopende olieverfcursus in Arnhem",
-  },
-  {
-    href: "/workshops",
-    label: "Workshops",
-    hint: "Verdiepende sessies op bijzondere locaties",
-  },
-  {
-    href: "/login",
-    label: "Cursusplatform",
-    hint: "Inloggen voor cursisten",
-  },
-];
 
 export default function HomePage() {
   return (
@@ -37,7 +18,7 @@ export default function HomePage() {
       <JsonLd data={homeGraph()} />
       <div className="relative z-10 max-w-3xl text-center text-paper">
         <p className="rise mb-5 text-sm uppercase tracking-[0.25em] text-paper/70">
-          Schildercursus · Arnhem
+          {home.eyebrow}
         </p>
         <div className="rise" style={delay(120)}>
           <Logo variant="paper" className="mx-auto mb-6 h-20 w-auto sm:h-24" />
@@ -46,19 +27,17 @@ export default function HomePage() {
           className="rise font-title text-5xl leading-[1.05] sm:text-7xl"
           style={delay(240)}
         >
-          Schilderen in Arnhem
+          {home.title}
         </h1>
         <p
           className="rise mx-auto mt-6 max-w-xl text-lg leading-relaxed text-paper/80"
           style={delay(380)}
         >
-          Leer schilderen in olieverf zoals de oude en nieuwe meesters dat
-          deden. Je werkt in een kleine groep onder persoonlijke begeleiding van
-          kunstenaar Jelle van de Ridder, in zijn atelier in Arnhem.
+          {home.intro}
         </p>
 
         <div className="mt-11 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-          {actions.map((a, i) => (
+          {home.actions.map((a, i) => (
             <Link
               key={a.href}
               href={a.href}
