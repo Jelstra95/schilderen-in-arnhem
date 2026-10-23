@@ -1,44 +1,58 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Textarea } from "@/components/ui/Field";
 import { cn } from "@/lib/cn";
 
-const CONTACT_EMAIL = "info@jellevanderidder.com";
-
 // Day-of-the-week options. Set available to false to show a day as "Binnenkort".
+// Keep the values in sync with ALLOWED_DAYS in src/app/api/inquiries/route.ts.
 const dayOptions = [
   { value: "Dinsdagavond", time: "19:00 – 21:30 uur", available: true },
   { value: "Woensdagavond", time: "19:00 – 21:30 uur", available: true },
 ];
 
 export function AanmeldForm() {
+  const router = useRouter();
   const [day, setDay] = useState("Woensdagavond");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(null);
+
     const form = new FormData(e.currentTarget);
-    const name = String(form.get("name") ?? "").trim();
-    const email = String(form.get("email") ?? "").trim();
-    const phone = String(form.get("phone") ?? "").trim();
-    const notes = String(form.get("notes") ?? "").trim();
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: form.get("name"),
+          email: form.get("email"),
+          phone: form.get("phone"),
+          day_preference: day,
+          notes: form.get("notes"),
+          website: form.get("website"), // honeypot
+        }),
+      });
 
-    const subject = `Aanmelding schildercursus — ${day}`;
-    const body = [
-      `Naam: ${name}`,
-      `E-mail: ${email}`,
-      `Telefoon: ${phone}`,
-      `Voorkeursavond: ${day} (19:00 – 21:30 uur)`,
-      "",
-      "Opmerkingen:",
-      notes || "-",
-    ].join("\n");
-
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(payload.error ?? "Er ging iets mis. Probeer het opnieuw.");
+        return;
+      }
+      router.push("/bedankt");
+    } catch {
+      setError(
+        "Kan geen verbinding maken. Controleer je internet en probeer opnieuw.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -122,17 +136,40 @@ export function AanmeldForm() {
             placeholder="Bijvoorbeeld je ervaring, vragen of wensen."
           />
         </Field>
+
+        {/* Honeypot: hidden from humans, non-empty = silently drop as spam. */}
+        <div aria-hidden="true" className="hidden">
+          <label>
+            Website
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </label>
+        </div>
       </fieldset>
 
+      {error && (
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
       <div>
-        <Button type="submit" size="lg" className="w-full sm:w-auto">
-          Aanmelding versturen
+        <Button
+          type="submit"
+          size="lg"
+          disabled={submitting}
+          className="w-full sm:w-auto"
+        >
+          {submitting ? "Bezig met versturen…" : "Aanmelding versturen"}
         </Button>
         <p className="mt-3 text-xs text-muted">
-          Je aanmelding opent in je eigen e-mailprogramma, gericht aan{" "}
-          {CONTACT_EMAIL}. Na ontvangst neem ik persoonlijk contact met je op
-          over de betaling en bevestiging. Met je aanmelding ga je akkoord
-          met de{" "}
+          Na je aanmelding krijg je direct een bevestiging per e-mail. Ik neem
+          daarna persoonlijk contact met je op over de betaling en bevestiging.
+          Met je aanmelding ga je akkoord met de{" "}
           <Link
             href="/algemene-voorwaarden"
             className="underline underline-offset-2 hover:text-ink"
