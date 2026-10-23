@@ -24,10 +24,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Ongeldige aanvraag." }, { status: 400 });
   }
 
-  // Silent-accept honeypot: pretend success so bots don't learn they were caught.
-  if (body.website && body.website.trim().length > 0) {
-    return NextResponse.json({ ok: true }, { status: 201 });
-  }
+  // Honeypot: suspicious submissions still get written to the DB so the owner
+  // never has a silent-drop blind spot, but they're pre-archived so they don't
+  // clutter the "new" inbox. If a real user ever trips this (bad password
+  // manager etc.), the row is still visible in /admin/aanvragen.
+  const suspicious = Boolean(body.website && body.website.trim().length > 0);
 
   const fullName = body.full_name?.trim();
   const email = body.email?.trim().toLowerCase();
@@ -81,6 +82,7 @@ export async function POST(request: NextRequest) {
       phone,
       day_preference: dayPreference,
       notes,
+      status: suspicious ? "archived" : "new",
     })
     .select("id")
     .single();
@@ -96,22 +98,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Fire owner + user emails. These are best-effort: a failure logs but does
+  // Fire owner + user emails for real submissions. Honeypot hits land in the
+  // DB (archived) but don't trigger emails — otherwise bots would spam the
+  // owner's inbox. Email failures are best-effort: a failure logs but does
   // NOT fail the request, because the submission is already safely in the DB.
-  const ownerEmail = process.env.OWNER_EMAIL;
-  const results = await Promise.allSettled([
-    ownerEmail
-      ? sendEmail(ownerNotification({ fullName, email, phone, dayPreference, notes }, ownerEmail))
-      : Promise.resolve({ ok: false, error: "OWNER_EMAIL not set" }),
-    sendEmail(userConfirmation({ fullName, email, dayPreference })),
-  ]);
+  if (!suspicious) {
+    const ownerEmail = process.env.OWNER_EMAIL;
+    const results = await Promise.allSettled([
+      ownerEmail
+        ? sendEmail(ownerNotification({ fullName, email, phone, dayPreference, notes }, ownerEmail))
+        : Promise.resolve({ ok: false, error: "OWNER_EMAIL not set" }),
+      sendEmail(userConfirmation({ fullName, email, dayPreference })),
+    ]);
 
-  for (const [idx, r] of results.entries()) {
-    const label = idx === 0 ? "owner" : "user";
-    if (r.status === "rejected") {
-      console.error(`[inquiries] ${label} email threw:`, r.reason);
-    } else if (!r.value.ok) {
-      console.error(`[inquiries] ${label} email failed:`, r.value.error);
+    for (const [idx, r] of results.entries()) {
+      const label = idx === 0 ? "owner" : "user";
+      if (r.status === "rejected") {
+        console.error(`[inquiries] ${label} email threw:`, r.reason);
+      } else if (!r.value.ok) {
+        console.error(`[inquiries] ${label} email failed:`, r.value.error);
+      }
     }
   }
 
