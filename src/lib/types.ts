@@ -4,6 +4,7 @@
 export type Role = "admin" | "participant";
 export type CourseStatus = "open" | "closed";
 export type EnrollmentStatus = "pending" | "confirmed" | "cancelled";
+export type InquiryStatus = "new" | "contacted" | "converted" | "archived";
 
 export interface Profile {
   id: string;
@@ -50,6 +51,17 @@ export interface Enrollment {
 
 export interface EnrollmentWithCourseDate extends Enrollment {
   course_date: CourseDate | null;
+}
+
+export interface CourseInquiry {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  day_preference: string;
+  notes: string | null;
+  status: InquiryStatus;
+  created_at: string;
 }
 
 export interface Material {
