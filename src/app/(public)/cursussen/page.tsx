@@ -9,6 +9,7 @@ import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { CourseCarousel } from "@/components/CourseCarousel";
 import { HeroVideo } from "@/components/HeroVideo";
 import { StickyCta } from "@/components/StickyCta";
+import { NoticeToast } from "@/components/NoticeToast";
 import { RichText } from "@/components/RichText";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
@@ -49,15 +50,6 @@ export default function LandingPage() {
           teaches: lesinhoud.curriculum,
         })}
       />
-      {notice && (
-        <div className="border-b border-clay/20 bg-clay/5">
-          <Container className="py-3">
-            <p className="text-center text-sm leading-relaxed text-ink/80">
-              {notice}
-            </p>
-          </Container>
-        </div>
-      )}
       {/* Hero: text over a silent loop of painting close-ups ------------- */}
       <section
         id="hero"
@@ -494,6 +486,7 @@ export default function LandingPage() {
       </section>
 
       <StickyCta hideWhileVisible={ctaSections} />
+      {notice && <NoticeToast {...notice} />}
     </>
   );
 }
