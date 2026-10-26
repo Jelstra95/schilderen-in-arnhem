@@ -51,6 +51,10 @@ export const cursus = {
     description: `Leer olieverf schilderen in Arnhem. Acht lessen in een kleine groep van maximaal zes cursisten, in het atelier aan de ${site.street} in ${site.district}. Geschikt voor beginners en gevorderden.`,
   },
 
+  /** A thin notice above the hero. Set to an empty string to hide it. */
+  notice:
+    "Let op: Door een foutje in de mailserver heb ik helaas geen aanmeldingen doorgekregen van voor 23 oktober. Mocht je je voor die tijd hebben aangemeld, meld je dan voor de zekerheid nog eens aan. Excuses voor het ongemak en hopelijk tot in het atelier!",
+
   /** The two buttons in the hero and in the closing banner. */
   cta: {
     signup: "Ik meld mij aan!",

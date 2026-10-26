@@ -34,6 +34,11 @@ export async function sendEmail(args: SendEmailArgs): Promise<SendResult> {
   const from = process.env.RESEND_FROM;
 
   if (!apiKey || !from) {
+    // On the live site missing config means emails silently stop, so report
+    // it as a failure; callers log that as an error.
+    if (process.env.VERCEL_ENV === "production") {
+      return { ok: false, error: "RESEND_API_KEY or RESEND_FROM not set" };
+    }
     // Dev fallback: log, don't send. Still returns ok so callers downstream
     // don't treat local dev as a failure.
     console.info("[email:dry-run]", {

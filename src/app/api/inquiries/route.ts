@@ -168,7 +168,7 @@ function userConfirmation(p: Pick<InquiryPayload, "fullName" | "email" | "dayPre
     `Ik neem binnenkort persoonlijk contact met je op over de startdatum, betaling en bevestiging.`,
     ``,
     `Groet,`,
-    `Jelle van der Idder`,
+    `Jelle van de Ridder`,
     `info@jellevanderidder.com`,
   ].join("\n");
   const html = `
@@ -177,7 +177,7 @@ function userConfirmation(p: Pick<InquiryPayload, "fullName" | "email" | "dayPre
        <strong>${escapeHtml(p.dayPreference)}</strong>).</p>
     <p>Ik neem binnenkort persoonlijk contact met je op over de startdatum,
        betaling en bevestiging.</p>
-    <p>Groet,<br>Jelle van der Idder<br>
+    <p>Groet,<br>Jelle van de Ridder<br>
        <a href="mailto:info@jellevanderidder.com">info@jellevanderidder.com</a></p>
   `;
   return { to: p.email, subject, text, html };
