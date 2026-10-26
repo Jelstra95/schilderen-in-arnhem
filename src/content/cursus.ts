@@ -39,6 +39,7 @@ const materials: {
     price: 17,
     category: "Penselen stug",
   },
+  { product: "Canvas 30x40cm", price: 10, category: "Schildersdoek" },
 ];
 
 /** Derived, so the total can never drift away from the rows above it. */
