@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 
 /** All texts on this page live in src/content/cursus.ts. */
 const {
+  notice,
   cta,
   hero,
   werk,
@@ -48,6 +49,15 @@ export default function LandingPage() {
           teaches: lesinhoud.curriculum,
         })}
       />
+      {notice && (
+        <div className="border-b border-clay/20 bg-clay/5">
+          <Container className="py-3">
+            <p className="text-center text-sm leading-relaxed text-ink/80">
+              {notice}
+            </p>
+          </Container>
+        </div>
+      )}
       {/* Hero: text over a silent loop of painting close-ups ------------- */}
       <section
         id="hero"
