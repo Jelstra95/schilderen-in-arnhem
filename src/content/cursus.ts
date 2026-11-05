@@ -69,14 +69,14 @@ export const cursus = {
   hero: {
     eyebrow: "Schildercursus in Arnhem",
     title: "Leer schilderen in olieverf als de oude en nieuwe meesters",
-    intro: `Hoe creëert Rembrandt het licht en donker? Waarom zit er zoveel beweging in de schilderijen van Van Gogh? In het atelier van Jelle van de Ridder in ${site.district} ontdek je hoe dat werkt, en schilder je het zelf. Je leert olieverf schilderen in een kleine groep, voor beginners en gevorderden.`,
+    intro: `Hoe creëert Rembrandt licht en donker? Waarom zit er zoveel beweging in de schilderijen van Van Gogh? Wat maakt de waterlelies van Monet zo mooi? In het atelier van Jelle van de Ridder in ${site.district} ontdek je hoe dat werkt en hoe je dit kan schilderen. Je leert olieverf schilderen in een kleine groep, voor zowel beginners als gevorderden!`,
     facts: `Iedere ${dagen} van ${site.course.startTime} tot ${site.course.endTime} uur · maximaal ${site.course.maxStudents} cursisten · op elk moment instromen`,
   },
 
   werk: {
     title: "Werk van cursisten van de schildercursus",
     intro:
-      "Dit schilderden eerdere cursisten tijdens de cursus. Sommigen waren pas net begonnen, anderen schilderden al langer. Allemaal werkten ze volgens dezelfde opbouw die jij ook leert.",
+      "Dit schilderden eerdere cursisten tijdens de cursus. Sommigen waren pas net begonnen, anderen schilderden al langer. Allemaal werkten ze volgens dezelfde methodes en manieren van kijken, denken en maken als een schilder die jij ook leert.",
     imageAlt:
       "Collage van olieverfschilderijen gemaakt door eerdere cursisten van de schildercursus in Arnhem",
   },
@@ -147,7 +147,7 @@ export const cursus = {
       "Jelle van de Ridder in zijn atelier met penselen naast twee olieverfschilderijen",
     lead: "Als autodidact heb ik zelf alle denkbare obstakels van het schilderen doorlopen. Juist daardoor weet ik waar je tegenaan loopt.",
     paragraphs: [
-      "Lesgeven is voor mij meer dan kennis overdragen; het is samen kijken, onderzoeken en groeien. Mijn eerste ervaring met lesgeven in olieverfschilderen begon in 2019, toen ik tijdens de coronaperiode online les gaf aan vrienden en kennissen. Dit groeide al snel uit tot structurele cursussen.",
+      "Lesgeven is voor mij meer dan kennis overdragen; het is samen kijken, onderzoeken en groeien. Mijn eerste ervaring met lesgeven in olieverfschilderen begon in 2019, toen ik tijdens de coronaperiode online lesgaf aan vrienden en kennissen. Al snel werden dit structurele cursussen.",
       "In 2024 en 2025 werkte ik als kunstdocent bij SKVR, het centrum voor kunsten in Rotterdam. Daar zag ik hoe beginners én gevorderden tegen dezelfde schilderobstakels aanlopen, en hoe je ze gericht verder helpt.",
     ],
     quote:

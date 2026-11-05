@@ -197,20 +197,12 @@ export default function LandingPage() {
             />
           </div>
 
-          <figure data-reveal className="mx-auto mt-20 max-w-3xl text-center">
-            <span
-              aria-hidden
-              className="block font-title text-7xl leading-none text-clay/40"
-            >
-              &ldquo;
-            </span>
-            <blockquote className="font-title text-3xl leading-snug text-ink sm:text-4xl">
-              {lesinhoud.quote}
-            </blockquote>
-            <figcaption className="mt-5 text-sm text-muted">
-              — {lesinhoud.quoteBy}
-            </figcaption>
-          </figure>
+          <Quote
+            data-reveal
+            text={lesinhoud.quote}
+            by={lesinhoud.quoteBy}
+            className="mx-auto mt-20 max-w-2xl rounded-xl border border-line bg-paper p-7"
+          />
         </Container>
       </section>
 
@@ -270,9 +262,11 @@ export default function LandingPage() {
                 <RichText text={p} />
               </p>
             ))}
-            <blockquote className="border-l-2 border-clay pl-5 font-body italic text-ink/80">
-              {docent.quote}
-            </blockquote>
+            <Quote
+              text={docent.quote}
+              by="Jelle van de Ridder, docent"
+              className="rounded-xl border border-line bg-mist/50 p-7"
+            />
             <p>
               <RichText text={docent.closing} />
             </p>
@@ -288,21 +282,13 @@ export default function LandingPage() {
           </h2>
           <div data-reveal-stagger className="mt-12 grid gap-8 md:grid-cols-3">
             {ervaringen.reviews.map((r) => (
-              <figure
+              <Quote
                 key={r.name}
                 data-reveal
-                className="flex flex-col rounded-xl border border-line bg-paper p-7"
-              >
-                <span className="font-title text-5xl leading-none text-clay/30">
-                  &ldquo;
-                </span>
-                <blockquote className="mt-2 flex-1 font-body italic leading-relaxed text-ink/80">
-                  {r.quote}
-                </blockquote>
-                <figcaption className="mt-5 text-sm text-muted">
-                  — {r.name}, {r.level}
-                </figcaption>
-              </figure>
+                text={r.quote}
+                by={`${r.name}, ${r.level}`}
+                className="rounded-xl border border-line bg-paper p-7"
+              />
             ))}
           </div>
         </Container>
@@ -536,5 +522,32 @@ function Painting({
         </figure>
       </div>
     </div>
+  );
+}
+
+/** One quote style for the whole page: docent and cursisten alike. */
+function Quote({
+  text,
+  by,
+  className = "",
+  ...rest
+}: {
+  text: string;
+  by: string;
+  className?: string;
+  "data-reveal"?: boolean;
+}) {
+  return (
+    <figure className={`flex flex-col ${className}`} {...rest}>
+      <span aria-hidden className="font-title text-5xl leading-none text-clay/40">
+        &ldquo;
+      </span>
+      <blockquote className="mt-2 flex-1 font-body text-lg italic leading-relaxed text-ink/80">
+        {text}
+      </blockquote>
+      <figcaption className="mt-5 text-sm not-italic text-muted">
+        — {by}
+      </figcaption>
+    </figure>
   );
 }
