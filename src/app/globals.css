@@ -205,3 +205,52 @@ h4,
     transition: none;
   }
 }
+
+/* Brush-stroke slide transition ---------------------------------------
+   The incoming slide is masked by four overlapping horizontal strokes.
+   Each stroke is a solid bar with a bristly right edge on the left half
+   of a wide mask; sliding the mask from 100% to 0% drags that edge
+   across the photo, one row slightly after the other. */
+.brush-in {
+  --brush: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 2400 400%22 preserveAspectRatio=%22none%22%3E%3Cfilter id=%22s%22%3E%3CfeGaussianBlur stdDeviation=%224 1.2%22/%3E%3C/filter%3E%3Cpath filter=%22url%28%23s%29%22 d=%22M0 0 L1177 0 L1177 7 L1242 7 L1242 16 L1218 16 L1218 28 L1138 28 L1138 30 L1149 30 L1149 42 L1297 42 L1297 51 L1301 51 L1301 53 L1276 53 L1276 58 L1303 58 L1303 70 L1371 70 L1371 77 L1351 77 L1351 80 L1327 80 L1327 84 L1394 84 L1394 87 L1292 87 L1292 90 L1344 90 L1344 102 L1320 102 L1320 109 L1349 109 L1349 114 L1352 114 L1352 126 L1360 126 L1360 128 L1383 128 L1383 131 L1374 131 L1374 143 L1388 143 L1388 146 L1399 146 L1399 153 L1309 153 L1309 156 L1390 156 L1390 165 L1460 165 L1460 170 L1394 170 L1394 174 L1353 174 L1353 177 L1380 177 L1380 181 L1357 181 L1357 188 L1406 188 L1406 195 L1336 195 L1336 199 L1302 199 L1302 201 L1408 201 L1408 206 L1305 206 L1305 215 L1367 215 L1367 224 L1430 224 L1430 227 L1356 227 L1356 229 L1280 229 L1280 238 L1337 238 L1337 245 L1254 245 L1254 257 L1301 257 L1301 269 L1204 269 L1204 271 L1287 271 L1287 278 L1286 278 L1286 281 L1275 281 L1275 293 L1217 293 L1217 298 L1267 298 L1267 305 L1228 305 L1228 309 L1194 309 L1194 318 L1225 318 L1225 330 L1103 330 L1103 332 L1201 332 L1201 337 L1169 337 L1169 341 L1089 341 L1089 348 L1092 348 L1092 352 L1200 352 L1200 356 L1117 356 L1117 360 L1119 360 L1119 369 L1146 369 L1146 371 L1151 371 L1151 380 L1151 380 L1151 385 L1085 385 L1085 388 L1060 388 L1060 395 L1073 395 L1073 400 L0 400Z%22/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--brush), var(--brush), var(--brush), var(--brush);
+  mask-image: var(--brush), var(--brush), var(--brush), var(--brush);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 240% 34%;
+  mask-size: 240% 34%;
+  -webkit-mask-position: 100% 0%, 100% 33.3%, 100% 66.7%, 100% 100%;
+  mask-position: 100% 0%, 100% 33.3%, 100% 66.7%, 100% 100%;
+  animation: brush-in 1.8s cubic-bezier(0.55, 0.1, 0.3, 1) forwards;
+}
+
+@keyframes brush-in {
+  0% {
+    -webkit-mask-position: 100% 0%, 100% 33.3%, 100% 66.7%, 100% 100%;
+    mask-position: 100% 0%, 100% 33.3%, 100% 66.7%, 100% 100%;
+  }
+  25% {
+    -webkit-mask-position: 55% 0%, 85% 33.3%, 100% 66.7%, 100% 100%;
+    mask-position: 55% 0%, 85% 33.3%, 100% 66.7%, 100% 100%;
+  }
+  50% {
+    -webkit-mask-position: 15% 0%, 45% 33.3%, 75% 66.7%, 100% 100%;
+    mask-position: 15% 0%, 45% 33.3%, 75% 66.7%, 100% 100%;
+  }
+  75% {
+    -webkit-mask-position: 0% 0%, 10% 33.3%, 35% 66.7%, 60% 100%;
+    mask-position: 0% 0%, 10% 33.3%, 35% 66.7%, 60% 100%;
+  }
+  100% {
+    -webkit-mask-position: 0% 0%, 0% 33.3%, 0% 66.7%, 0% 100%;
+    mask-position: 0% 0%, 0% 33.3%, 0% 66.7%, 0% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brush-in {
+    animation: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

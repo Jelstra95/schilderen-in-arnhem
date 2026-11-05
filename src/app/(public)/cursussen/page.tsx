@@ -149,10 +149,10 @@ export default function LandingPage() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-3 font-title text-xl text-ink">{s.title}</h3>
-                <p className="mt-3 font-body italic leading-relaxed text-ink/80">
+                <p className="mt-3 font-body text-lg italic leading-relaxed text-ink/80">
                   {s.question}
                 </p>
-                <p className="mt-2 leading-relaxed text-muted">{s.body}</p>
+                <p className="mt-2 text-lg leading-relaxed text-muted">{s.body}</p>
               </div>
             ))}
           </div>
@@ -162,14 +162,14 @@ export default function LandingPage() {
               <h3 className="font-title text-2xl text-ink">
                 {lesinhoud.curriculumTitle}
               </h3>
-              <p className="mt-2 text-muted">{lesinhoud.curriculumIntro}</p>
+              <p className="mt-3 text-lg leading-relaxed text-muted">{lesinhoud.curriculumIntro}</p>
             </div>
             <ul data-reveal-stagger className="space-y-4">
               {lesinhoud.curriculum.map((item) => (
                 <li
                   key={item}
                   data-reveal
-                  className="flex gap-3 border-t border-line pt-4 leading-relaxed text-muted"
+                  className="flex gap-3 border-t border-line pt-4 text-lg leading-relaxed text-muted"
                 >
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-clay" />
                   <span>{item}</span>
@@ -318,7 +318,7 @@ export default function LandingPage() {
                 <dt className="text-sm uppercase tracking-wide text-clay">
                   {item.label}
                 </dt>
-                <dd className="text-ink">{item.value}</dd>
+                <dd className="text-lg text-ink">{item.value}</dd>
               </div>
             ))}
           </dl>
@@ -326,7 +326,7 @@ export default function LandingPage() {
 
         <Container>
           <div id="materiaal" data-reveal className="mt-20 scroll-mt-20">
-            <h3 className="font-title text-3xl text-ink">{materiaal.title}</h3>
+            <h3 className="font-title text-2xl text-ink">{materiaal.title}</h3>
             <div className="mt-6 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
               {materiaal.paragraphs.map((p) => (
                 <p key={p}>
@@ -336,7 +336,7 @@ export default function LandingPage() {
             </div>
 
             <details className="group mt-8 border-y border-line">
-              <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-ink [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-lg text-ink [&::-webkit-details-marker]:hidden">
                 <span>{materiaal.toggle}</span>
                 <span className="text-clay transition-transform duration-200 group-open:rotate-45">
                   +
@@ -407,13 +407,13 @@ export default function LandingPage() {
                 className="border-t border-line pt-5"
               >
                 <dt className="font-title text-xl text-ink">{item.q}</dt>
-                <dd className="mt-2 leading-relaxed text-muted">
+                <dd className="mt-2 text-lg leading-relaxed text-muted">
                   <RichText text={item.a} />
                 </dd>
               </div>
             ))}
           </dl>
-          <p className="mt-12 text-muted">
+          <p className="mt-12 text-lg leading-relaxed text-muted">
             <RichText text={vragen.footer} />
           </p>
         </Container>
