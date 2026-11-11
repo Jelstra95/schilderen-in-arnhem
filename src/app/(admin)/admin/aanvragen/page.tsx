@@ -103,9 +103,9 @@ export default async function AdminInquiriesPage() {
   });
 
   return (
-    <Container className="max-w-6xl">
+    <Container className="max-w-none">
       <h1 className="font-title text-4xl text-ink">Aanvragen en deelnemers</h1>
-      <p className="mt-2 text-muted">
+      <p className="mt-2 max-w-3xl text-muted">
         Iedereen die zich via <code className="font-mono">/inschrijven</code>{" "}
         aanmeldt, komt hier binnen. Zet de status op Aangemeld om er een
         deelnemer van te maken. Er wordt dan een account aangemaakt op hun

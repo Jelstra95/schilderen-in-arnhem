@@ -413,7 +413,7 @@ function PersonRow({
             <span className="text-xs text-muted">Nog geen account</span>
           )}
         </td>
-        <td className="max-w-56 px-3 py-3">
+        <td className="w-full max-w-0 px-3 py-3">
           <button
             onClick={onToggle}
             className="block w-full truncate text-left text-muted hover:text-ink"
