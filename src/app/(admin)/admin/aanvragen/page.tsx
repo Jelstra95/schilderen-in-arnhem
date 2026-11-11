@@ -110,8 +110,8 @@ export default async function AdminInquiriesPage() {
         aanmeldt, komt hier binnen. Zet de status op Aangemeld om er een
         deelnemer van te maken. Er wordt dan een account aangemaakt op hun
         e-mailadres met het wachtwoord{" "}
-        <span className="font-mono text-ink">olieverf</span>. Klik op een rij
-        voor notities en meer details.
+        <span className="font-mono text-ink">olieverf</span>. Notities slaan
+        vanzelf op zodra je ergens anders klikt.
       </p>
       <div className="mt-10">
         <PeopleManager people={people} />

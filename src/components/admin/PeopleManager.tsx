@@ -244,7 +244,7 @@ export function PeopleManager({ people }: { people: Person[] }) {
 
       {/* Table ------------------------------------------------------------ */}
       <div className="overflow-x-auto rounded-lg border border-line">
-        <table className="w-full min-w-[60rem] text-left text-sm">
+        <table className="w-full min-w-[72rem] text-left text-sm">
           <thead className="bg-mist/60 text-xs uppercase tracking-wide text-muted">
             <tr>
               <th className="px-4 py-3 font-medium">Naam</th>
@@ -253,8 +253,8 @@ export function PeopleManager({ people }: { people: Person[] }) {
               <th className="px-3 py-3 text-center font-medium">Gereageerd</th>
               <th className="px-3 py-3 font-medium">Status</th>
               <th className="px-3 py-3 font-medium">Startdatum</th>
-              <th className="px-3 py-3 font-medium">Notitie</th>
-              <th className="px-3 py-3" aria-label="Details" />
+              <th className="px-3 py-3 font-medium">Notitie (alleen voor jou)</th>
+              <th className="px-3 py-3" aria-label="Acties" />
             </tr>
           </thead>
           <tbody className="divide-y divide-line">
@@ -318,38 +318,61 @@ function PersonRow({
     }
   }
 
+  /** Creates the participant account; optionally sets a status right after. */
+  async function createAccount(thenStatus?: InquiryStatus) {
+    if (
+      !window.confirm(
+        `Account aanmaken voor ${person.full_name} (${person.email}) met wachtwoord "olieverf"?`,
+      )
+    ) {
+      router.refresh(); // put the dropdown back
+      return;
+    }
+    setBusy(true);
+    onError(null);
+    try {
+      const { ok, payload } = await send(`/api/admin/inquiries/${person.id}/account`, "POST");
+      if (!ok) {
+        onError(payload.error ?? "Aanmaken van het account is mislukt.");
+        router.refresh();
+        return;
+      }
+      if (thenStatus && thenStatus !== "converted") {
+        await send(`/api/admin/inquiries/${person.id}`, "PATCH", { status: thenStatus });
+      }
+      onConverted({ name: person.full_name, email: payload.email, password: payload.password });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      router.refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function changeStatus(next: InquiryStatus) {
     if (next === status) return;
     if (!isParticipant && (next === "converted" || next === "participated")) {
-      if (
-        !window.confirm(
-          `Account aanmaken voor ${person.full_name} (${person.email}) met wachtwoord "olieverf"?`,
-        )
-      ) {
-        router.refresh(); // put the dropdown back
-        return;
-      }
-      setBusy(true);
-      onError(null);
-      try {
-        const { ok, payload } = await send(`/api/admin/inquiries/${person.id}/account`, "POST");
-        if (!ok) {
-          onError(payload.error ?? "Aanmaken van het account is mislukt.");
-          router.refresh();
-          return;
-        }
-        if (next === "participated") {
-          await send(`/api/admin/inquiries/${person.id}`, "PATCH", { status: next });
-        }
-        onConverted({ name: person.full_name, email: payload.email, password: payload.password });
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        router.refresh();
-      } finally {
-        setBusy(false);
-      }
+      await createAccount(next);
       return;
     }
     if (!(await patch({ status: next }))) router.refresh();
+  }
+
+  async function viewAs() {
+    setBusy(true);
+    onError(null);
+    try {
+      const { ok, payload } = await send("/api/admin/preview", "POST", {
+        participant_id: person.user_id,
+      });
+      if (!ok) {
+        onError(payload.error ?? "Kon niet als deelnemer bekijken.");
+        return;
+      }
+      router.push("/dashboard");
+      router.refresh();
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -413,23 +436,36 @@ function PersonRow({
             <span className="text-xs text-muted">Nog geen account</span>
           )}
         </td>
-        <td className="w-full max-w-0 px-3 py-3">
-          <button
-            onClick={onToggle}
-            className="block w-full truncate text-left text-muted hover:text-ink"
-            title={person.admin_notes ?? undefined}
-          >
-            {person.admin_notes || <span className="text-ink/30">Toevoegen</span>}
-          </button>
+        <td className="w-full min-w-[18rem] px-3 py-2">
+          <NotesInput person={person} onSave={patch} />
         </td>
-        <td className="px-3 py-3 text-right">
-          <button
-            onClick={onToggle}
-            className="text-sm text-clay hover:underline"
-            aria-expanded={open}
-          >
-            {open ? "Sluiten" : "Details"}
-          </button>
+        <td className="whitespace-nowrap px-3 py-3 text-right">
+          <div className="flex items-center justify-end gap-3">
+            {isParticipant ? (
+              <button
+                onClick={viewAs}
+                disabled={busy}
+                className="text-sm text-clay hover:underline disabled:opacity-50"
+              >
+                Bekijk als
+              </button>
+            ) : (
+              <button
+                onClick={() => createAccount()}
+                disabled={busy}
+                className="text-sm text-clay hover:underline disabled:opacity-50"
+              >
+                Account aanmaken
+              </button>
+            )}
+            <button
+              onClick={onToggle}
+              className="text-sm text-muted hover:text-ink hover:underline"
+              aria-expanded={open}
+            >
+              {open ? "Sluiten" : "Details"}
+            </button>
+          </div>
         </td>
       </tr>
       {open && (
@@ -447,6 +483,46 @@ function PersonRow({
         </tr>
       )}
     </Fragment>
+  );
+}
+
+/** Always-visible note field that saves itself when you click away. */
+function NotesInput({
+  person,
+  onSave,
+}: {
+  person: Person;
+  onSave: (changes: Record<string, unknown>) => Promise<boolean>;
+}) {
+  const saved = person.admin_notes ?? "";
+  const [value, setValue] = useState(saved);
+  const [state, setState] = useState<"idle" | "saving" | "saved">("idle");
+
+  async function commit() {
+    if (value.trim() === saved.trim()) return;
+    setState("saving");
+    const ok = await onSave({ admin_notes: value });
+    setState(ok ? "saved" : "idle");
+    if (ok) setTimeout(() => setState("idle"), 2000);
+  }
+
+  return (
+    <div className="relative">
+      <textarea
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={commit}
+        rows={Math.min(6, Math.max(2, value.split("\n").length))}
+        placeholder="Bijvoorbeeld betaalafspraken of afspraken op maat"
+        aria-label={`Notitie over ${person.full_name}`}
+        className="block w-full resize-y rounded-md border border-line bg-paper px-2 py-1.5 text-sm text-ink placeholder:text-ink/30 focus:border-clay focus:outline-none focus:ring-2 focus:ring-clay/20"
+      />
+      {state !== "idle" && (
+        <span className="absolute bottom-1.5 right-2 text-xs text-emerald-700">
+          {state === "saving" ? "Opslaan…" : "Opgeslagen"}
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -522,30 +598,11 @@ function PersonDetails({
       phone: form.get("phone"),
       day_preference: form.get("day_preference"),
       notes: form.get("notes"),
-      admin_notes: form.get("admin_notes"),
     };
     if (isParticipant) changes.access_ends_on = form.get("access_ends_on") || null;
     if (await onSave(changes)) {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-    }
-  }
-
-  async function viewAs() {
-    setBusy(true);
-    onError(null);
-    try {
-      const { ok, payload } = await send("/api/admin/preview", "POST", {
-        participant_id: person.user_id,
-      });
-      if (!ok) {
-        onError(payload.error ?? "Kon niet als deelnemer bekijken.");
-        return;
-      }
-      router.push("/dashboard");
-      router.refresh();
-    } finally {
-      setBusy(false);
     }
   }
 
@@ -571,18 +628,6 @@ function PersonDetails({
 
   return (
     <form onSubmit={save} className="grid gap-4 rounded-lg border border-line bg-paper p-5 sm:grid-cols-2 lg:grid-cols-4">
-      <div className="sm:col-span-2 lg:col-span-4">
-        <Field label="Notities (alleen voor jou)" htmlFor={`admin-notes-${person.id}`}>
-          <Textarea
-            id={`admin-notes-${person.id}`}
-            name="admin_notes"
-            defaultValue={person.admin_notes ?? ""}
-            placeholder="Bijvoorbeeld betaalafspraken of andere afspraken op maat."
-            className="min-h-24 text-sm"
-          />
-        </Field>
-      </div>
-
       <Field label="Naam" htmlFor={`name-${person.id}`}>
         <Input id={`name-${person.id}`} name="full_name" defaultValue={person.full_name} required className="py-2 text-sm" />
       </Field>
@@ -665,11 +710,6 @@ function PersonDetails({
           {busy ? "Bezig…" : "Opslaan"}
         </Button>
         {saved && <span className="text-sm text-emerald-700">Opgeslagen</span>}
-        {isParticipant && (
-          <Button type="button" size="sm" variant="secondary" onClick={viewAs} disabled={busy}>
-            Bekijk als
-          </Button>
-        )}
         <button
           type="button"
           onClick={remove}
