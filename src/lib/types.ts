@@ -4,7 +4,12 @@
 export type Role = "admin" | "participant";
 export type CourseStatus = "open" | "closed";
 export type EnrollmentStatus = "pending" | "confirmed" | "cancelled";
-export type InquiryStatus = "new" | "contacted" | "converted" | "archived";
+export type InquiryStatus =
+  | "new"
+  | "contacted"
+  | "converted"
+  | "participated"
+  | "archived";
 
 export interface Profile {
   id: string;
@@ -58,9 +63,11 @@ export interface CourseInquiry {
   full_name: string;
   email: string;
   phone: string | null;
-  day_preference: string;
-  notes: string | null;
+  day_preference: string | null;
+  notes: string | null; // message the person wrote on the public form
+  admin_notes: string | null; // the owner's private notes (payment, agreements)
   status: InquiryStatus;
+  user_id: string | null; // set once the person has a participant account
   created_at: string;
 }
 

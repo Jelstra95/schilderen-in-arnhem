@@ -16,24 +16,24 @@ export default async function AdminOverviewPage() {
         .select("*", { count: "exact", head: true })
         .gte("starts_at", nowIso),
       supabase
-        .from("enrollments")
+        .from("course_inquiries")
         .select("*", { count: "exact", head: true })
-        .eq("status", "pending"),
+        .eq("status", "new"),
       supabase
-        .from("enrollments")
+        .from("course_inquiries")
         .select("*", { count: "exact", head: true })
-        .eq("status", "confirmed"),
+        .in("status", ["converted", "participated"]),
       supabase.from("materials").select("*", { count: "exact", head: true }),
     ]);
 
   const pending = pendingRes.count ?? 0;
   const stats = [
     { label: "Aankomende data", value: upcomingRes.count ?? 0, href: "/admin/data" },
-    { label: "Open aanmeldingen", value: pending, href: "/admin/deelnemers" },
+    { label: "Nieuwe aanvragen", value: pending, href: "/admin/aanvragen" },
     {
-      label: "Bevestigde deelnemers",
+      label: "Deelnemers",
       value: confirmedRes.count ?? 0,
-      href: "/admin/deelnemers",
+      href: "/admin/aanvragen",
     },
     { label: "Materialen", value: materialsRes.count ?? 0, href: "/admin/materiaal" },
   ];
@@ -63,15 +63,15 @@ export default async function AdminOverviewPage() {
           <p className="text-ink">
             Er {pending === 1 ? "is" : "zijn"}{" "}
             <strong>
-              {pending} open {pending === 1 ? "aanmelding" : "aanmeldingen"}
+              {pending} nieuwe {pending === 1 ? "aanvraag" : "aanvragen"}
             </strong>{" "}
-            die wachten op bevestiging.
+            die nog op een reactie {pending === 1 ? "wacht" : "wachten"}.
           </p>
           <Link
-            href="/admin/deelnemers"
+            href="/admin/aanvragen"
             className="mt-2 inline-block text-sm text-clay hover:underline"
           >
-            → Naar de deelnemers
+            Naar de aanvragen
           </Link>
         </div>
       )}

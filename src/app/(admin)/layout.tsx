@@ -9,8 +9,7 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 const nav = [
   { href: "/admin", label: "Overzicht" },
   { href: "/admin/data", label: "Cursusdata" },
-  { href: "/admin/aanvragen", label: "Aanvragen" },
-  { href: "/admin/deelnemers", label: "Deelnemers" },
+  { href: "/admin/aanvragen", label: "Aanvragen en deelnemers" },
   { href: "/admin/materiaal", label: "Materiaal" },
 ];
 
