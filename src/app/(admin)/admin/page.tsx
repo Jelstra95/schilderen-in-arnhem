@@ -18,7 +18,8 @@ export default async function AdminOverviewPage() {
       supabase
         .from("course_inquiries")
         .select("*", { count: "exact", head: true })
-        .eq("status", "new"),
+        .eq("status", "new")
+        .eq("responded", false),
       supabase
         .from("course_inquiries")
         .select("*", { count: "exact", head: true })

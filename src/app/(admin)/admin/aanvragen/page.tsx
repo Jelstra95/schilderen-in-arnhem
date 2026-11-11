@@ -20,7 +20,7 @@ function Notice({
       ? "border-amber-200 bg-amber-50 text-amber-800"
       : "border-red-200 bg-red-50 text-red-800";
   return (
-    <Container className="max-w-5xl">
+    <Container className="max-w-6xl">
       <h1 className="font-title text-4xl text-ink">Aanvragen en deelnemers</h1>
       <div className={`mt-8 rounded-lg border p-6 ${cls}`}>
         <p className="font-title text-lg">{title}</p>
@@ -69,16 +69,16 @@ export default async function AdminInquiriesPage() {
 
   const rows = (inquiriesRes.data as CourseInquiry[] | null) ?? [];
 
-  // The linked-account columns arrive with migration 0006. Without them the
-  // page cannot show who is a participant, so say so plainly.
-  if (rows.length > 0 && !("user_id" in rows[0])) {
+  // The linked-account columns arrive with migration 0006 and the responded
+  // checkbox with 0008. Without them the table cannot work, so say so plainly.
+  if (rows.length > 0 && !("user_id" in rows[0] && "responded" in rows[0])) {
     return (
       <Notice tone="amber" title="De database mist nog een update">
-        Voer{" "}
-        <code className="font-mono">
-          supabase/migrations/0006_inquiries_as_participants.sql
-        </code>{" "}
-        uit in de Supabase SQL editor en herlaad de pagina.
+        Voer de ontbrekende migraties in{" "}
+        <code className="font-mono">supabase/migrations/</code> uit in de
+        Supabase SQL editor (tot en met{" "}
+        <code className="font-mono">0008_inquiry_responded.sql</code>) en
+        herlaad de pagina.
       </Notice>
     );
   }
@@ -103,13 +103,15 @@ export default async function AdminInquiriesPage() {
   });
 
   return (
-    <Container className="max-w-5xl">
+    <Container className="max-w-6xl">
       <h1 className="font-title text-4xl text-ink">Aanvragen en deelnemers</h1>
       <p className="mt-2 text-muted">
         Iedereen die zich via <code className="font-mono">/inschrijven</code>{" "}
-        aanmeldt, komt hier binnen. Met een klik maak je er een deelnemer van.
-        Er wordt dan een account aangemaakt op hun e-mailadres met het
-        wachtwoord <span className="font-mono text-ink">olieverf</span>.
+        aanmeldt, komt hier binnen. Zet de status op Aangemeld om er een
+        deelnemer van te maken. Er wordt dan een account aangemaakt op hun
+        e-mailadres met het wachtwoord{" "}
+        <span className="font-mono text-ink">olieverf</span>. Klik op een rij
+        voor notities en meer details.
       </p>
       <div className="mt-10">
         <PeopleManager people={people} />

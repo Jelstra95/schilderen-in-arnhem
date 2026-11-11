@@ -9,17 +9,17 @@ import {
 } from "@/lib/admin-inquiries";
 import type { CourseInquiry, InquiryStatus } from "@/lib/types";
 
-// Without an account a person is an open inquiry; "converted" is only reached
-// through the account route. With an account they are either signed up
-// ("converted") or have taken part ("participated").
+// Without an account a person is a new or archived inquiry; "converted" is
+// only reached through the account route. With an account they are signed up
+// ("converted"), have taken part ("participated") or are archived.
 const INQUIRY_STATUS: ReadonlySet<InquiryStatus> = new Set<InquiryStatus>([
   "new",
-  "contacted",
   "archived",
 ]);
 const PARTICIPANT_STATUS: ReadonlySet<InquiryStatus> = new Set<InquiryStatus>([
   "converted",
   "participated",
+  "archived",
 ]);
 
 function bad(message: string, status = 400) {
@@ -63,7 +63,7 @@ export async function PATCH(
   if (loadError) return bad("Laden van de aanvraag is mislukt.", 500);
   if (!current) return bad("Aanvraag niet gevonden.", 404);
 
-  const inquiry: Record<string, string | null> = {};
+  const inquiry: Record<string, string | boolean | null> = {};
   const profile: Record<string, string | null> = {};
 
   if (body.full_name !== undefined) {
@@ -86,7 +86,12 @@ export async function PATCH(
     if (value === false) return bad("Een van de velden is te lang.");
     if (value !== undefined) inquiry[key] = value;
   }
-  if (inquiry.phone !== undefined) profile.phone = inquiry.phone;
+  if (inquiry.phone !== undefined) profile.phone = inquiry.phone as string | null;
+
+  if (body.responded !== undefined) {
+    if (typeof body.responded !== "boolean") return bad("Ongeldige waarde.");
+    inquiry.responded = body.responded;
+  }
 
   if (body.status !== undefined) {
     const status = body.status as InquiryStatus;
@@ -94,8 +99,8 @@ export async function PATCH(
     if (!allowed.has(status)) {
       return bad(
         current.user_id
-          ? "Deze persoon is al deelnemer. Kies aangemeld of deelgenomen."
-          : "Ongeldige status.",
+          ? "Deze persoon heeft al een account. Kies aangemeld, deelgenomen of gearchiveerd."
+          : "Maak eerst een account aan om iemand als deelnemer te markeren.",
       );
     }
     inquiry.status = status;
@@ -170,6 +175,59 @@ export async function PATCH(
       .eq("id", id);
     if (error) return bad("Bijwerken is mislukt.", 500);
   }
+
+  return NextResponse.json({ ok: true });
+}
+
+/**
+ * Admin-only: delete a person for good. If they have a participant account,
+ * the login and profile are deleted too (enrollments keep their row but lose
+ * the link). Admin accounts are never deleted this way.
+ */
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const guard = await guardAdminApi();
+  if (!guard.ok) return guard.response;
+
+  const missingEnv = missingAdminEnv();
+  if (missingEnv) {
+    return bad(`Serverinstelling ${missingEnv} ontbreekt in deze omgeving.`, 503);
+  }
+
+  const { id } = await params;
+  if (!UUID_RE.test(id)) return bad("Ongeldige aanvraag.");
+
+  const admin = createAdminClient();
+  const { data: current, error: loadError } = await admin
+    .from("course_inquiries")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle<CourseInquiry>();
+  if (loadError) return bad("Laden van de aanvraag is mislukt.", 500);
+  if (!current) return bad("Aanvraag niet gevonden.", 404);
+
+  if (current.user_id) {
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("role")
+      .eq("id", current.user_id)
+      .maybeSingle();
+    if (profile?.role === "admin") {
+      return bad("Dit is een beheerdersaccount en kan hier niet verwijderd worden.", 409);
+    }
+    if (profile) {
+      const { error } = await admin.auth.admin.deleteUser(current.user_id);
+      if (error) {
+        console.error("[inquiries/delete] deleteUser failed", error.message);
+        return bad("Verwijderen van het account is mislukt.", 500);
+      }
+    }
+  }
+
+  const { error } = await admin.from("course_inquiries").delete().eq("id", id);
+  if (error) return bad("Verwijderen is mislukt.", 500);
 
   return NextResponse.json({ ok: true });
 }

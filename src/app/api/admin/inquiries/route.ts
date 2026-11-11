@@ -48,7 +48,8 @@ export async function POST(request: NextRequest) {
       phone: phone ?? null,
       day_preference: day ?? null,
       admin_notes: adminNotes ?? null,
-      status: "contacted",
+      status: "new",
+      responded: true,
     })
     .select("id")
     .single();

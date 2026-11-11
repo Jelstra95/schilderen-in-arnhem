@@ -68,6 +68,7 @@ export interface CourseInquiry {
   admin_notes: string | null; // the owner's private notes (payment, agreements)
   status: InquiryStatus;
   user_id: string | null; // set once the person has a participant account
+  responded: boolean; // the owner has replied to this person
   created_at: string;
 }
 
