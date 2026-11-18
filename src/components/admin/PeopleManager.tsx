@@ -34,6 +34,15 @@ const FILTERS: { key: Filter; label: string; match: (p: Person) => boolean }[] =
   { key: "all", label: "Iedereen", match: () => true },
 ];
 
+/** Enrolled participants whose access has not ended. */
+function isActiveParticipant(p: Person, today: string): boolean {
+  return (
+    !!p.user_id &&
+    p.status === "converted" &&
+    !(p.access_ends_on && p.access_ends_on < today)
+  );
+}
+
 const smallControl =
   "rounded-md border border-line bg-paper px-2 py-1 text-sm text-ink focus:border-clay focus:outline-none focus:ring-2 focus:ring-clay/20 disabled:opacity-50";
 
@@ -70,6 +79,14 @@ export function PeopleManager({ people }: { people: Person[] }) {
   }, [people]);
 
   const waiting = people.filter((p) => !p.responded && p.status === "new").length;
+
+  const activeEmails = useMemo(() => {
+    const today = todayISO();
+    return people
+      .filter((p) => isActiveParticipant(p, today))
+      .map((p) => p.email.trim())
+      .join("; ");
+  }, [people]);
 
   const visible = useMemo(() => {
     const match = FILTERS.find((f) => f.key === filter)!.match;
@@ -198,6 +215,8 @@ export function PeopleManager({ people }: { people: Person[] }) {
         </p>
       )}
 
+      {activeEmails && <EmailList emails={activeEmails} />}
+
       {adding && (
         <form onSubmit={addPerson} className="mb-6 rounded-lg border border-line bg-paper p-6">
           <p className="font-title text-lg text-ink">Persoon toevoegen</p>
@@ -253,6 +272,7 @@ export function PeopleManager({ people }: { people: Person[] }) {
               <th className="px-3 py-3 text-center font-medium">Gereageerd</th>
               <th className="px-3 py-3 font-medium">Status</th>
               <th className="px-3 py-3 font-medium">Startdatum</th>
+              <th className="px-3 py-3 font-medium">Laatst ingelogd</th>
               <th className="px-3 py-3 font-medium">Notitie (alleen voor jou)</th>
               <th className="px-3 py-3" aria-label="Acties" />
             </tr>
@@ -270,7 +290,7 @@ export function PeopleManager({ people }: { people: Person[] }) {
             ))}
             {visible.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-10 text-center text-muted">
+                <td colSpan={9} className="px-4 py-10 text-center text-muted">
                   {query ? "Niemand gevonden." : "Hier staat nog niemand."}
                 </td>
               </tr>
@@ -436,6 +456,15 @@ function PersonRow({
             <span className="text-xs text-muted">Nog geen account</span>
           )}
         </td>
+        <td className="whitespace-nowrap px-3 py-3">
+          {!isParticipant ? (
+            <span className="text-xs text-muted">Geen account</span>
+          ) : person.last_sign_in_at ? (
+            <span className="text-ink">{formatShortDate(person.last_sign_in_at)}</span>
+          ) : (
+            <span className="text-muted">Nog niet</span>
+          )}
+        </td>
         <td className="w-full min-w-[18rem] px-3 py-2">
           <NotesInput person={person} onSave={patch} />
         </td>
@@ -470,7 +499,7 @@ function PersonRow({
       </tr>
       {open && (
         <tr className="bg-mist/40">
-          <td colSpan={8} className="px-4 pb-5 pt-1">
+          <td colSpan={9} className="px-4 pb-5 pt-1">
             <PersonDetails
               person={person}
               busy={busy}
@@ -483,6 +512,42 @@ function PersonRow({
         </tr>
       )}
     </Fragment>
+  );
+}
+
+/** Email addresses of active participants, ready to paste into a mail. */
+function EmailList({ emails }: { emails: string }) {
+  const [copied, setCopied] = useState(false);
+  const count = emails.split("; ").length;
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(emails);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard can be blocked; the text is still selectable by hand.
+    }
+  }
+
+  return (
+    <div className="mb-4 rounded-lg border border-line bg-paper p-4">
+      <div className="mb-2 flex items-center justify-between gap-4">
+        <p className="text-sm font-medium text-ink">
+          E-mailadressen van actieve deelnemers{" "}
+          <span className="font-normal text-muted">({count})</span>
+        </p>
+        <button onClick={copy} className="text-sm text-clay hover:underline">
+          {copied ? "Gekopieerd" : "Kopieer"}
+        </button>
+      </div>
+      <p
+        onClick={(e) => window.getSelection()?.selectAllChildren(e.currentTarget)}
+        className="select-all break-all font-mono text-xs text-ink"
+      >
+        {emails}
+      </p>
+    </div>
   );
 }
 
